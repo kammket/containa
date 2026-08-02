@@ -47,5 +47,8 @@ apps/api/prisma/*.db
 apps/api/prisma/*.db-journal
 
 # Uploads / temp
-uploads/
-tmp/
+# Bewusst am Wurzelverzeichnis verankert: ohne führenden Schrägstrich passt
+# "uploads/" auf jedes gleichnamige Verzeichnis – und schluckt damit auch
+# apps/api/src/modules/uploads/, also Quellcode.
+/uploads/
+/tmp/

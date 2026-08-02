@@ -99,17 +99,34 @@ ADMIN_NOTIFY_EMAIL=vertrieb@emccontainer.com
 ### 1.4 Erster Start
 
 Das Dockerfile führt `prisma migrate deploy` vor dem Start aus – das Schema
-entsteht beim ersten Deploy automatisch.
+entsteht beim ersten Deploy automatisch. Sobald der Health Check auf `/health`
+grün ist, läuft die API.
 
-Den Katalog anschließend einmalig übernehmen (Railway CLI):
+Den Katalog anschließend **einmalig** übernehmen. Der Seed legt 15 Kategorien,
+26 Produkte und das erste Administratorkonto an:
 
 ```bash
-railway run --service api npm run db:seed --workspace=@emc/api
+# Öffentliche Verbindungszeichenfolge des Datenbankdienstes holen.
+# Wichtig: DATABASE_URL zeigt auf railway.internal und ist von außen nicht
+# erreichbar – vom eigenen Rechner aus funktioniert nur DATABASE_PUBLIC_URL.
+railway variables --service Postgres --kv | grep DATABASE_PUBLIC_URL
+
+DATABASE_URL="<die eben ausgegebene URL>" \
+ADMIN_EMAIL="admin@emccontainer.com" \
+ADMIN_PASSWORD="<starkes Passwort>" \
+  npm run db:seed --workspace=@emc/api
 ```
 
-Das legt 15 Kategorien, 26 Produkte und das erste Administratorkonto an. Setzen
-Sie `ADMIN_EMAIL` und `ADMIN_PASSWORD` vorher als Variablen – sonst erzeugt der
-Seed ein Passwort und gibt es einmalig im Log aus.
+Ohne `ADMIN_PASSWORD` erzeugt der Seed eines und gibt es einmalig aus – dann
+sofort notieren, es erscheint kein zweites Mal.
+
+Alternativ direkt im laufenden Container, dort ist `DATABASE_URL` bereits
+gesetzt:
+
+```bash
+railway ssh --service api
+npm run db:seed
+```
 
 ### 1.5 Domain
 
@@ -233,6 +250,12 @@ erzeugt den CommonJS-Build, den NestJS per `require` einbindet.
 **Vercel-Build bricht ab: „No Next.js version detected"**
 Das Root Directory wurde im Dashboard auf `apps/web` gesetzt. Dann greift die
 `vercel.json` im Wurzelverzeichnis nicht mehr. Root Directory leeren.
+
+**Lokaler API-Typecheck meldet TS1479 („cannot be imported with require")**
+Nur ein lokales Problem: Der inkrementelle Cache der API hat eine Auflösung
+gespeichert, die entstand, während `packages/catalog/dist` gelöscht war.
+`rm -rf apps/api/dist` behebt es. In CI und im Docker-Build tritt das nicht auf,
+weil dort jedes Mal frisch ausgecheckt wird.
 
 **Railway-Build bricht in `npm ci` ab**
 `package-lock.json` passt nicht zu den Manifesten – meist nach einem Merge.
