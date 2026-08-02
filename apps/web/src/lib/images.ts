@@ -11,6 +11,12 @@ import { hashCode } from './utils';
 
 const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
+/**
+ * Ersatzbild in Cloudinary für noch nicht hinterlegte Produktfotos. Liegt im
+ * Markendesign vor und entspricht optisch dem erzeugten SVG-Platzhalter.
+ */
+const PLACEHOLDER_ID = 'emc/placeholder.svg';
+
 export interface ImageOptions {
   width?: number;
   height?: number;
@@ -34,6 +40,13 @@ export function cloudinaryUrl(publicId: string, options: ImageOptions = {}): str
   if (width) transforms.push(`w_${width}`);
   if (height) transforms.push(`h_${height}`);
   if (width && height) transforms.push(`c_${crop}`);
+
+  // Ersatzbild, falls die publicId in Cloudinary (noch) nicht existiert. Ohne
+  // diese Angabe antwortet Cloudinary mit 404 und der Browser zeigt ein
+  // kaputtes Bild – sichtbar schlechter als der Platzhalter, den die Seite ohne
+  // konfigurierte Cloud ausliefert. Der Schrägstrich wird in der Angabe zum
+  // Doppelpunkt, die Dateiendung ist Pflicht.
+  transforms.push(`d_${PLACEHOLDER_ID.replace(/\//g, ':')}`);
 
   return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${transforms.join(',')}/${publicId}`;
 }
