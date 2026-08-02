@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary, type UploadApiResponse } from 'cloudinary';
 
@@ -115,9 +120,7 @@ export class UploadsService {
     }
 
     if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
-      throw new BadRequestException(
-        'Nur JPEG-, PNG-, WebP- und AVIF-Dateien sind zulässig.',
-      );
+      throw new BadRequestException('Nur JPEG-, PNG-, WebP- und AVIF-Dateien sind zulässig.');
     }
 
     if (file.size > MAX_FILE_SIZE) {
@@ -137,12 +140,7 @@ export class UploadsService {
     if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) return true;
 
     // PNG: 89 50 4E 47 0D 0A 1A 0A
-    if (
-      buffer[0] === 0x89 &&
-      buffer[1] === 0x50 &&
-      buffer[2] === 0x4e &&
-      buffer[3] === 0x47
-    ) {
+    if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4e && buffer[3] === 0x47) {
       return true;
     }
 

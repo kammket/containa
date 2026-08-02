@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Zentrale Produkt-, Kategorie- und SEO-Datenquelle für EMC Container",
+  "description": "Zentrale Produkt-, Kategorie- und SEO-Datenquelle f\u00fcr EMC Container",
   "main": "./dist/cjs/index.js",
   "types": "./dist/cjs/index.d.ts",
   "exports": {
@@ -16,7 +16,7 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.cjs.json && node -e \"require('fs').writeFileSync('dist/cjs/package.json', '{\\\"type\\\":\\\"commonjs\\\"}\\n')\"",
+    "build": "tsc -p tsconfig.cjs.json && node scripts/finalize-cjs.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node --test --experimental-strip-types src/catalog.test.ts",
     "build:esm": "tsc -p tsconfig.json"
