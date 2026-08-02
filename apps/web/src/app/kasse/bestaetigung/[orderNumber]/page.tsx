@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Check, Mail, Phone, Truck } from 'lucide-react';
+import { ArrowRight, Check, Mail, Phone, Truck } from 'lucide-react';
 
 import { contact, routes } from '@emc/catalog';
 
@@ -92,14 +92,14 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
       <div className="mt-10 rounded-2xl bg-navy-950 p-6 text-center text-white">
         <h2 className="font-display text-lg font-bold">Fragen zu Ihrer Bestellung?</h2>
         <p className="mx-auto mt-2 max-w-lg text-sm leading-relaxed text-white/70">
-          Halten Sie Ihre Bestellnummer bereit – dann können wir Ihnen sofort weiterhelfen.
+          Geben Sie Ihre Bestellnummer an – dann können wir Ihnen sofort weiterhelfen.
         </p>
         <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
           <Button asChild variant="primary">
-            <a href={contact.phoneHref}>
-              <Phone aria-hidden />
-              {contact.phoneDisplay}
-            </a>
+            <Link href={routes.contact}>
+              Nachricht senden
+              <ArrowRight aria-hidden />
+            </Link>
           </Button>
           <Button
             asChild

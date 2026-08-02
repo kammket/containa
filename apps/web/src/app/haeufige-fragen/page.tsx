@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { breadcrumbs, contact, faqCategories, faqs, faqsByCategory, routes } from '@emc/catalog';
+import { breadcrumbs, faqCategories, faqs, faqsByCategory, routes } from '@emc/catalog';
 
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
@@ -93,11 +93,11 @@ export default function FaqPage() {
             <div className="rounded-2xl bg-navy-950 p-6 text-white">
               <h2 className="font-display text-base font-bold">Frage nicht beantwortet?</h2>
               <p className="mt-1.5 text-sm leading-relaxed text-white/70">
-                Rufen Sie uns an – wir beraten kostenlos und sagen Ihnen auch, wenn eine günstigere
-                Lösung besser passt.
+                Schildern Sie uns Ihr Vorhaben – wir antworten mit einem Festpreis und sagen Ihnen
+                auch, wenn eine günstigere Lösung besser passt.
               </p>
               <Button asChild className="mt-5 w-full">
-                <a href={contact.phoneHref}>{contact.phoneDisplay}</a>
+                <Link href={routes.quote}>Angebot anfordern</Link>
               </Button>
               <Button
                 asChild

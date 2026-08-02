@@ -1,10 +1,9 @@
 import Link from 'next/link';
-import { ArrowRight, Check, MapPin, Phone, Truck } from 'lucide-react';
+import { ArrowRight, Check, MapPin, Truck } from 'lucide-react';
 
 import {
   bestsellers,
   breadcrumbs,
-  contact,
   formatPrice,
   grossFromNet,
   nearbyCities,
@@ -118,10 +117,10 @@ export function CityPage({ city }: { city: City }) {
               variant="outline"
               className="border-white/25 bg-white/10 text-white hover:bg-white/15"
             >
-              <a href={contact.phoneHref}>
-                <Phone aria-hidden />
-                {contact.phoneDisplay}
-              </a>
+              <Link href={routes.quote}>
+                Angebot anfordern
+                <ArrowRight aria-hidden />
+              </Link>
             </Button>
           </div>
         </div>

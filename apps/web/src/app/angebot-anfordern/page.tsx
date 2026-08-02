@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
-import { Check, Clock, Phone, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
+import { Check, Clock, ShieldCheck } from 'lucide-react';
 
-import { breadcrumbs, contact, routes } from '@emc/catalog';
+import { breadcrumbs, routes } from '@emc/catalog';
 
 import { QuoteForm } from '@/components/forms/quote-form';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
@@ -87,16 +88,13 @@ export default function QuotePage() {
             </ul>
 
             <div className="rounded-2xl bg-navy-950 p-6 text-white">
-              <h2 className="font-display text-base font-bold">Lieber direkt sprechen?</h2>
+              <h2 className="font-display text-base font-bold">Lieber frei formulieren?</h2>
               <p className="mt-1.5 text-sm leading-relaxed text-white/70">
-                Bei komplexen Vorhaben – Umbauten, mehrere Standorte, enge Zufahrt – geht es am
-                Telefon oft schneller.
+                Bei komplexen Vorhaben – Umbauten, mehrere Standorte, enge Zufahrt – beschreiben Sie
+                uns Ihr Projekt einfach im Kontaktformular.
               </p>
               <Button asChild className="mt-5 w-full">
-                <a href={contact.phoneHref}>
-                  <Phone aria-hidden />
-                  {contact.phoneDisplay}
-                </a>
+                <Link href={routes.contact}>Zum Kontaktformular</Link>
               </Button>
               <p className="mt-3 text-center text-2xs text-white/50">
                 Mo–Do 8–17 Uhr · Fr 8–16 Uhr · Sa 9–13 Uhr

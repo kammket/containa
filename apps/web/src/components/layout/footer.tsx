@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Clock, Mail, MapPin, Phone } from 'lucide-react';
+import { Clock, FileText, Mail, MapPin } from 'lucide-react';
 
 import {
   address,
@@ -80,13 +80,13 @@ export function Footer() {
           </p>
 
           <address className="mt-6 space-y-2.5 text-sm not-italic">
-            <a
-              href={contact.phoneHref}
+            <Link
+              href={routes.quote}
               className="flex items-center gap-2.5 font-semibold text-white transition-colors hover:text-accent-400"
             >
-              <Phone className="size-4 shrink-0 text-accent-500" aria-hidden />
-              {contact.phoneDisplay}
-            </a>
+              <FileText className="size-4 shrink-0 text-accent-500" aria-hidden />
+              Angebot anfordern
+            </Link>
             <a
               href={contact.emailHref}
               className="flex items-center gap-2.5 transition-colors hover:text-white"

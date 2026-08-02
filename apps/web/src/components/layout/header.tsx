@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { Phone } from 'lucide-react';
+import { FileText } from 'lucide-react';
 
-import { contact, routes } from '@emc/catalog';
+import { routes } from '@emc/catalog';
 
 import { Logo } from './logo';
 import { MegaMenu } from './mega-menu';
@@ -34,13 +34,13 @@ export function Header() {
             <span className="hidden lg:inline">CSC-zertifiziert nach ISO 668</span>
             <span className="hidden xl:inline">Bis zu 60 Monate Garantie</span>
           </p>
-          <a
-            href={contact.phoneHref}
+          <Link
+            href={routes.quote}
             className="flex items-center gap-1.5 font-semibold text-white transition-colors hover:text-accent-300"
           >
-            <Phone className="size-3.5" aria-hidden />
-            {contact.phoneDisplay}
-          </a>
+            <FileText className="size-3.5" aria-hidden />
+            Angebot anfordern
+          </Link>
         </div>
       </div>
 

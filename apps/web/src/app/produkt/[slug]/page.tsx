@@ -1,13 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowRight, BadgeCheck, Check, Download, Phone, ShieldCheck, Truck } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Check, Download, ShieldCheck, Truck } from 'lucide-react';
 
 import {
   averageRating,
   breadcrumbs,
   conditions,
-  contact,
   discountPercent,
   formatPrice,
   getCategory,
@@ -250,14 +249,14 @@ export default async function ProductPage({ params }: PageProps) {
               <div>
                 <p className="text-sm font-semibold">Fragen zu diesem Container?</p>
                 <p className="mt-0.5 text-sm text-white/70">
-                  Wir beraten kostenlos – auch zur Zufahrt vor Ort.
+                  Wir melden uns mit einem Festpreis – auch zur Zufahrt vor Ort.
                 </p>
               </div>
               <Button asChild variant="primary" size="sm" className="shrink-0">
-                <a href={contact.phoneHref}>
-                  <Phone aria-hidden />
-                  Anrufen
-                </a>
+                <Link href={routes.quote}>
+                  Angebot anfordern
+                  <ArrowRight aria-hidden />
+                </Link>
               </Button>
             </div>
           </div>

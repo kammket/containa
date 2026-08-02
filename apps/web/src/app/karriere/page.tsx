@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Clock, Euro, MapPin } from 'lucide-react';
 
 import { address, breadcrumbs, contact, routes } from '@emc/catalog';
@@ -230,10 +231,10 @@ export default function CareersPage() {
               </a>
             </Button>
             <p className="mt-4 text-sm text-stone-500">
-              Fragen vorab? Rufen Sie an:{' '}
-              <a href={contact.phoneHref} className="font-semibold text-navy-800">
-                {contact.phoneDisplay}
-              </a>
+              Fragen vorab?{' '}
+              <Link href={routes.contact} className="font-semibold text-navy-800">
+                Schreiben Sie uns
+              </Link>
             </p>
           </div>
         </div>

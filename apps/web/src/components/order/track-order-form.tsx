@@ -1,13 +1,14 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { AlertCircle, Loader2, Package, Phone, Search } from 'lucide-react';
+import { AlertCircle, ArrowRight, Loader2, Package, Search } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { contact } from '@emc/catalog';
+import { routes } from '@emc/catalog';
 
 import { Button } from '@/components/ui/button';
 import { FieldError, Input, Label } from '@/components/ui/input';
@@ -169,15 +170,15 @@ export function TrackOrderForm() {
         <div className="flex items-start gap-3">
           <Package className="mt-0.5 size-5 shrink-0 text-stone-400" aria-hidden />
           <p className="text-sm leading-relaxed text-stone-600">
-            Bestellnummer nicht zur Hand? Sie steht in Ihrer Bestellbestätigung – oder rufen Sie uns
-            einfach an.
+            Bestellnummer nicht zur Hand? Sie steht in Ihrer Bestellbestätigung – oder schreiben Sie
+            uns kurz.
           </p>
         </div>
         <Button asChild variant="outline" size="sm" className="shrink-0">
-          <a href={contact.phoneHref}>
-            <Phone aria-hidden />
-            {contact.phoneDisplay}
-          </a>
+          <Link href={routes.contact}>
+            Nachricht senden
+            <ArrowRight aria-hidden />
+          </Link>
         </Button>
       </div>
     </div>

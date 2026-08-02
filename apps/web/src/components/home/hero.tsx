@@ -1,10 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, BadgeCheck, Phone, ShieldCheck, Truck } from 'lucide-react';
+import { ArrowRight, BadgeCheck, ShieldCheck, Truck } from 'lucide-react';
 
 import {
   aggregateRating,
-  contact,
   formatPriceCompact,
   grossFromNet,
   containerPriceRange,
@@ -77,10 +76,10 @@ export function Hero() {
               variant="outline"
               className="border-white/25 bg-white/10 text-white backdrop-blur-sm hover:border-white/40 hover:bg-white/15"
             >
-              <a href={contact.phoneHref}>
-                <Phone aria-hidden />
-                {contact.phoneDisplay}
-              </a>
+              <Link href={routes.quote}>
+                Angebot anfordern
+                <ArrowRight aria-hidden />
+              </Link>
             </Button>
           </div>
 

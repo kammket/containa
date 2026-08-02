@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Check } from 'lucide-react';
 
-import { address, aggregateRating, brand, breadcrumbs, contact, routes } from '@emc/catalog';
+import { address, aggregateRating, brand, breadcrumbs, routes } from '@emc/catalog';
 
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
@@ -205,7 +205,7 @@ export default function AboutPage() {
                 variant="outline"
                 className="border-white/25 bg-white/10 text-white hover:bg-white/15"
               >
-                <a href={contact.phoneHref}>{contact.phoneDisplay}</a>
+                <Link href={routes.contact}>Kontakt aufnehmen</Link>
               </Button>
             </div>
           </div>

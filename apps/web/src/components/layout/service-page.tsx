@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { ArrowRight, Check, Phone } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 
-import { breadcrumbs, contact, routes } from '@emc/catalog';
+import { breadcrumbs, routes } from '@emc/catalog';
 
 import { Breadcrumbs } from './breadcrumbs';
 import { JsonLd } from './json-ld';
@@ -212,10 +212,7 @@ export function ServicePage({
                 variant="outline"
                 className="mt-3 w-full border-white/25 bg-white/10 text-white hover:bg-white/15"
               >
-                <a href={contact.phoneHref}>
-                  <Phone aria-hidden />
-                  Anrufen
-                </a>
+                <Link href={routes.contact}>Kontakt aufnehmen</Link>
               </Button>
             </div>
           </aside>

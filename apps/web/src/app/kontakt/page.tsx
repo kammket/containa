@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { Clock, Mail, MapPin, MessageCircle, Phone, Printer } from 'lucide-react';
+import Link from 'next/link';
+import { Clock, FileText, Mail, MapPin, type Phone, Printer } from 'lucide-react';
 
 import { address, brand, breadcrumbs, contact, openingHours, routes } from '@emc/catalog';
 
@@ -58,22 +59,16 @@ export default function ContactPage() {
               <h2 className="font-display text-lg font-bold text-navy-950">Direkter Draht</h2>
 
               <ul className="mt-5 space-y-4 text-sm">
-                <ContactRow icon={Phone} label="Telefon">
-                  <a
-                    href={contact.phoneHref}
+                <ContactRow icon={FileText} label="Angebot">
+                  <Link
+                    href={routes.quote}
                     className="font-semibold text-navy-900 transition-colors hover:text-accent-700"
                   >
-                    {contact.phoneDisplay}
-                  </a>
-                </ContactRow>
-
-                <ContactRow icon={MessageCircle} label="WhatsApp / Mobil">
-                  <a
-                    href={contact.mobileHref}
-                    className="font-semibold text-navy-900 transition-colors hover:text-accent-700"
-                  >
-                    {contact.whatsapp}
-                  </a>
+                    Angebot anfordern
+                  </Link>
+                  <span className="mt-1 block text-xs text-stone-500">
+                    Maße, Zustand und Lieferort angeben – wir antworten mit einem Festpreis.
+                  </span>
                 </ContactRow>
 
                 <ContactRow icon={Mail} label="E-Mail">

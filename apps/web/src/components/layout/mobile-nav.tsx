@@ -3,7 +3,7 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronDown, Mail, Menu, Phone, X } from 'lucide-react';
+import { ChevronDown, FileText, Mail, Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { contact, formatPriceCompact, navigation, routes } from '@emc/catalog';
@@ -125,13 +125,13 @@ export function MobileNav() {
               <Link href={routes.quote}>Kostenloses Angebot anfordern</Link>
             </Button>
             <div className="flex flex-col gap-2 text-sm">
-              <a
-                href={contact.phoneHref}
+              <Link
+                href={routes.contact}
                 className="flex items-center gap-2 font-semibold text-navy-900"
               >
-                <Phone className="size-4 text-accent-600" aria-hidden />
-                {contact.phoneDisplay}
-              </a>
+                <FileText className="size-4 text-accent-600" aria-hidden />
+                Kontakt aufnehmen
+              </Link>
               <a href={contact.emailHref} className="flex items-center gap-2 text-stone-600">
                 <Mail className="size-4 text-stone-400" aria-hidden />
                 {contact.email}

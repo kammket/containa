@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { ArrowRight, Home, Phone, Search } from 'lucide-react';
+import { ArrowRight, Home, Search } from 'lucide-react';
 
-import { bestsellers, contact, navCategories, routes } from '@emc/catalog';
+import { bestsellers, navCategories, routes } from '@emc/catalog';
 
 import { ProductCard } from '@/components/commerce/product-card';
 import { Button } from '@/components/ui/button';
@@ -78,14 +78,14 @@ export default function NotFound() {
           <div className="mt-12 rounded-2xl bg-navy-950 p-8 text-center text-white">
             <h2 className="font-display text-xl font-bold">Nicht gefunden, was Sie suchen?</h2>
             <p className="mx-auto mt-2 max-w-lg text-sm leading-relaxed text-white/70">
-              Rufen Sie uns an – wir sagen Ihnen in zwei Minuten, ob wir das Passende haben.
+              Schreiben Sie uns kurz, was Sie brauchen – wir sagen Ihnen, ob wir das Passende haben.
             </p>
             <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
               <Button asChild>
-                <a href={contact.phoneHref}>
-                  <Phone aria-hidden />
-                  {contact.phoneDisplay}
-                </a>
+                <Link href={routes.quote}>
+                  Angebot anfordern
+                  <ArrowRight aria-hidden />
+                </Link>
               </Button>
               <Button
                 asChild

@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import { ArrowRight, Phone } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 import {
   breadcrumbs,
-  contact,
   formatPrice,
   getCategory,
   getProduct,
@@ -88,10 +87,10 @@ export function KeywordLandingPage({ page }: { page: LandingPage }) {
               variant="outline"
               className="border-white/25 bg-white/10 text-white hover:bg-white/15"
             >
-              <a href={contact.phoneHref}>
-                <Phone aria-hidden />
-                {contact.phoneDisplay}
-              </a>
+              <Link href={routes.quote}>
+                Angebot anfordern
+                <ArrowRight aria-hidden />
+              </Link>
             </Button>
           </div>
 
