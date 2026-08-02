@@ -45,6 +45,12 @@ openssl rand -base64 48   # COOKIE_SECRET
    * **Root Directory**: leer lassen (das Dockerfile arbeitet vom Monorepo-Root)
    * **Config as code**: `railway.json`
 
+> Railway erkennt die npm-Workspaces und schlägt an dieser Stelle **zwei**
+> Dienste vor, `@emc/api` und `@emc/web`. Nur der erste gehört hierher – die
+> Storefront läuft auf Vercel. Den Dienst `@emc/web` löschen, sonst schlägt
+> sein Build fehl und die Bereitstellung wird insgesamt als fehlerhaft
+> gemeldet, obwohl die API in Ordnung ist.
+
 `railway.json` legt Builder, Dockerfile-Pfad, Startbefehl, Health Check auf
 `/health` und die Neustartregel fest. Dockerfile-Pfad und Health Check daher
 nicht zusätzlich im Dashboard setzen – doppelte Angaben führen dort zu

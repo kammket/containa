@@ -25,10 +25,14 @@ RUN npm ci --workspace=@emc/api --workspace=@emc/catalog --include-workspace-roo
 
 # ── Build ────────────────────────────────────────────────────────────────────
 FROM base AS builder
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/packages/catalog/node_modules ./packages/catalog/node_modules
-COPY --from=deps /app/apps/api/node_modules ./apps/api/node_modules
-COPY package.json package-lock.json ./
+# Den gesamten Stand der deps-Stufe übernehmen, statt einzelne
+# node_modules-Verzeichnisse aufzuzählen. npm hebt Abhängigkeiten an die Wurzel,
+# weshalb packages/catalog/node_modules gar nicht erst entsteht – und COPY
+# bricht ab, sobald eine Quelle fehlt.
+COPY --from=deps /app ./
+
+# Quellen darüberlegen. COPY führt Verzeichnisse zusammen, die aus der
+# deps-Stufe stammenden node_modules bleiben also erhalten.
 COPY packages/catalog ./packages/catalog
 COPY apps/api ./apps/api
 
