@@ -73,7 +73,7 @@ export function Footer() {
       {/* Hauptbereich */}
       <div className="container-page grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <Logo inverted />
+          <Logo inverted size="lg" />
           <p className="mt-4 max-w-sm text-sm leading-relaxed">
             {brand.claim} Seit {brand.foundingYear} beliefern wir Gewerbe, Handwerk, Landwirtschaft
             und Privatkunden in ganz Deutschland – zum Festpreis inklusive Anlieferung.

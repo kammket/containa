@@ -51,7 +51,7 @@ export function Header() {
         <div className="container-page flex h-header items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <MobileNav />
-            <Logo />
+            <Logo size="lg" withTagline={false} />
           </div>
 
           <nav aria-label="Hauptnavigation" className="hidden lg:block">

@@ -76,7 +76,7 @@ export default function AdminProductsPage() {
             aria-hidden
           />
           <label htmlFor="product-search" className="sr-only">
-            Produkte durchsuchen
+            Search products
           </label>
           <Input
             id="product-search"
@@ -143,7 +143,7 @@ export default function AdminProductsPage() {
                   <td className="px-4 py-3 font-medium whitespace-nowrap text-navy-900">
                     {formatPrice(grossFromNet(product.priceNet))}
                     <span className="block text-2xs font-normal text-stone-400">
-                      {formatPrice(product.priceNet)} netto
+                      {formatPrice(product.priceNet)} net
                     </span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">

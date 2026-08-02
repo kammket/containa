@@ -44,7 +44,7 @@ export function buildMetadata({
   noIndex = false,
 }: BuildMetadataOptions): Metadata {
   const url = absoluteUrl(path);
-  const ogImage = image ? ogImageUrl(image) : absoluteUrl('/og-default.svg');
+  const ogImage = image ? ogImageUrl(image) : absoluteUrl('/og-default.png');
 
   return {
     title: withBrand(seo.title),

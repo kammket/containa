@@ -174,7 +174,7 @@ export default function AdminOrderDetailPage() {
                     <div>
                       <p className="font-medium text-navy-900">{item.name}</p>
                       <p className="mt-0.5 text-xs text-stone-500">
-                        Art.-Nr. {item.sku} · {item.quantity} × {formatPrice(item.priceNet)} netto
+                        SKU {item.sku} · {item.quantity} × {formatPrice(item.priceNet)} net
                       </p>
                     </div>
                     <p className="shrink-0 font-medium text-navy-900">

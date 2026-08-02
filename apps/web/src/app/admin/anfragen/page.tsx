@@ -63,7 +63,7 @@ export default function AdminInquiriesPage() {
               aria-hidden
             />
             <label htmlFor="inquiry-search" className="sr-only">
-              Anfragen durchsuchen
+              Search inquiries
             </label>
             <Input
               id="inquiry-search"

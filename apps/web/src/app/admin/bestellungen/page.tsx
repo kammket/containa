@@ -60,7 +60,7 @@ export default function AdminOrdersPage() {
               aria-hidden
             />
             <label htmlFor="order-search" className="sr-only">
-              Bestellungen durchsuchen
+              Search orders
             </label>
             <Input
               id="order-search"

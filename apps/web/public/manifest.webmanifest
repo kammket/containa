@@ -1,5 +1,5 @@
 {
-  "name": "EMC Container – Seecontainer kaufen",
+  "name": "EMC Container \u2013 Seecontainer kaufen",
   "short_name": "EMC Container",
   "description": "Neue, gebrauchte und umgebaute Seecontainer, deutschlandweit geliefert.",
   "lang": "de-DE",
@@ -8,6 +8,23 @@
   "background_color": "#ffffff",
   "theme_color": "#0f1b2d",
   "icons": [
-    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

@@ -11,6 +11,14 @@ import { v2 as cloudinary, type UploadApiResponse } from 'cloudinary';
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
+/**
+ * Wortbildmarke als Wasserzeichen für Produktfotos.
+ *
+ * In der Overlay-Angabe von Cloudinary ersetzt ein Doppelpunkt den
+ * Verzeichnistrenner; die Datei liegt also unter `emc/watermark`.
+ */
+const WATERMARK_ID = 'emc:watermark';
+
 export interface UploadResult {
   publicId: string;
   url: string;
@@ -64,8 +72,24 @@ export class UploadsService {
         {
           folder: `emc/products/${productSlug}`,
           resource_type: 'image',
-          // Überbreite Aufnahmen aus der Kamera auf sinnvolle Maße bringen
-          transformation: [{ width: 2000, height: 2000, crop: 'limit', quality: 'auto:good' }],
+          transformation: [
+            // Überbreite Aufnahmen aus der Kamera auf sinnvolle Maße bringen
+            { width: 2000, height: 2000, crop: 'limit', quality: 'auto:good' },
+            // Wasserzeichen unten rechts. Es wird beim Hochladen fest
+            // eingebrannt, nicht erst beim Ausliefern: So trägt auch eine
+            // heruntergeladene oder anderswo eingebundene Datei die Marke.
+            // `w_0.28` skaliert relativ zur Bildbreite, `fl_relative` ist dafür
+            // erforderlich.
+            {
+              overlay: WATERMARK_ID,
+              width: '0.28',
+              flags: 'relative',
+              gravity: 'south_east',
+              x: 24,
+              y: 20,
+              opacity: 62,
+            },
+          ],
           // Verhindert doppelte Dateien bei mehrfachem Hochladen
           overwrite: false,
           unique_filename: true,

@@ -106,5 +106,5 @@ export function blurDataUrl(publicId: string): string {
 export function ogImageUrl(publicId: string): string {
   return isCloudinaryConfigured()
     ? cloudinaryUrl(publicId, { width: 1200, height: 630, crop: 'fill' })
-    : `/og-default.svg`;
+    : `/og-default.png`;
 }

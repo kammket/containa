@@ -52,7 +52,7 @@ export function MobileNav() {
           <Dialog.Title className="sr-only">Navigation</Dialog.Title>
 
           <div className="flex items-center justify-between border-b border-stone-200 px-4 py-3">
-            <Logo />
+            <Logo withTagline={false} />
             <Dialog.Close
               aria-label="Menü schließen"
               className="inline-flex size-10 cursor-pointer items-center justify-center rounded-xl text-stone-500 transition-colors hover:bg-stone-100"
