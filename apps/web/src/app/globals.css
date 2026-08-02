@@ -1,0 +1,277 @@
+@import 'tailwindcss';
+
+/*
+ * EMC Container – Designsystem
+ *
+ * Palette: Dunkelblau (Marke), Weiß, Hellgrau (Flächen), Orange (Aktion).
+ * Farben in OKLCH, damit Helligkeitsstufen wahrnehmungsgleich abgestuft sind
+ * und Kontrastwerte über die gesamte Skala berechenbar bleiben.
+ */
+@theme {
+  /* ── Marke: Dunkelblau ──────────────────────────────────────────────── */
+  --color-navy-50: oklch(0.973 0.011 253);
+  --color-navy-100: oklch(0.936 0.024 253);
+  --color-navy-200: oklch(0.869 0.046 253);
+  --color-navy-300: oklch(0.771 0.078 253);
+  --color-navy-400: oklch(0.658 0.11 253);
+  --color-navy-500: oklch(0.566 0.128 254);
+  --color-navy-600: oklch(0.481 0.122 255);
+  --color-navy-700: oklch(0.399 0.104 256);
+  --color-navy-800: oklch(0.322 0.082 256);
+  --color-navy-900: oklch(0.253 0.062 257);
+  --color-navy-950: oklch(0.183 0.045 258);
+
+  /* ── Aktion: Orange ─────────────────────────────────────────────────── */
+  --color-accent-50: oklch(0.977 0.017 68);
+  --color-accent-100: oklch(0.948 0.041 71);
+  --color-accent-200: oklch(0.897 0.081 68);
+  --color-accent-300: oklch(0.837 0.121 62);
+  --color-accent-400: oklch(0.766 0.161 54);
+  --color-accent-500: oklch(0.702 0.183 47);
+  --color-accent-600: oklch(0.625 0.183 42);
+  --color-accent-700: oklch(0.527 0.158 39);
+  --color-accent-800: oklch(0.446 0.128 39);
+  --color-accent-900: oklch(0.386 0.104 39);
+
+  /* ── Neutral: Hellgrau ──────────────────────────────────────────────── */
+  --color-stone-50: oklch(0.985 0.002 250);
+  --color-stone-100: oklch(0.968 0.004 250);
+  --color-stone-150: oklch(0.951 0.005 250);
+  --color-stone-200: oklch(0.925 0.006 250);
+  --color-stone-300: oklch(0.869 0.008 250);
+  --color-stone-400: oklch(0.712 0.012 250);
+  --color-stone-500: oklch(0.573 0.014 252);
+  --color-stone-600: oklch(0.463 0.014 252);
+  --color-stone-700: oklch(0.383 0.013 253);
+  --color-stone-800: oklch(0.283 0.011 254);
+  --color-stone-900: oklch(0.208 0.009 255);
+
+  /* ── Semantisch ─────────────────────────────────────────────────────── */
+  --color-success-50: oklch(0.966 0.032 158);
+  --color-success-600: oklch(0.573 0.132 158);
+  --color-success-700: oklch(0.484 0.113 158);
+  --color-warning-50: oklch(0.977 0.033 92);
+  --color-warning-600: oklch(0.669 0.145 68);
+  --color-warning-700: oklch(0.566 0.128 62);
+  --color-danger-50: oklch(0.968 0.021 18);
+  --color-danger-600: oklch(0.577 0.201 27);
+  --color-danger-700: oklch(0.492 0.176 27);
+
+  /* ── Typografie ─────────────────────────────────────────────────────── */
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-display: var(--font-display), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+
+  /* Große Überschriften mit engerem Satz für premium Anmutung */
+  --text-6xl--letter-spacing: -0.035em;
+  --text-5xl--letter-spacing: -0.032em;
+  --text-4xl--letter-spacing: -0.028em;
+  --text-3xl--letter-spacing: -0.022em;
+  --text-2xl--letter-spacing: -0.018em;
+  --text-xl--letter-spacing: -0.012em;
+
+  /* ── Radien ─────────────────────────────────────────────────────────── */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.75rem;
+
+  /* ── Schatten: weich, mehrlagig, in Markenfarbe getönt ──────────────── */
+  --shadow-soft:
+    0 1px 2px 0 oklch(0.253 0.062 257 / 0.04), 0 1px 3px 0 oklch(0.253 0.062 257 / 0.06);
+  --shadow-card:
+    0 1px 2px 0 oklch(0.253 0.062 257 / 0.04), 0 4px 12px -2px oklch(0.253 0.062 257 / 0.07);
+  --shadow-card-hover:
+    0 2px 4px 0 oklch(0.253 0.062 257 / 0.05), 0 12px 28px -6px oklch(0.253 0.062 257 / 0.13);
+  --shadow-float:
+    0 4px 8px -2px oklch(0.253 0.062 257 / 0.06), 0 20px 44px -12px oklch(0.253 0.062 257 / 0.18);
+  --shadow-menu:
+    0 8px 16px -4px oklch(0.253 0.062 257 / 0.08), 0 28px 56px -16px oklch(0.253 0.062 257 / 0.2);
+
+  /* ── Container ──────────────────────────────────────────────────────── */
+  --spacing-header: 4.5rem;
+
+  /* ── Animationen ────────────────────────────────────────────────────── */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-fade-up: fade-up 0.5s var(--ease-out-quint) both;
+  --animate-fade-in: fade-in 0.4s ease-out both;
+  --animate-marquee: marquee 40s linear infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Basis ────────────────────────────────────────────────────────────── */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-stone-200);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* Sticky Header beim Ankersprung nicht überdecken */
+    scroll-padding-top: calc(var(--spacing-header) + 1rem);
+  }
+
+  body {
+    background-color: var(--color-white);
+    color: var(--color-navy-900);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Sichtbarer, konsistenter Fokusring für Tastaturbedienung */
+  :focus-visible {
+    outline: 2px solid var(--color-accent-600);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  /* Deutsche Silbentrennung für lange Komposita in Fließtext */
+  .prose-de {
+    hyphens: auto;
+    -webkit-hyphens: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Einheitliche Seitenbreite und Außenabstände */
+  .container-page {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 80rem;
+    padding-inline: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .container-page {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  .container-narrow {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 48rem;
+    padding-inline: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .container-narrow {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  /* Dezenter Raster-Hintergrund für Hero-Flächen */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, oklch(1 0 0 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(1 0 0 / 0.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  /* Nur für Screenreader – z. B. Skip-Link, Formularlabels */
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
+
+@layer utilities {
+  /* Horizontal scrollbare Bereiche mit Snap – Produktkarussells mobil */
+  .scroll-snap-x {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .scroll-snap-x::-webkit-scrollbar {
+    display: none;
+  }
+
+  .snap-item {
+    scroll-snap-align: start;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}

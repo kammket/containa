@@ -1,0 +1,42 @@
+{
+  "name": "emc-container",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EMC Container – Premium Seecontainer Onlineshop für Deutschland",
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@emc/web",
+    "dev:api": "npm run dev --workspace=@emc/api",
+    "dev:all": "npm run dev --workspace=@emc/web & npm run dev --workspace=@emc/api",
+    "build": "npm run build --workspace=@emc/catalog && npm run build --workspace=@emc/web",
+    "build:api": "npm run build --workspace=@emc/catalog && npm run build --workspace=@emc/api",
+    "start": "npm run start --workspace=@emc/web",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,md,css}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,mjs,json,md,css}\"",
+    "db:migrate": "npm run db:migrate --workspace=@emc/api",
+    "db:seed": "npm run db:seed --workspace=@emc/api",
+    "db:studio": "npm run db:studio --workspace=@emc/api",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.9",
+    "typescript": "^5.7.3"
+  },
+  "overridesComment": "Transitive Abhängigkeiten mit bekannten Advisories, für die es keinen nicht-brechenden Upstream-Fix gibt: postcss und sharp (via Next.js), js-yaml (via @nestjs/swagger). 'npm audit fix --force' würde Next.js auf v9 zurückstufen; stattdessen heben wir gezielt die betroffenen Pakete an.",
+  "overrides": {
+    "postcss": "^8.5.25",
+    "sharp": "^0.35.3",
+    "js-yaml": "^4.1.0"
+  }
+}

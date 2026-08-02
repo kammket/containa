@@ -1,0 +1,174 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Bei mehreren Pushes hintereinander nur den letzten Lauf behalten.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  catalog:
+    name: Katalog – Typen & Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typen prüfen
+        run: npm run typecheck --workspace=@emc/catalog
+
+      - name: Katalogtests
+        # Prüft Preislogik, Lieferzonen, Slug-Kollisionen, Duplicate Content
+        # und die Länge aller SEO-Metadaten.
+        run: npm test --workspace=@emc/catalog
+
+  web:
+    name: Storefront – Build
+    runs-on: ubuntu-latest
+    needs: catalog
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Katalog bauen
+        run: npm run build --workspace=@emc/catalog
+
+      - name: Typen prüfen
+        run: npm run typecheck --workspace=@emc/web
+
+      - name: ESLint
+        run: npm run lint --workspace=@emc/web
+
+      - name: Storefront bauen
+        run: npm run build --workspace=@emc/web
+        env:
+          NEXT_PUBLIC_API_URL: https://api.emccontainer.com
+          NEXT_TELEMETRY_DISABLED: '1'
+
+      - name: Browser für E2E-Tests bereitstellen
+        run: npx playwright install --with-deps chromium
+        working-directory: apps/web
+
+      - name: E2E-Tests
+        # Prüft den Kaufweg zweimal – einmal regulär und einmal mit
+        # simulierter Übersetzungserweiterung, die Textknoten ersetzt.
+        run: |
+          npm run start --workspace=@emc/web &
+          npx wait-on http://localhost:3000 -t 60000
+          npm run test:e2e --workspace=@emc/web
+        env:
+          BASE_URL: http://localhost:3000
+
+  api:
+    name: API – Build & Migrationen
+    runs-on: ubuntu-latest
+    needs: catalog
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: emc
+          POSTGRES_PASSWORD: emc_ci_password
+          POSTGRES_DB: emc_container_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://emc:emc_ci_password@localhost:5432/emc_container_test?schema=public
+      JWT_SECRET: ci-jwt-secret-mit-mindestens-32-zeichen-laenge-ok
+      JWT_REFRESH_SECRET: ci-refresh-secret-anders-und-32-zeichen-lang-ok
+      COOKIE_SECRET: ci-cookie-secret-mit-mindestens-32-zeichen-lang
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Katalog bauen
+        run: npm run build --workspace=@emc/catalog
+
+      - name: Prisma-Client erzeugen
+        run: npm run db:generate --workspace=@emc/api
+
+      - name: Typen prüfen
+        run: npm run typecheck --workspace=@emc/api
+
+      - name: Linten
+        run: npm run lint --workspace=@emc/api
+
+      - name: Migrationen anwenden
+        # Stellt sicher, dass die Migrationen tatsächlich lauffähig sind und
+        # zum Schema passen – ein reiner Build würde das nicht aufdecken.
+        run: npm run db:deploy --workspace=@emc/api
+
+      - name: API bauen
+        run: npm run build --workspace=@emc/api
+
+      - name: Seed prüfen
+        run: npm run db:seed --workspace=@emc/api
+        env:
+          ADMIN_EMAIL: ci@emccontainer.com
+          ADMIN_PASSWORD: ci-test-passwort-2026
+
+  format:
+    name: Formatierung
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Prettier prüfen
+        run: npm run format:check
+
+  audit:
+    name: Sicherheitsprüfung
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: npm audit
+        # Bricht ab, sobald eine Schwachstelle ab Schweregrad "high" auftaucht.
+        run: npm audit --audit-level=high
