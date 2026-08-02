@@ -52,3 +52,10 @@ apps/api/prisma/*.db-journal
 # apps/api/src/modules/uploads/, also Quellcode.
 /uploads/
 /tmp/
+
+# Die folgende Zeile trägt `vercel link` bei jedem Aufruf selbst ein. Sie steht
+# hinter dem `!.env.example` weiter oben und würde die Vorlagen deshalb wieder
+# ausschließen – die Ausnahmen daher hier erneut setzen, damit sie gewinnen.
+.env*
+!.env.example
+!**/.env.example
