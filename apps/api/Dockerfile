@@ -52,6 +52,11 @@ RUN addgroup --system --gid 1001 nodejs \
 COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nodejs /app/packages/catalog/dist ./packages/catalog/dist
 COPY --from=builder --chown=nestjs:nodejs /app/packages/catalog/package.json ./packages/catalog/
+# Die Quellen (396 kB reine Datendateien) werden für den Seed gebraucht:
+# prisma/seed.ts läuft als ES-Modul und löst @emc/catalog deshalb über die
+# default-Bedingung der exports-Map auf, also auf src/index.ts. Ohne diesen
+# Ordner lässt sich der Katalog im Container nicht einspielen.
+COPY --from=builder --chown=nestjs:nodejs /app/packages/catalog/src ./packages/catalog/src
 COPY --from=builder --chown=nestjs:nodejs /app/apps/api/dist ./apps/api/dist
 COPY --from=builder --chown=nestjs:nodejs /app/apps/api/prisma ./apps/api/prisma
 COPY --from=builder --chown=nestjs:nodejs /app/apps/api/package.json ./apps/api/
