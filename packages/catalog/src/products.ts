@@ -17,21 +17,21 @@ const standardDownloads: Product['downloads'] = [
     description: 'Bemaßte Ansichten und Schnitte als PDF für Ihre Planung.',
     href: '/downloads/emc-massblatt-seecontainer.pdf',
     type: 'pdf',
-    sizeLabel: '480 KB',
+    sizeLabel: '4 KB',
   },
   {
     label: 'Checkliste Stellplatz & Anlieferung',
     description: 'Zufahrt, Untergrund und Kranstellung vorab prüfen.',
     href: '/downloads/emc-checkliste-anlieferung.pdf',
     type: 'pdf',
-    sizeLabel: '260 KB',
+    sizeLabel: '4 KB',
   },
   {
     label: 'Garantiebedingungen',
     description: 'Umfang und Laufzeit unserer Garantieleistungen.',
     href: '/downloads/emc-garantiebedingungen.pdf',
     type: 'pdf',
-    sizeLabel: '180 KB',
+    sizeLabel: '5 KB',
   },
 ];
 
