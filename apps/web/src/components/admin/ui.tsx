@@ -4,7 +4,13 @@ import { Loader2 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
-/** Wiederverwendbare Bausteine des Adminbereichs. */
+/**
+ * Wiederverwendbare Bausteine des Adminbereichs.
+ *
+ * Die Oberfläche des Adminbereichs ist englisch: Er wird von einer Person
+ * bedient, die kein Deutsch spricht. Die Storefront bleibt davon unberührt –
+ * sie richtet sich an deutsche Kundschaft.
+ */
 
 export function PageHeader({
   title,
@@ -64,7 +70,7 @@ export function StatCard({ label, value, hint }: { label: string; value: string;
 }
 
 const statusStyles: Record<string, string> = {
-  // Bestellungen
+  // Orders
   EINGEGANGEN: 'bg-navy-100 text-navy-800',
   ZAHLUNG_AUSSTEHEND: 'bg-warning-50 text-warning-700',
   BEZAHLT: 'bg-success-50 text-success-700',
@@ -74,25 +80,29 @@ const statusStyles: Record<string, string> = {
   GELIEFERT: 'bg-success-50 text-success-700',
   STORNIERT: 'bg-stone-100 text-stone-500',
   ERSTATTET: 'bg-stone-100 text-stone-500',
-  // Anfragen
+  // Inquiries
   NEU: 'bg-accent-100 text-accent-800',
   BEANTWORTET: 'bg-success-50 text-success-700',
   GESCHLOSSEN: 'bg-stone-100 text-stone-500',
 };
 
+/**
+ * Anzeigetexte der Statuswerte. Die Schlüssel sind die Enumwerte aus der
+ * Datenbank und bleiben deutsch – nur die Beschriftung wird übersetzt.
+ */
 export const statusLabels: Record<string, string> = {
-  EINGEGANGEN: 'Eingegangen',
-  ZAHLUNG_AUSSTEHEND: 'Zahlung offen',
-  BEZAHLT: 'Bezahlt',
-  IN_BEARBEITUNG: 'In Bearbeitung',
-  VERSANDBEREIT: 'Versandbereit',
-  IN_ZUSTELLUNG: 'In Zustellung',
-  GELIEFERT: 'Geliefert',
-  STORNIERT: 'Storniert',
-  ERSTATTET: 'Erstattet',
-  NEU: 'Neu',
-  BEANTWORTET: 'Beantwortet',
-  GESCHLOSSEN: 'Geschlossen',
+  EINGEGANGEN: 'Received',
+  ZAHLUNG_AUSSTEHEND: 'Payment pending',
+  BEZAHLT: 'Paid',
+  IN_BEARBEITUNG: 'In progress',
+  VERSANDBEREIT: 'Ready to ship',
+  IN_ZUSTELLUNG: 'Out for delivery',
+  GELIEFERT: 'Delivered',
+  STORNIERT: 'Cancelled',
+  ERSTATTET: 'Refunded',
+  NEU: 'New',
+  BEANTWORTET: 'Answered',
+  GESCHLOSSEN: 'Closed',
 };
 
 export function StatusBadge({ status }: { status: string }) {
@@ -108,7 +118,7 @@ export function StatusBadge({ status }: { status: string }) {
   );
 }
 
-export function LoadingState({ label = 'Wird geladen …' }: { label?: string }) {
+export function LoadingState({ label = 'Loading …' }: { label?: string }) {
   return (
     <div className="flex items-center justify-center gap-3 py-16 text-sm text-stone-500">
       <Loader2 className="size-5 animate-spin" aria-hidden />
@@ -148,7 +158,7 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry?: ()
           onClick={onRetry}
           className="ml-2 cursor-pointer font-semibold underline underline-offset-2"
         >
-          Erneut versuchen
+          Try again
         </button>
       )}
     </div>

@@ -14,9 +14,9 @@ const schema = z.object({
   email: z
     .string()
     .trim()
-    .min(1, 'Bitte geben Sie Ihre E-Mail-Adresse ein.')
-    .email('Bitte geben Sie eine gültige E-Mail-Adresse ein.'),
-  password: z.string().min(1, 'Bitte geben Sie Ihr Passwort ein.'),
+    .min(1, 'Please enter your email address.')
+    .email('Please enter a valid email address.'),
+  password: z.string().min(1, 'Please enter your password.'),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -42,9 +42,7 @@ export function AdminLogin({ onSuccess }: { onSuccess: (user: AdminUser) => void
       onSuccess(await adminLogin(values.email, values.password));
     } catch (caught) {
       setError(
-        caught instanceof AdminApiError
-          ? caught.message
-          : 'Die Anmeldung ist fehlgeschlagen. Läuft die API?',
+        caught instanceof AdminApiError ? caught.message : 'Sign-in failed. Is the API running?',
       );
     }
   };
@@ -58,7 +56,7 @@ export function AdminLogin({ onSuccess }: { onSuccess: (user: AdminUser) => void
           <p className="font-display text-xl font-bold text-white">
             EMC<span className="text-accent-500"> Container</span>
           </p>
-          <p className="mt-1 text-sm text-white/50">Verwaltung</p>
+          <p className="mt-1 text-sm text-white/50">Administration</p>
         </div>
 
         <form
@@ -66,14 +64,14 @@ export function AdminLogin({ onSuccess }: { onSuccess: (user: AdminUser) => void
           noValidate
           className="rounded-2xl bg-white p-6 shadow-float"
         >
-          <h1 className="font-display text-lg font-bold text-navy-950">Anmelden</h1>
+          <h1 className="font-display text-lg font-bold text-navy-950">Sign in</h1>
           <p className="mt-1 text-sm text-stone-500">
-            Zugang ausschließlich für Mitarbeitende von EMC Container.
+            Access is restricted to EMC Container staff.
           </p>
 
           <div className="mt-6 space-y-4">
             <div>
-              <Label htmlFor="admin-email">E-Mail-Adresse</Label>
+              <Label htmlFor="admin-email">Email address</Label>
               <Input
                 id="admin-email"
                 type="email"
@@ -86,7 +84,7 @@ export function AdminLogin({ onSuccess }: { onSuccess: (user: AdminUser) => void
             </div>
 
             <div>
-              <Label htmlFor="admin-password">Passwort</Label>
+              <Label htmlFor="admin-password">Password</Label>
               <Input
                 id="admin-password"
                 type="password"
@@ -116,11 +114,11 @@ export function AdminLogin({ onSuccess }: { onSuccess: (user: AdminUser) => void
                 <Lock aria-hidden />
               )}
             </span>
-            <span>{isSubmitting ? 'Anmeldung läuft …' : 'Anmelden'}</span>
+            <span>{isSubmitting ? 'Signing in …' : 'Sign in'}</span>
           </Button>
 
           <p className="mt-4 text-center text-2xs leading-relaxed text-stone-500">
-            Nach fünf Fehlversuchen wird das Konto für 15 Minuten gesperrt.
+            After five failed attempts the account is locked for 15 minutes.
           </p>
         </form>
       </div>

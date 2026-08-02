@@ -7,8 +7,8 @@ export default function NewProductPage() {
   return (
     <>
       <PageHeader
-        title="Neues Produkt"
-        description="Stammdaten anlegen. Bilder können Sie nach dem Speichern hochladen."
+        title="New product"
+        description="Create the master data. You can upload images after saving."
       />
       <Content>
         <ProductForm />

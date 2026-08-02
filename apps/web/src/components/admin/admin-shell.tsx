@@ -24,10 +24,10 @@ export function useAdminSession(): AdminSession {
 }
 
 const navigation = [
-  { href: '/admin', label: 'Übersicht', icon: LayoutGrid, exact: true },
-  { href: '/admin/produkte', label: 'Produkte', icon: Package },
-  { href: '/admin/bestellungen', label: 'Bestellungen', icon: ShoppingBag },
-  { href: '/admin/anfragen', label: 'Anfragen', icon: Inbox, badge: 'inquiries' },
+  { href: '/admin', label: 'Overview', icon: LayoutGrid, exact: true },
+  { href: '/admin/produkte', label: 'Products', icon: Package },
+  { href: '/admin/bestellungen', label: 'Orders', icon: ShoppingBag },
+  { href: '/admin/anfragen', label: 'Inquiries', icon: Inbox, badge: 'inquiries' },
 ];
 
 /**
@@ -66,7 +66,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     return (
       <div className="flex min-h-dvh items-center justify-center bg-stone-50">
         <Loader2 className="size-6 animate-spin text-stone-400" aria-hidden />
-        <span className="sr-only">Sitzung wird geprüft …</span>
+        <span className="sr-only">Checking session …</span>
       </div>
     );
   }
@@ -82,10 +82,10 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             <p className="font-display text-base font-bold text-navy-950">
               EMC<span className="text-accent-600"> Container</span>
             </p>
-            <p className="mt-0.5 text-xs text-stone-500">Verwaltung</p>
+            <p className="mt-0.5 text-xs text-stone-500">Administration</p>
           </div>
 
-          <nav aria-label="Verwaltung" className="flex-1 p-3">
+          <nav aria-label="Administration" className="flex-1 p-3">
             <ul className="space-y-1">
               {navigation.map((item) => {
                 const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
@@ -122,26 +122,26 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
           <div className="border-t border-stone-200 p-3">
             <p className="px-3 pb-2 text-xs text-stone-500">
-              Angemeldet als
+              Signed in as
               <br />
               <span className="font-medium text-navy-900">{user.email}</span>
             </p>
             <Button variant="ghost" size="sm" onClick={signOut} className="w-full justify-start">
               <LogOut aria-hidden />
-              Abmelden
+              Sign out
             </Button>
             <Link
               href="/"
               className="mt-1 block rounded-lg px-3 py-2 text-sm text-stone-500 transition-colors hover:bg-stone-100 hover:text-navy-900"
             >
-              Zum Shop
+              Go to shop
             </Link>
           </div>
         </aside>
 
         {/* Mobile Navigation */}
         <nav
-          aria-label="Verwaltung"
+          aria-label="Administration"
           className="fixed inset-x-0 bottom-0 z-40 flex border-t border-stone-200 bg-white lg:hidden"
         >
           {navigation.map((item) => {

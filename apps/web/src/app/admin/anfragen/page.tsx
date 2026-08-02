@@ -19,17 +19,17 @@ import { adminApi } from '@/lib/admin-api';
 import { cn, formatDateShort } from '@/lib/utils';
 
 const typeFilters = [
-  { value: '', label: 'Alle' },
-  { value: 'ANGEBOT', label: 'Angebotsanfragen' },
-  { value: 'KONTAKT', label: 'Kontaktanfragen' },
+  { value: '', label: 'All' },
+  { value: 'ANGEBOT', label: 'Quote requests' },
+  { value: 'KONTAKT', label: 'Contact inquiries' },
 ];
 
 const statusFilters = [
-  { value: '', label: 'Alle Status' },
-  { value: 'NEU', label: 'Neu' },
-  { value: 'IN_BEARBEITUNG', label: 'In Bearbeitung' },
-  { value: 'BEANTWORTET', label: 'Beantwortet' },
-  { value: 'GESCHLOSSEN', label: 'Geschlossen' },
+  { value: '', label: 'All statuses' },
+  { value: 'NEU', label: 'New' },
+  { value: 'IN_BEARBEITUNG', label: 'In progress' },
+  { value: 'BEANTWORTET', label: 'Answered' },
+  { value: 'GESCHLOSSEN', label: 'Closed' },
 ];
 
 export default function AdminInquiriesPage() {
@@ -51,8 +51,8 @@ export default function AdminInquiriesPage() {
   return (
     <>
       <PageHeader
-        title="Anfragen"
-        description="Kontakt- und Angebotsanfragen aus den Formularen der Website."
+        title="Inquiries"
+        description="Contact and quote requests from the website forms."
       />
 
       <Content>
@@ -69,7 +69,7 @@ export default function AdminInquiriesPage() {
               id="inquiry-search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Referenz, Name, E-Mail oder Firma …"
+              placeholder="Reference, name, email or company …"
               className="pl-10"
             />
           </div>
@@ -86,7 +86,7 @@ export default function AdminInquiriesPage() {
               ))}
             </div>
 
-            <div className="flex gap-1.5" role="group" aria-label="Nach Status filtern">
+            <div className="flex gap-1.5" role="group" aria-label="Filter by status">
               {statusFilters.map((filter) => (
                 <FilterButton
                   key={filter.value}
@@ -100,21 +100,30 @@ export default function AdminInquiriesPage() {
         </div>
 
         {inquiries.isLoading ? (
-          <LoadingState label="Anfragen werden geladen …" />
+          <LoadingState label="Loading inquiries …" />
         ) : inquiries.isError ? (
           <ErrorState
-            message="Die Anfragen konnten nicht geladen werden."
+            message="The inquiries could not be loaded."
             onRetry={() => void inquiries.refetch()}
           />
         ) : inquiries.data && inquiries.data.items.length > 0 ? (
           <>
             <p className="mb-3 text-sm text-stone-500">
-              {inquiries.data.meta.total} {inquiries.data.meta.total === 1 ? 'Anfrage' : 'Anfragen'}
+              {inquiries.data.meta.total}{' '}
+              {inquiries.data.meta.total === 1 ? 'inquiry' : 'inquiries'}
             </p>
 
             <DataTable
-              caption="Anfragenliste"
-              head={['Referenz', 'Art', 'Datum', 'Name', 'Kontakt', 'Betreff / Bedarf', 'Status']}
+              caption="List of inquiries"
+              head={[
+                'Reference',
+                'Type',
+                'Date',
+                'Name',
+                'Contact',
+                'Subject / requirement',
+                'Status',
+              ]}
             >
               {inquiries.data.items.map((inquiry) => (
                 <tr key={inquiry.id} className="hover:bg-stone-50">
@@ -135,7 +144,7 @@ export default function AdminInquiriesPage() {
                           : 'bg-navy-100 text-navy-800',
                       )}
                     >
-                      {inquiry.type === 'ANGEBOT' ? 'Angebot' : 'Kontakt'}
+                      {inquiry.type === 'ANGEBOT' ? 'Quote' : 'Contact'}
                     </span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-stone-600">
@@ -169,11 +178,11 @@ export default function AdminInquiriesPage() {
           </>
         ) : (
           <EmptyState
-            title={search || type || status ? 'Keine Treffer' : 'Noch keine Anfragen'}
+            title={search || type || status ? 'No matches' : 'No inquiries yet'}
             description={
               search || type || status
-                ? 'Passen Sie Suche oder Filter an.'
-                : 'Anfragen aus dem Kontakt- und Angebotsformular erscheinen hier.'
+                ? 'Adjust your search or filters.'
+                : 'Inquiries from the contact and quote forms appear here.'
             }
           />
         )}

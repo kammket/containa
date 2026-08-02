@@ -45,9 +45,7 @@ export function ImageManager({
     },
     onError: (caught) =>
       setError(
-        caught instanceof AdminApiError
-          ? caught.message
-          : 'Das Bild konnte nicht hochgeladen werden.',
+        caught instanceof AdminApiError ? caught.message : 'The image could not be uploaded.',
       ),
   });
 
@@ -68,7 +66,7 @@ export function ImageManager({
 
     // Vorabprüfung im Browser; die verbindliche Prüfung macht die API.
     if (file.size > MAX_FILE_SIZE) {
-      setError('Die Datei ist größer als 10 MB.');
+      setError('The file is larger than 10 MB.');
       event.target.value = '';
       return;
     }
@@ -87,7 +85,7 @@ export function ImageManager({
   };
 
   return (
-    <Card title="Produktbilder">
+    <Card title="Product images">
       {images.length > 0 ? (
         <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {images.map((image, index) => (
@@ -107,13 +105,13 @@ export function ImageManager({
                   />
                 ) : (
                   <span className="flex h-full items-center justify-center px-3 text-center text-xs text-stone-400">
-                    Ohne Cloudinary-Konfiguration ist keine Vorschau verfügbar
+                    No preview available without Cloudinary configured
                   </span>
                 )}
 
                 {index === 0 && (
                   <span className="absolute top-2 left-2 rounded-full bg-navy-900 px-2.5 py-1 text-2xs font-bold text-white">
-                    Titelbild
+                    Cover image
                   </span>
                 )}
               </div>
@@ -146,10 +144,10 @@ export function ImageManager({
                   <button
                     type="button"
                     onClick={() => {
-                      if (confirm(`Bild „${image.alt}" wirklich löschen?`)) remove.mutate(image.id);
+                      if (confirm(`Delete image “${image.alt}”?`)) remove.mutate(image.id);
                     }}
                     disabled={remove.isPending}
-                    aria-label="Bild löschen"
+                    aria-label="Delete image"
                     className="ml-auto cursor-pointer rounded-md p-1.5 text-stone-400 transition-colors hover:bg-danger-50 hover:text-danger-600 disabled:opacity-30"
                   >
                     <Trash2 className="size-3.5" aria-hidden />
@@ -161,7 +159,7 @@ export function ImageManager({
         </ul>
       ) : (
         <p className="rounded-xl border border-dashed border-stone-300 px-5 py-10 text-center text-sm text-stone-500">
-          Noch keine Bilder. Das erste hochgeladene Bild wird automatisch zum Titelbild.
+          No images yet. The first image you upload automatically becomes the cover image.
         </p>
       )}
 
@@ -169,7 +167,7 @@ export function ImageManager({
       <div className="mt-5 border-t border-stone-100 pt-5">
         <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
           <div>
-            <Label htmlFor="image-alt">Alt-Text für das nächste Bild</Label>
+            <Label htmlFor="image-alt">Alt text for the next image</Label>
             <Input
               id="image-alt"
               value={alt}
@@ -177,8 +175,8 @@ export function ImageManager({
               placeholder={`${productName} – Frontansicht mit geschlossenen Türen`}
             />
             <p className="mt-1.5 text-2xs text-stone-500">
-              Beschreibt das Bild für Screenreader und die Bildersuche. Ohne Eingabe verwenden wir
-              den Produktnamen.
+              Describes the image for screen readers and image search. We use the product name if
+              you leave this empty.
             </p>
           </div>
 
@@ -202,13 +200,13 @@ export function ImageManager({
               ) : (
                 <ImagePlus aria-hidden />
               )}
-              <span>{upload.isPending ? 'Wird hochgeladen …' : 'Bild hochladen'}</span>
+              <span>{upload.isPending ? 'Uploading …' : 'Upload image'}</span>
             </Button>
           </div>
         </div>
 
         <p className="mt-3 text-2xs text-stone-500">
-          JPEG, PNG, WebP oder AVIF · maximal 10 MB · Empfehlung: mindestens 1.200 × 900 Pixel
+          JPEG, PNG, WebP or AVIF · 10 MB maximum · recommended at least 1,200 × 900 pixels
         </p>
 
         {error && (

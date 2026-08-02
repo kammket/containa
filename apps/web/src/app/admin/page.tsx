@@ -38,32 +38,29 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <PageHeader
-        title="Übersicht"
-        description="Bestellungen, Anfragen und Umsatz auf einen Blick."
-      />
+      <PageHeader title="Overview" description="Orders, inquiries and revenue at a glance." />
 
       <Content>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
-            label="Offene Bestellungen"
+            label="Open orders"
             value={orderStats.data ? String(orderStats.data.openOrders) : '–'}
-            hint="eingegangen, bezahlt oder in Bearbeitung"
+            hint="received, paid or in progress"
           />
           <StatCard
-            label="Bestellungen gesamt"
+            label="Total orders"
             value={orderStats.data ? String(orderStats.data.totalOrders) : '–'}
             hint={
               orderStats.data ? `${orderStats.data.ordersThisMonth} in diesem Monat` : undefined
             }
           />
           <StatCard
-            label="Umsatz gesamt"
+            label="Total revenue"
             value={orderStats.data ? formatPrice(orderStats.data.revenueGross) : '–'}
-            hint="brutto, ohne Stornos und Erstattungen"
+            hint="gross, excluding cancellations and refunds"
           />
           <StatCard
-            label="Neue Anfragen"
+            label="New inquiries"
             value={inquiryStats.data ? String(inquiryStats.data.newTotal) : '–'}
             hint={
               inquiryStats.data
@@ -76,12 +73,12 @@ export default function AdminDashboard() {
         {/* Neueste Bestellungen */}
         <section className="mt-8">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="font-display text-base font-bold text-navy-950">Neueste Bestellungen</h2>
+            <h2 className="font-display text-base font-bold text-navy-950">Latest orders</h2>
             <Link
               href="/admin/bestellungen"
               className="inline-flex items-center gap-1 text-sm font-semibold text-navy-800 transition-colors hover:text-accent-700"
             >
-              Alle ansehen
+              View all
               <ArrowRight className="size-4" aria-hidden />
             </Link>
           </div>
@@ -90,8 +87,8 @@ export default function AdminDashboard() {
             <LoadingState />
           ) : recentOrders.data && recentOrders.data.items.length > 0 ? (
             <DataTable
-              caption="Neueste Bestellungen"
-              head={['Nummer', 'Datum', 'Kunde', 'Lieferort', 'Betrag', 'Status']}
+              caption="Latest orders"
+              head={['Number', 'Date', 'Customer', 'Delivery location', 'Amount', 'Status']}
             >
               {recentOrders.data.items.map((order) => (
                 <tr key={order.id} className="hover:bg-stone-50">
@@ -126,8 +123,8 @@ export default function AdminDashboard() {
             </DataTable>
           ) : (
             <EmptyState
-              title="Noch keine Bestellungen"
-              description="Sobald die erste Bestellung eingeht, erscheint sie hier."
+              title="No orders yet"
+              description="The first order will appear here as soon as it arrives."
             />
           )}
         </section>
@@ -135,14 +132,12 @@ export default function AdminDashboard() {
         {/* Offene Anfragen */}
         <section className="mt-8">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="font-display text-base font-bold text-navy-950">
-              Unbearbeitete Anfragen
-            </h2>
+            <h2 className="font-display text-base font-bold text-navy-950">Unhandled inquiries</h2>
             <Link
               href="/admin/anfragen"
               className="inline-flex items-center gap-1 text-sm font-semibold text-navy-800 transition-colors hover:text-accent-700"
             >
-              Alle ansehen
+              View all
               <ArrowRight className="size-4" aria-hidden />
             </Link>
           </div>
@@ -151,8 +146,8 @@ export default function AdminDashboard() {
             <LoadingState />
           ) : openInquiries.data && openInquiries.data.items.length > 0 ? (
             <DataTable
-              caption="Unbearbeitete Anfragen"
-              head={['Referenz', 'Art', 'Datum', 'Name', 'Kontakt']}
+              caption="Unhandled inquiries"
+              head={['Reference', 'Type', 'Date', 'Name', 'Contact']}
             >
               {openInquiries.data.items.map((inquiry) => (
                 <tr key={inquiry.id} className="hover:bg-stone-50">
@@ -165,7 +160,7 @@ export default function AdminDashboard() {
                     </Link>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-stone-600">
-                    {inquiry.type === 'ANGEBOT' ? 'Angebot' : 'Kontakt'}
+                    {inquiry.type === 'ANGEBOT' ? 'Quote' : 'Contact'}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-stone-600">
                     {formatDateShort(inquiry.createdAt.slice(0, 10))}
@@ -179,8 +174,8 @@ export default function AdminDashboard() {
             </DataTable>
           ) : (
             <EmptyState
-              title="Keine offenen Anfragen"
-              description="Alle eingegangenen Anfragen sind bearbeitet."
+              title="No open inquiries"
+              description="Every inquiry received has been handled."
             />
           )}
         </section>

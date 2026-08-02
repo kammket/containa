@@ -64,37 +64,33 @@ export default function AdminOrderDetailPage() {
         ...(estimatedDelivery ? { estimatedDelivery } : {}),
       }),
     onSuccess: () => {
-      setFeedback('Status aktualisiert. Die Kundin bzw. der Kunde wurde per E-Mail informiert.');
+      setFeedback('Status updated. The customer has been notified by email.');
       setDescription('');
       setStatus('');
       invalidate();
     },
     onError: (caught) =>
       setError(
-        caught instanceof AdminApiError
-          ? caught.message
-          : 'Der Status konnte nicht geändert werden.',
+        caught instanceof AdminApiError ? caught.message : 'The status could not be changed.',
       ),
   });
 
   const markPaid = useMutation({
-    mutationFn: () => adminApi.orders.markPaid(orderNumber, 'Zahlungseingang manuell bestätigt.'),
+    mutationFn: () => adminApi.orders.markPaid(orderNumber, 'Payment receipt confirmed manually.'),
     onSuccess: () => {
-      setFeedback('Zahlung als eingegangen vermerkt.');
+      setFeedback('Payment marked as received.');
       invalidate();
     },
     onError: (caught) =>
       setError(
-        caught instanceof AdminApiError
-          ? caught.message
-          : 'Die Zahlung konnte nicht bestätigt werden.',
+        caught instanceof AdminApiError ? caught.message : 'The payment could not be confirmed.',
       ),
   });
 
   if (order.isLoading) {
     return (
       <>
-        <PageHeader title="Bestellung" />
+        <PageHeader title="Order" />
         <Content>
           <LoadingState />
         </Content>
@@ -105,10 +101,10 @@ export default function AdminOrderDetailPage() {
   if (order.isError || !order.data) {
     return (
       <>
-        <PageHeader title="Bestellung" />
+        <PageHeader title="Order" />
         <Content>
           <ErrorState
-            message="Diese Bestellung konnte nicht geladen werden."
+            message="This order could not be loaded."
             onRetry={() => void order.refetch()}
           />
         </Content>
@@ -168,7 +164,7 @@ export default function AdminOrderDetailPage() {
 
         <div className="grid gap-5 lg:grid-cols-[1fr_22rem]">
           <div className="space-y-5">
-            <Card title="Positionen">
+            <Card title="Line items">
               <ul className="divide-y divide-stone-100">
                 {data.items.map((item) => (
                   <li
@@ -189,18 +185,18 @@ export default function AdminOrderDetailPage() {
               </ul>
 
               <dl className="mt-4 space-y-2 border-t border-stone-100 pt-4 text-sm">
-                <Row label="Zwischensumme (netto)" value={formatPrice(data.subtotalNet)} />
+                <Row label="Subtotal (net)" value={formatPrice(data.subtotalNet)} />
                 {data.discountNet > 0 && (
-                  <Row label="Rabatt" value={`− ${formatPrice(data.discountNet)}`} />
+                  <Row label="Discount" value={`− ${formatPrice(data.discountNet)}`} />
                 )}
                 <Row
-                  label="Lieferung"
+                  label="Delivery"
                   value={data.shippingNet === 0 ? 'kostenlos' : formatPrice(data.shippingNet)}
                 />
-                <Row label="Nettobetrag" value={formatPrice(netTotal)} />
-                <Row label="zzgl. 19 % MwSt." value={formatPrice(data.vatAmount)} />
+                <Row label="Net total" value={formatPrice(netTotal)} />
+                <Row label="plus 19% VAT" value={formatPrice(data.vatAmount)} />
                 <div className="flex items-baseline justify-between gap-3 border-t border-stone-100 pt-2">
-                  <dt className="font-display text-base font-bold text-navy-900">Gesamt</dt>
+                  <dt className="font-display text-base font-bold text-navy-900">Total</dt>
                   <dd className="font-display text-lg font-bold text-navy-950">
                     {formatPrice(data.totalGross)}
                   </dd>
@@ -209,12 +205,12 @@ export default function AdminOrderDetailPage() {
             </Card>
 
             <div className="grid gap-5 sm:grid-cols-2">
-              <AddressCard title="Rechnungsadresse" address={data.billingAddress} />
-              <AddressCard title="Lieferadresse" address={data.shippingAddress} />
+              <AddressCard title="Billing address" address={data.billingAddress} />
+              <AddressCard title="Delivery address" address={data.shippingAddress} />
             </div>
 
             {data.deliveryNotes && (
-              <Card title="Hinweise des Kunden zur Anlieferung">
+              <Card title="Customer notes on delivery">
                 <p className="text-sm leading-relaxed whitespace-pre-line text-stone-700">
                   {data.deliveryNotes}
                 </p>
@@ -222,7 +218,7 @@ export default function AdminOrderDetailPage() {
             )}
 
             {data.events && data.events.length > 0 && (
-              <Card title="Verlauf">
+              <Card title="History">
                 <ol className="space-y-4 border-l-2 border-stone-200 pl-5">
                   {data.events.map((event, index) => (
                     <li key={`${event.createdAt}-${index}`} className="relative">
@@ -252,34 +248,34 @@ export default function AdminOrderDetailPage() {
 
               <dl className="space-y-2 border-t border-stone-100 pt-4 text-sm">
                 <Row
-                  label="Kundentyp"
+                  label="Customer type"
                   value={data.customerType === 'GEWERBLICH' ? 'Geschäftskunde' : 'Privatkunde'}
                 />
                 {data.vatId && <Row label="USt-IdNr." value={data.vatId} />}
-                {data.carrier && <Row label="Transporteur" value={data.carrier} />}
+                {data.carrier && <Row label="Carrier" value={data.carrier} />}
                 {data.estimatedDelivery && (
                   <Row
-                    label="Voraussichtliche Lieferung"
+                    label="Estimated delivery"
                     value={formatDateShort(data.estimatedDelivery.slice(0, 10))}
                   />
                 )}
                 {data.payments?.[0] && (
-                  <Row label="Zahlungsart" value={paymentLabel(data.payments[0].method)} />
+                  <Row label="Payment method" value={paymentLabel(data.payments[0].method)} />
                 )}
               </dl>
             </Card>
 
-            <Card title="Status ändern">
+            <Card title="Change status">
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="new-status">Neuer Status</Label>
+                  <Label htmlFor="new-status">New status</Label>
                   <select
                     id="new-status"
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
                     className="h-11 w-full cursor-pointer rounded-xl border border-stone-300 bg-white px-3.5 text-sm text-navy-900 focus:border-navy-500 focus:ring-2 focus:ring-navy-500/15 focus:outline-none"
                   >
-                    <option value="">Bitte wählen …</option>
+                    <option value="">Please choose …</option>
                     {nextStatuses
                       .filter((s) => s !== data.status)
                       .map((s) => (
@@ -291,7 +287,7 @@ export default function AdminOrderDetailPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="carrier">Transporteur</Label>
+                  <Label htmlFor="carrier">Carrier</Label>
                   <Input
                     id="carrier"
                     value={carrier}
@@ -301,7 +297,7 @@ export default function AdminOrderDetailPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="estimated">Voraussichtliche Lieferung</Label>
+                  <Label htmlFor="estimated">Estimated delivery</Label>
                   <Input
                     id="estimated"
                     type="date"
@@ -311,13 +307,13 @@ export default function AdminOrderDetailPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="status-note">Nachricht an die Kundschaft</Label>
+                  <Label htmlFor="status-note">Message to the customer</Label>
                   <Textarea
                     id="status-note"
                     rows={3}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Optional – ohne Eingabe verwenden wir den Standardtext."
+                    placeholder="Optional – we use the default text if you leave this empty."
                   />
                 </div>
 
@@ -382,7 +378,7 @@ function AddressCard({ title, address }: { title: string; address: AdminAddress 
           </a>
         </address>
       ) : (
-        <p className="text-sm text-stone-500">Keine Adresse hinterlegt.</p>
+        <p className="text-sm text-stone-500">No address on file.</p>
       )}
     </Card>
   );
@@ -391,11 +387,11 @@ function AddressCard({ title, address }: { title: string; address: AdminAddress 
 function paymentLabel(method: string): string {
   const labels: Record<string, string> = {
     // Nicht mehr auswählbar; erhalten für bereits erfasste Bestellungen
-    STRIPE: 'Kreditkarte (eingestellt)',
-    PAYPAL: 'PayPal (eingestellt)',
-    SEPA: 'SEPA-Lastschrift',
-    BANKTRANSFER: 'Vorkasse / Überweisung',
-    INVOICE: 'Kauf auf Rechnung',
+    STRIPE: 'Credit card (discontinued)',
+    PAYPAL: 'PayPal (discontinued)',
+    SEPA: 'SEPA direct debit',
+    BANKTRANSFER: 'Bank transfer (prepayment)',
+    INVOICE: 'Invoice',
   };
   return labels[method] ?? method;
 }

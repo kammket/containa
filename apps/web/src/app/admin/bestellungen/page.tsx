@@ -22,13 +22,13 @@ import { adminApi } from '@/lib/admin-api';
 import { cn, formatDateShort } from '@/lib/utils';
 
 const statusFilters = [
-  { value: '', label: 'Alle' },
-  { value: 'EINGEGANGEN', label: 'Eingegangen' },
-  { value: 'BEZAHLT', label: 'Bezahlt' },
-  { value: 'IN_BEARBEITUNG', label: 'In Bearbeitung' },
-  { value: 'IN_ZUSTELLUNG', label: 'In Zustellung' },
-  { value: 'GELIEFERT', label: 'Geliefert' },
-  { value: 'STORNIERT', label: 'Storniert' },
+  { value: '', label: 'All' },
+  { value: 'EINGEGANGEN', label: 'Received' },
+  { value: 'BEZAHLT', label: 'Paid' },
+  { value: 'IN_BEARBEITUNG', label: 'In progress' },
+  { value: 'IN_ZUSTELLUNG', label: 'Out for delivery' },
+  { value: 'GELIEFERT', label: 'Delivered' },
+  { value: 'STORNIERT', label: 'Cancelled' },
 ];
 
 export default function AdminOrdersPage() {
@@ -48,8 +48,8 @@ export default function AdminOrdersPage() {
   return (
     <>
       <PageHeader
-        title="Bestellungen"
-        description="Eingegangene Bestellungen einsehen und den Status pflegen."
+        title="Orders"
+        description="Review incoming orders and keep their status up to date."
       />
 
       <Content>
@@ -66,12 +66,12 @@ export default function AdminOrdersPage() {
               id="order-search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Bestellnummer, E-Mail, Name oder Firma …"
+              placeholder="Order number, email, name or company …"
               className="pl-10"
             />
           </div>
 
-          <div className="flex flex-wrap gap-1.5" role="group" aria-label="Nach Status filtern">
+          <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter by status">
             {statusFilters.map((filter) => (
               <button
                 key={filter.value}
@@ -92,23 +92,30 @@ export default function AdminOrdersPage() {
         </div>
 
         {orders.isLoading ? (
-          <LoadingState label="Bestellungen werden geladen …" />
+          <LoadingState label="Loading orders …" />
         ) : orders.isError ? (
           <ErrorState
-            message="Die Bestellungen konnten nicht geladen werden."
+            message="The orders could not be loaded."
             onRetry={() => void orders.refetch()}
           />
         ) : orders.data && orders.data.items.length > 0 ? (
           <>
             <p className="mb-3 text-sm text-stone-500">
-              {orders.data.meta.total}{' '}
-              {orders.data.meta.total === 1 ? 'Bestellung' : 'Bestellungen'}
-              {status && ` mit Status „${statusLabels[status] ?? status}"`}
+              {orders.data.meta.total} {orders.data.meta.total === 1 ? 'order' : 'orders'}
+              {status && ` with status “${statusLabels[status] ?? status}”`}
             </p>
 
             <DataTable
-              caption="Bestellliste"
-              head={['Nummer', 'Datum', 'Kunde', 'Lieferort', 'Positionen', 'Betrag', 'Status']}
+              caption="List of orders"
+              head={[
+                'Number',
+                'Date',
+                'Customer',
+                'Delivery location',
+                'Line items',
+                'Amount',
+                'Status',
+              ]}
             >
               {orders.data.items.map((order) => (
                 <tr key={order.id} className="hover:bg-stone-50">
@@ -152,11 +159,11 @@ export default function AdminOrdersPage() {
           </>
         ) : (
           <EmptyState
-            title={search || status ? 'Keine Treffer' : 'Noch keine Bestellungen'}
+            title={search || status ? 'No matches' : 'No orders yet'}
             description={
               search || status
-                ? 'Passen Sie Suche oder Statusfilter an.'
-                : 'Sobald die erste Bestellung eingeht, erscheint sie hier.'
+                ? 'Adjust your search or status filter.'
+                : 'The first order will appear here as soon as it arrives.'
             }
           />
         )}

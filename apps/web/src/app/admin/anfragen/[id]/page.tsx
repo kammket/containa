@@ -22,20 +22,20 @@ import { formatDate } from '@/lib/utils';
 const statusOptions = ['NEU', 'IN_BEARBEITUNG', 'BEANTWORTET', 'GESCHLOSSEN'];
 
 const sizeLabels: Record<string, string> = {
-  '10ft': '10 Fuß',
-  '20ft': '20 Fuß',
-  '20ft-hc': '20 Fuß High Cube',
-  '40ft': '40 Fuß',
-  '40ft-hc': '40 Fuß High Cube',
-  '45ft': '45 Fuß High Cube',
-  unklar: 'noch offen – Beratung gewünscht',
+  '10ft': '10 ft',
+  '20ft': '20 ft',
+  '20ft-hc': '20 ft high cube',
+  '40ft': '40 ft',
+  '40ft-hc': '40 ft high cube',
+  '45ft': '45 ft high cube',
+  unklar: 'still open – advice requested',
 };
 
 const conditionLabels: Record<string, string> = {
   neu: 'Fabrikneu',
   'one-trip': 'One-Trip',
   generalueberholt: 'Generalüberholt',
-  gebraucht: 'Gebraucht',
+  gebraucht: 'Used',
   egal: 'Egal',
 };
 
@@ -66,22 +66,18 @@ export default function AdminInquiryDetailPage() {
   const save = useMutation({
     mutationFn: () => adminApi.inquiries.update(id, { status, internalNote }),
     onSuccess: () => {
-      setFeedback('Änderungen gespeichert.');
+      setFeedback('Changes saved.');
       void queryClient.invalidateQueries({ queryKey: ['admin', 'inquiry', id] });
       void queryClient.invalidateQueries({ queryKey: ['admin', 'inquiries'] });
     },
     onError: (caught) =>
-      setError(
-        caught instanceof AdminApiError
-          ? caught.message
-          : 'Die Änderung konnte nicht gespeichert werden.',
-      ),
+      setError(caught instanceof AdminApiError ? caught.message : 'The change could not be saved.'),
   });
 
   if (inquiry.isLoading) {
     return (
       <>
-        <PageHeader title="Anfrage" />
+        <PageHeader title="Inquiry" />
         <Content>
           <LoadingState />
         </Content>
@@ -92,10 +88,10 @@ export default function AdminInquiryDetailPage() {
   if (inquiry.isError || !inquiry.data) {
     return (
       <>
-        <PageHeader title="Anfrage" />
+        <PageHeader title="Inquiry" />
         <Content>
           <ErrorState
-            message="Diese Anfrage konnte nicht geladen werden."
+            message="This inquiry could not be loaded."
             onRetry={() => void inquiry.refetch()}
           />
         </Content>
@@ -107,13 +103,13 @@ export default function AdminInquiryDetailPage() {
   const isQuote = data.type === 'ANGEBOT';
 
   const replySubject = encodeURIComponent(
-    `${isQuote ? 'Ihr Angebot' : 'Ihre Anfrage'} ${data.reference} – EMC Container`,
+    `${isQuote ? 'The quote request' : 'The inquiry'} ${data.reference} – EMC Container`,
   );
 
   return (
     <>
       <PageHeader
-        title={`${isQuote ? 'Angebotsanfrage' : 'Kontaktanfrage'} ${data.reference}`}
+        title={`${isQuote ? 'Quote request' : 'Contact inquiry'} ${data.reference}`}
         description={`Eingegangen am ${formatDate(data.createdAt.slice(0, 10))}`}
         actions={
           <>
@@ -152,10 +148,10 @@ export default function AdminInquiryDetailPage() {
 
         <div className="grid gap-5 lg:grid-cols-[1fr_22rem]">
           <div className="space-y-5">
-            <Card title="Kontaktdaten">
+            <Card title="Contact details">
               <dl className="grid gap-3 sm:grid-cols-2">
                 <Field label="Name" value={data.name} />
-                {data.company && <Field label="Firma" value={data.company} />}
+                {data.company && <Field label="Company" value={data.company} />}
                 <Field
                   label="E-Mail"
                   value={
@@ -169,7 +165,7 @@ export default function AdminInquiryDetailPage() {
                 />
                 {data.phone && (
                   <Field
-                    label="Telefon"
+                    label="Phone"
                     value={
                       <a
                         href={`tel:${data.phone.replace(/\s/g, '')}`}
@@ -182,7 +178,7 @@ export default function AdminInquiryDetailPage() {
                 )}
                 {data.customerType && (
                   <Field
-                    label="Kundentyp"
+                    label="Customer type"
                     value={data.customerType === 'GEWERBLICH' ? 'Geschäftskunde' : 'Privatkunde'}
                   />
                 )}
@@ -190,18 +186,18 @@ export default function AdminInquiryDetailPage() {
             </Card>
 
             {isQuote ? (
-              <Card title="Angefragter Bedarf">
+              <Card title="Requested requirement">
                 <dl className="grid gap-3 sm:grid-cols-2">
                   <Field
-                    label="Containergröße"
+                    label="Container size"
                     value={sizeLabels[data.size ?? ''] ?? data.size ?? '–'}
                   />
                   <Field
-                    label="Zustand"
+                    label="Condition"
                     value={conditionLabels[data.condition ?? ''] ?? data.condition ?? '–'}
                   />
                   <Field label="Anzahl" value={String(data.quantity ?? 1)} />
-                  <Field label="Lieferpostleitzahl" value={data.postalCode ?? '–'} />
+                  <Field label="Delivery postcode" value={data.postalCode ?? '–'} />
                   {data.usage && <Field label="Verwendungszweck" value={data.usage} />}
                   {data.deliveryDate && (
                     <Field
@@ -209,19 +205,19 @@ export default function AdminInquiryDetailPage() {
                       value={formatDate(data.deliveryDate.slice(0, 10))}
                     />
                   )}
-                  {data.productSlug && <Field label="Bezug zu Produkt" value={data.productSlug} />}
+                  {data.productSlug && <Field label="Related product" value={data.productSlug} />}
                 </dl>
               </Card>
             ) : (
               data.subject && (
-                <Card title="Betreff">
+                <Card title="Subject">
                   <p className="text-sm text-navy-900">{data.subject}</p>
                 </Card>
               )
             )}
 
             {data.message && (
-              <Card title="Nachricht">
+              <Card title="Message">
                 <p className="text-sm leading-relaxed whitespace-pre-line text-stone-700">
                   {data.message}
                 </p>
@@ -230,7 +226,7 @@ export default function AdminInquiryDetailPage() {
           </div>
 
           <aside className="space-y-5">
-            <Card title="Bearbeitung">
+            <Card title="Processing">
               <div className="mb-4">
                 <StatusBadge status={data.status} />
               </div>
@@ -253,13 +249,13 @@ export default function AdminInquiryDetailPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="internal-note">Interne Notiz</Label>
+                  <Label htmlFor="internal-note">Internal note</Label>
                   <Textarea
                     id="internal-note"
                     rows={6}
                     value={internalNote}
                     onChange={(e) => setInternalNote(e.target.value)}
-                    placeholder="Nur für das Team sichtbar – z. B. Angebotsnummer, Rückrufzeit, Besonderheiten."
+                    placeholder="Visible to the team only – e.g. quote number, call-back time, special notes."
                   />
                 </div>
 
@@ -277,7 +273,7 @@ export default function AdminInquiryDetailPage() {
                 </Button>
 
                 <p className="text-2xs leading-relaxed text-stone-500">
-                  Interne Notizen sind für Kundinnen und Kunden nicht sichtbar.
+                  Internal notes are never visible to customers.
                 </p>
               </div>
             </Card>

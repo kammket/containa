@@ -32,27 +32,24 @@ const euroField = (message: string) =>
     .regex(/^\d+([.,]\d{1,2})?$/, message);
 
 const schema = z.object({
-  name: z.string().trim().min(3, 'Bitte geben Sie einen Produktnamen ein.').max(180),
+  name: z.string().trim().min(3, 'Please enter a product name.').max(180),
   slug: z
     .string()
     .trim()
     .regex(
       /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-      'Nur Kleinbuchstaben, Ziffern und Bindestriche – z. B. 20-fuss-container-gebraucht.',
+      'Lower-case letters, digits and hyphens only – e.g. 20-fuss-container-gebraucht.',
     ),
-  sku: z.string().trim().min(2, 'Bitte geben Sie eine Artikelnummer ein.').max(64),
-  tagline: z.string().trim().min(10, 'Bitte geben Sie einen kurzen Verkaufstext ein.').max(300),
+  sku: z.string().trim().min(2, 'Please enter an SKU.').max(64),
+  tagline: z.string().trim().min(10, 'Please enter a short sales description.').max(300),
   descriptionText: z
     .string()
     .trim()
-    .min(30, 'Bitte beschreiben Sie das Produkt in mindestens 30 Zeichen.'),
+    .min(30, 'Please describe the product in at least 30 characters.'),
   highlightsText: z.string().trim(),
 
-  priceEuro: euroField('Bitte geben Sie einen gültigen Nettopreis ein, z. B. 1190,00.'),
-  compareAtEuro: z.union([
-    euroField('Bitte geben Sie einen gültigen Streichpreis ein.'),
-    z.literal(''),
-  ]),
+  priceEuro: euroField('Please enter a valid net price, e.g. 1190.00.'),
+  compareAtEuro: z.union([euroField('Please enter a valid compare-at price.'), z.literal('')]),
 
   condition: z.enum(['NEU', 'ONE_TRIP', 'GENERALUEBERHOLT', 'GEBRAUCHT']),
   size: z.enum(['8ft', '10ft', '20ft', '40ft', '45ft', 'sonder']),
@@ -63,18 +60,18 @@ const schema = z.object({
   leadTimeDaysMax: z.coerce.number().int().min(0).max(365),
   warrantyMonths: z.coerce.number().int().min(0).max(120),
 
-  lengthMm: z.coerce.number().int().min(1, 'Bitte geben Sie die Außenlänge in Millimetern an.'),
-  widthMm: z.coerce.number().int().min(1, 'Bitte geben Sie die Außenbreite in Millimetern an.'),
-  heightMm: z.coerce.number().int().min(1, 'Bitte geben Sie die Außenhöhe in Millimetern an.'),
+  lengthMm: z.coerce.number().int().min(1, 'Please enter the exterior length in millimetres.'),
+  widthMm: z.coerce.number().int().min(1, 'Please enter the exterior width in millimetres.'),
+  heightMm: z.coerce.number().int().min(1, 'Please enter the exterior height in millimetres.'),
 
-  categorySlugs: z.array(z.string()).min(1, 'Bitte wählen Sie mindestens eine Kategorie.'),
-  primaryCategory: z.string().min(1, 'Bitte wählen Sie eine Primärkategorie.'),
+  categorySlugs: z.array(z.string()).min(1, 'Please choose at least one category.'),
+  primaryCategory: z.string().min(1, 'Please choose a primary category.'),
 
-  seoTitle: z.string().trim().max(70, 'Höchstens 70 Zeichen – sonst kürzt Google den Titel.'),
+  seoTitle: z.string().trim().max(70, 'At most 70 characters – Google truncates longer titles.'),
   seoDescription: z
     .string()
     .trim()
-    .max(175, 'Höchstens 175 Zeichen – sonst wird die Beschreibung abgeschnitten.'),
+    .max(175, 'At most 175 characters – longer descriptions get cut off.'),
   focusKeyword: z.string().trim().max(120),
 
   isActive: z.boolean(),
@@ -206,9 +203,7 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
     },
     onError: (error) => {
       setSubmitError(
-        error instanceof AdminApiError
-          ? error.message
-          : 'Das Produkt konnte nicht gespeichert werden.',
+        error instanceof AdminApiError ? error.message : 'The product could not be saved.',
       );
     },
   });
@@ -233,10 +228,10 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
-      <Card title="Stammdaten">
+      <Card title="Master data">
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <Label htmlFor="name">Produktname *</Label>
+            <Label htmlFor="name">Product name *</Label>
             <Input id="name" aria-invalid={Boolean(errors.name)} {...register('name')} />
             <FieldError>{errors.name?.message}</FieldError>
           </div>
@@ -251,26 +246,26 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
           </div>
 
           <div>
-            <Label htmlFor="sku">Artikelnummer *</Label>
+            <Label htmlFor="sku">SKU *</Label>
             <Input id="sku" aria-invalid={Boolean(errors.sku)} {...register('sku')} />
             <FieldError>{errors.sku?.message}</FieldError>
           </div>
 
           <div className="sm:col-span-2">
-            <Label htmlFor="tagline">Kurztext *</Label>
+            <Label htmlFor="tagline">Tagline *</Label>
             <Input id="tagline" aria-invalid={Boolean(errors.tagline)} {...register('tagline')} />
             <p className="mt-1.5 text-2xs text-stone-500">
-              Erscheint auf Produktkarten und in Suchergebnissen.
+              Shown on product cards and in search results.
             </p>
             <FieldError>{errors.tagline?.message}</FieldError>
           </div>
 
           <div className="sm:col-span-2">
-            <Label htmlFor="descriptionText">Beschreibung *</Label>
+            <Label htmlFor="descriptionText">Description *</Label>
             <Textarea
               id="descriptionText"
               rows={8}
-              placeholder="Absätze durch eine Leerzeile trennen."
+              placeholder="Separate paragraphs with a blank line."
               aria-invalid={Boolean(errors.descriptionText)}
               {...register('descriptionText')}
             />
@@ -278,7 +273,7 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
           </div>
 
           <div className="sm:col-span-2">
-            <Label htmlFor="highlightsText">Kernvorteile</Label>
+            <Label htmlFor="highlightsText">Key benefits</Label>
             <Textarea
               id="highlightsText"
               rows={5}
@@ -289,10 +284,10 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
         </div>
       </Card>
 
-      <Card title="Preis und Verfügbarkeit">
+      <Card title="Price and availability">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <Label htmlFor="priceEuro">Nettopreis in € *</Label>
+            <Label htmlFor="priceEuro">Net price in € *</Label>
             <Input
               id="priceEuro"
               inputMode="decimal"
@@ -309,7 +304,7 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
           </div>
 
           <div>
-            <Label htmlFor="compareAtEuro">Streichpreis netto in €</Label>
+            <Label htmlFor="compareAtEuro">Compare-at price, net, in €</Label>
             <Input
               id="compareAtEuro"
               inputMode="decimal"
@@ -320,80 +315,80 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
           </div>
 
           <div>
-            <Label htmlFor="stock">Bestand *</Label>
+            <Label htmlFor="stock">Stock *</Label>
             <Input id="stock" type="number" min={0} {...register('stock')} />
           </div>
 
           <div>
-            <Label htmlFor="availability">Verfügbarkeit *</Label>
+            <Label htmlFor="availability">Availability *</Label>
             <Select id="availability" {...register('availability')}>
-              <option value="AUF_LAGER">Auf Lager</option>
-              <option value="KURZFRISTIG">Kurzfristig verfügbar</option>
-              <option value="AUF_ANFRAGE">Auf Anfrage</option>
-              <option value="AUSVERKAUFT">Ausverkauft</option>
+              <option value="AUF_LAGER">In stock</option>
+              <option value="KURZFRISTIG">Available at short notice</option>
+              <option value="AUF_ANFRAGE">On request</option>
+              <option value="AUSVERKAUFT">Sold out</option>
             </Select>
           </div>
 
           <div>
-            <Label htmlFor="condition">Zustand *</Label>
+            <Label htmlFor="condition">Condition *</Label>
             <Select id="condition" {...register('condition')}>
-              <option value="NEU">Fabrikneu</option>
+              <option value="NEU">Factory new</option>
               <option value="ONE_TRIP">One-Trip</option>
-              <option value="GENERALUEBERHOLT">Generalüberholt</option>
-              <option value="GEBRAUCHT">Gebraucht</option>
+              <option value="GENERALUEBERHOLT">Refurbished</option>
+              <option value="GEBRAUCHT">Used</option>
             </Select>
           </div>
 
           <div>
-            <Label htmlFor="size">Größe *</Label>
+            <Label htmlFor="size">Size *</Label>
             <Select id="size" {...register('size')}>
-              <option value="10ft">10 Fuß</option>
-              <option value="20ft">20 Fuß</option>
-              <option value="40ft">40 Fuß</option>
-              <option value="45ft">45 Fuß</option>
-              <option value="8ft">8 Fuß</option>
-              <option value="sonder">Zubehör / Sonderformat</option>
+              <option value="10ft">10 ft</option>
+              <option value="20ft">20 ft</option>
+              <option value="40ft">40 ft</option>
+              <option value="45ft">45 ft</option>
+              <option value="8ft">8 ft</option>
+              <option value="sonder">Accessories / special format</option>
             </Select>
           </div>
 
           <div>
-            <Label htmlFor="leadTimeDaysMin">Lieferzeit von (Werktage)</Label>
+            <Label htmlFor="leadTimeDaysMin">Delivery time from (working days)</Label>
             <Input id="leadTimeDaysMin" type="number" min={0} {...register('leadTimeDaysMin')} />
           </div>
 
           <div>
-            <Label htmlFor="leadTimeDaysMax">Lieferzeit bis (Werktage)</Label>
+            <Label htmlFor="leadTimeDaysMax">Delivery time to (working days)</Label>
             <Input id="leadTimeDaysMax" type="number" min={0} {...register('leadTimeDaysMax')} />
           </div>
         </div>
       </Card>
 
-      <Card title="Abmessungen und Garantie">
+      <Card title="Dimensions and warranty">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <Label htmlFor="lengthMm">Außenlänge in mm *</Label>
+            <Label htmlFor="lengthMm">Exterior length in mm *</Label>
             <Input id="lengthMm" type="number" min={1} {...register('lengthMm')} />
-            <p className="mt-1.5 text-2xs text-stone-500">Bestimmt die Lieferpauschale.</p>
+            <p className="mt-1.5 text-2xs text-stone-500">Determines the flat delivery rate.</p>
             <FieldError>{errors.lengthMm?.message}</FieldError>
           </div>
           <div>
-            <Label htmlFor="widthMm">Außenbreite in mm *</Label>
+            <Label htmlFor="widthMm">Exterior width in mm *</Label>
             <Input id="widthMm" type="number" min={1} {...register('widthMm')} />
           </div>
           <div>
-            <Label htmlFor="heightMm">Außenhöhe in mm *</Label>
+            <Label htmlFor="heightMm">Exterior height in mm *</Label>
             <Input id="heightMm" type="number" min={1} {...register('heightMm')} />
           </div>
           <div>
-            <Label htmlFor="warrantyMonths">Garantie in Monaten</Label>
+            <Label htmlFor="warrantyMonths">Warranty in months</Label>
             <Input id="warrantyMonths" type="number" min={0} {...register('warrantyMonths')} />
           </div>
         </div>
       </Card>
 
-      <Card title="Kategorien">
+      <Card title="Categories">
         <fieldset>
-          <legend className="sr-only">Kategorien auswählen</legend>
+          <legend className="sr-only">Select categories</legend>
           <div className="flex flex-wrap gap-2">
             {navCategories.map((category) => {
               const selected = selectedCategories.includes(category.slug);
@@ -419,7 +414,7 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
 
         {selectedCategories.length > 0 && (
           <div className="mt-5 max-w-sm">
-            <Label htmlFor="primaryCategory">Primärkategorie *</Label>
+            <Label htmlFor="primaryCategory">Primary category *</Label>
             <Select id="primaryCategory" {...register('primaryCategory')}>
               {selectedCategories.map((slug) => (
                 <option key={slug} value={slug}>
@@ -428,17 +423,17 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
               ))}
             </Select>
             <p className="mt-1.5 text-2xs text-stone-500">
-              Bestimmt Breadcrumb und kanonischen Pfad des Produkts.
+              Determines the breadcrumb and the canonical path of the product.
             </p>
             <FieldError>{errors.primaryCategory?.message}</FieldError>
           </div>
         )}
       </Card>
 
-      <Card title="Suchmaschinenoptimierung">
+      <Card title="Search engine optimisation">
         <div className="space-y-4">
           <div>
-            <Label htmlFor="seoTitle">SEO-Titel</Label>
+            <Label htmlFor="seoTitle">SEO title</Label>
             <Input id="seoTitle" maxLength={70} {...register('seoTitle')} />
             <p className="mt-1.5 text-2xs text-stone-500">
               {(watch('seoTitle') ?? '').length} / 70 Zeichen
@@ -461,23 +456,23 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
           </div>
 
           <div className="max-w-sm">
-            <Label htmlFor="focusKeyword">Fokus-Keyword</Label>
+            <Label htmlFor="focusKeyword">Focus keyword</Label>
             <Input
               id="focusKeyword"
-              placeholder="z. B. 20 Fuß Container kaufen"
+              placeholder="e.g. buy 20 ft container"
               {...register('focusKeyword')}
             />
           </div>
         </div>
       </Card>
 
-      <Card title="Sichtbarkeit">
+      <Card title="Visibility">
         <div className="space-y-3">
           <Checkbox id="isActive" label="Im Shop sichtbar" {...register('isActive')} />
           <Checkbox
             id="isBestseller"
             label="Als Bestseller kennzeichnen"
-            hint="Erscheint auf der Startseite unter „Meistgekaufte Container“."
+            hint="Shown on the home page under “Best-selling containers”."
             {...register('isBestseller')}
           />
           <Checkbox
@@ -508,10 +503,10 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
           ) : (
             <Save aria-hidden />
           )}
-          <span>{save.isPending ? 'Wird gespeichert …' : saved ? 'Gespeichert' : 'Speichern'}</span>
+          <span>{save.isPending ? 'Saving …' : saved ? 'Gespeichert' : 'Save'}</span>
         </Button>
         <Button type="button" variant="outline" size="lg" onClick={() => router.back()}>
-          Abbrechen
+          Cancel
         </Button>
       </div>
     </form>

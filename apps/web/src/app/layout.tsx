@@ -6,6 +6,7 @@ import { brand, routes } from '@emc/catalog';
 import { CookieBanner } from '@/components/layout/cookie-banner';
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
+import { StorefrontChrome } from '@/components/layout/storefront-chrome';
 import { Providers } from '@/components/providers';
 import { ServiceWorkerCleanup } from '@/components/layout/service-worker-cleanup';
 import { jsonLdGraph, localBusinessSchema, organizationSchema, websiteSchema } from '@/lib/schema';
@@ -104,12 +105,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="flex min-h-dvh flex-col bg-white antialiased">
         <Providers>
-          <Header />
+          <StorefrontChrome>
+            <Header />
+          </StorefrontChrome>
           <main id="hauptinhalt" className="flex-1">
             {children}
           </main>
-          <Footer />
-          <CookieBanner />
+          <StorefrontChrome>
+            <Footer />
+            <CookieBanner />
+          </StorefrontChrome>
         </Providers>
       </body>
     </html>

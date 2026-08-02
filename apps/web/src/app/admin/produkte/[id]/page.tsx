@@ -26,7 +26,7 @@ export default function EditProductPage() {
   if (product.isLoading) {
     return (
       <>
-        <PageHeader title="Produkt bearbeiten" />
+        <PageHeader title="Edit product" />
         <Content>
           <LoadingState />
         </Content>
@@ -37,10 +37,10 @@ export default function EditProductPage() {
   if (product.isError || !product.data) {
     return (
       <>
-        <PageHeader title="Produkt bearbeiten" />
+        <PageHeader title="Edit product" />
         <Content>
           <ErrorState
-            message="Dieses Produkt konnte nicht geladen werden."
+            message="This product could not be loaded."
             onRetry={() => void product.refetch()}
           />
         </Content>

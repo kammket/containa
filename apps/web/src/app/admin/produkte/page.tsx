@@ -22,19 +22,19 @@ import { adminApi, type AdminProduct } from '@/lib/admin-api';
 import { cn } from '@/lib/utils';
 
 const sizeLabels: Record<string, string> = {
-  '8ft': '8 Fuß',
-  '10ft': '10 Fuß',
-  '20ft': '20 Fuß',
-  '40ft': '40 Fuß',
-  '45ft': '45 Fuß',
-  sonder: 'Zubehör',
+  '8ft': '8 ft',
+  '10ft': '10 ft',
+  '20ft': '20 ft',
+  '40ft': '40 ft',
+  '45ft': '45 ft',
+  sonder: 'Accessories',
 };
 
 const conditionLabels: Record<string, string> = {
-  NEU: 'Neu',
+  NEU: 'New',
   ONE_TRIP: 'One-Trip',
-  GENERALUEBERHOLT: 'Überholt',
-  GEBRAUCHT: 'Gebraucht',
+  GENERALUEBERHOLT: 'Refurbished',
+  GEBRAUCHT: 'Used',
 };
 
 export default function AdminProductsPage() {
@@ -57,13 +57,13 @@ export default function AdminProductsPage() {
   return (
     <>
       <PageHeader
-        title="Produkte"
-        description="Stammdaten, Preise, Bestand und Bilder pflegen."
+        title="Products"
+        description="Manage master data, prices, stock and images."
         actions={
           <Button asChild size="sm">
             <Link href="/admin/produkte/neu">
               <Plus aria-hidden />
-              Neues Produkt
+              New product
             </Link>
           </Button>
         }
@@ -82,27 +82,27 @@ export default function AdminProductsPage() {
             id="product-search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Name, Artikelnummer oder Kurztext …"
+            placeholder="Name, SKU or tagline …"
             className="pl-10"
           />
         </div>
 
         {products.isLoading ? (
-          <LoadingState label="Produkte werden geladen …" />
+          <LoadingState label="Loading products …" />
         ) : products.isError ? (
           <ErrorState
-            message="Die Produkte konnten nicht geladen werden."
+            message="The products could not be loaded."
             onRetry={() => void products.refetch()}
           />
         ) : products.data && products.data.items.length > 0 ? (
           <>
             <p className="mb-3 text-sm text-stone-500">
-              {products.data.meta.total} {products.data.meta.total === 1 ? 'Produkt' : 'Produkte'}
+              {products.data.meta.total} {products.data.meta.total === 1 ? 'product' : 'products'}
             </p>
 
             <DataTable
-              caption="Produktliste"
-              head={['', 'Produkt', 'Größe', 'Zustand', 'Preis (brutto)', 'Bestand', 'Status', '']}
+              caption="List of products"
+              head={['', 'Product', 'Size', 'Condition', 'Price (gross)', 'Stock', 'Status', '']}
             >
               {products.data.items.map((product) => (
                 <tr
@@ -165,7 +165,7 @@ export default function AdminProductsPage() {
                           : 'bg-stone-100 text-stone-500',
                       )}
                     >
-                      <span>{product.isActive ? 'Sichtbar' : 'Ausgeblendet'}</span>
+                      <span>{product.isActive ? 'Visible' : 'Ausgeblendet'}</span>
                     </span>
                   </td>
 
@@ -191,18 +191,18 @@ export default function AdminProductsPage() {
           </>
         ) : (
           <EmptyState
-            title={search ? 'Keine Treffer' : 'Noch keine Produkte'}
+            title={search ? 'No matches' : 'No products yet'}
             description={
               search
                 ? `Zu „${search}" wurde nichts gefunden. Versuchen Sie einen anderen Begriff.`
-                : 'Legen Sie Ihr erstes Produkt an oder übernehmen Sie den Katalog per Seed.'
+                : 'Create your first product, or import the catalogue with the seed.'
             }
             action={
               !search && (
                 <Button asChild>
                   <Link href="/admin/produkte/neu">
                     <Plus aria-hidden />
-                    Neues Produkt
+                    New product
                   </Link>
                 </Button>
               )
