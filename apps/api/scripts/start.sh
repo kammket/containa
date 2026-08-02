@@ -13,7 +13,11 @@ set -e
 # entscheidende Frage: Erreichen die Variablen des Dienstes den Container?
 dump_env_names() {
   echo "Im Container gesetzte Variablen (nur Namen, keine Werte):" >&2
-  env | cut -d= -f1 | sort | sed 's/^/    /' >&2
+  # Der Filter ist notwendig, nicht kosmetisch: Railway reicht die vollständige
+  # Commit-Nachricht als RAILWAY_GIT_COMMIT_MESSAGE weiter. Deren Zeilenumbrüche
+  # tauchen sonst als vermeintliche Variablennamen auf und machen die Liste
+  # unlesbar. Übrig bleibt, was syntaktisch ein Variablenname sein kann.
+  env | cut -d= -f1 | grep -E '^[A-Za-z_][A-Za-z0-9_]*$' | sort | sed 's/^/    /' >&2
   echo "" >&2
   echo "Fehlt hier die gesamte Konfiguration (JWT_SECRET, APP_URL …), wurden" >&2
   echo "die Variablen am falschen Dienst oder in der falschen Umgebung" >&2
