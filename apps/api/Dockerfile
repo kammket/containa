@@ -60,6 +60,7 @@ COPY --from=builder --chown=nestjs:nodejs /app/packages/catalog/src ./packages/c
 COPY --from=builder --chown=nestjs:nodejs /app/apps/api/dist ./apps/api/dist
 COPY --from=builder --chown=nestjs:nodejs /app/apps/api/prisma ./apps/api/prisma
 COPY --from=builder --chown=nestjs:nodejs /app/apps/api/package.json ./apps/api/
+COPY --from=builder --chown=nestjs:nodejs /app/apps/api/scripts ./apps/api/scripts
 COPY --from=builder --chown=nestjs:nodejs /app/package.json ./
 
 USER nestjs
@@ -72,4 +73,5 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
   CMD node -e "fetch('http://localhost:4000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 
 # Migrationen laufen beim Start – Railway startet Container ohne Release-Phase.
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/src/main.js"]
+# Das Skript prüft vorher DATABASE_URL und meldet ein Fehlen verständlich.
+CMD ["sh", "scripts/start.sh"]
