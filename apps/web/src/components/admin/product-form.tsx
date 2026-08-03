@@ -25,6 +25,13 @@ const euroToCents = (value: string): number =>
 const centsToEuro = (cents: number | null | undefined): string =>
   cents === null || cents === undefined ? '' : (cents / 100).toFixed(2).replace('.', ',');
 
+/** Eine Angabe pro Zeile – dieselbe Schreibweise wie bei den Kernvorteilen. */
+const linesToList = (value: string): string[] =>
+  value
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+
 const euroField = (message: string) =>
   z
     .string()
@@ -73,6 +80,9 @@ const schema = z.object({
     .trim()
     .max(175, 'At most 175 characters – longer descriptions get cut off.'),
   focusKeyword: z.string().trim().max(120),
+  secondaryKeywordsText: z.string().trim(),
+  keywordsText: z.string().trim(),
+  relatedSlugsText: z.string().trim(),
 
   isActive: z.boolean(),
   isBestseller: z.boolean(),
@@ -125,6 +135,9 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
           seoTitle: product.seoTitle ?? '',
           seoDescription: product.seoDescription ?? '',
           focusKeyword: product.focusKeyword ?? '',
+          secondaryKeywordsText: product.secondaryKeywords.join('\n'),
+          keywordsText: product.keywords.join('\n'),
+          relatedSlugsText: product.relatedSlugs.join('\n'),
           isActive: product.isActive,
           isBestseller: product.isBestseller,
           isFeatured: product.isFeatured,
@@ -150,6 +163,9 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
           seoTitle: '',
           seoDescription: '',
           focusKeyword: '',
+          secondaryKeywordsText: '',
+          keywordsText: '',
+          relatedSlugsText: '',
         },
   });
 
@@ -194,6 +210,9 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
         seoTitle: values.seoTitle,
         seoDescription: values.seoDescription,
         focusKeyword: values.focusKeyword,
+        secondaryKeywords: linesToList(values.secondaryKeywordsText),
+        keywords: linesToList(values.keywordsText),
+        relatedSlugs: linesToList(values.relatedSlugsText),
         isActive: values.isActive,
         isBestseller: values.isBestseller,
         isFeatured: values.isFeatured,
@@ -470,6 +489,47 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
               placeholder="e.g. buy 20 ft container"
               {...register('focusKeyword')}
             />
+          </div>
+
+          <div>
+            <Label htmlFor="secondaryKeywordsText">Secondary keywords</Label>
+            <Textarea
+              id="secondaryKeywordsText"
+              rows={4}
+              placeholder={'Ein Begriff pro Zeile.\nSeecontainer kaufen\nLagercontainer 20 Fuß'}
+              {...register('secondaryKeywordsText')}
+            />
+            <p className="mt-1.5 text-2xs text-stone-500">
+              Used for internal linking between products, categories and guide articles.
+            </p>
+          </div>
+
+          <div>
+            <Label htmlFor="keywordsText">Search terms</Label>
+            <Textarea
+              id="keywordsText"
+              rows={4}
+              placeholder={'Ein Begriff pro Zeile.\n20 Fuß Container gebraucht\n20ft Seecontainer'}
+              {...register('keywordsText')}
+            />
+            <p className="mt-1.5 text-2xs text-stone-500">
+              Terms the shop’s instant search matches on. Without them the product is only found by
+              its name and tagline.
+            </p>
+          </div>
+
+          <div>
+            <Label htmlFor="relatedSlugsText">Related products</Label>
+            <Textarea
+              id="relatedSlugsText"
+              rows={3}
+              placeholder={'Ein Slug pro Zeile.\n20-fuss-high-cube-one-trip'}
+              {...register('relatedSlugsText')}
+            />
+            <p className="mt-1.5 text-2xs text-stone-500">
+              Shown under “You might also like”. Leave empty to fill automatically from the same
+              category.
+            </p>
           </div>
         </div>
       </Card>

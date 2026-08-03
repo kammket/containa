@@ -206,6 +206,41 @@ export class CreateProductDto {
   @MaxLength(120)
   focusKeyword?: string;
 
+  @ApiPropertyOptional({
+    type: [String],
+    description: 'Nebenkeywords für die interne Verlinkung',
+    example: ['Seecontainer kaufen', 'Lagercontainer 20 Fuß'],
+  })
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(15)
+  @IsString({ each: true })
+  @MaxLength(120, { each: true })
+  secondaryKeywords?: string[];
+
+  @ApiPropertyOptional({
+    type: [String],
+    description: 'Begriffe, unter denen die Instant-Suche das Produkt findet',
+    example: ['20 Fuß Container gebraucht', '20ft Seecontainer'],
+  })
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(25)
+  @IsString({ each: true })
+  @MaxLength(120, { each: true })
+  keywords?: string[];
+
+  @ApiPropertyOptional({
+    type: [String],
+    description: 'Kuratierte verwandte Produkte als Slugs. Leer: automatisch aus der Kategorie.',
+  })
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(12)
+  @IsString({ each: true })
+  @MaxLength(120, { each: true })
+  relatedSlugs?: string[];
+
   @ApiProperty({ type: [String], example: ['20-fuss-container', 'gebrauchte-container'] })
   @IsArray()
   @ArrayMinSize(1, { message: 'Bitte ordnen Sie das Produkt mindestens einer Kategorie zu.' })

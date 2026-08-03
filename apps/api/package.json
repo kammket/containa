@@ -2,7 +2,7 @@
   "name": "@emc/api",
   "version": "1.0.0",
   "private": true,
-  "description": "EMC Container \u2013 REST API (NestJS)",
+  "description": "EMC Container – REST API (NestJS)",
   "scripts": {
     "build": "prisma generate && nest build",
     "dev": "nest start --watch",
@@ -15,6 +15,7 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
+    "db:backfill-seo": "node --experimental-strip-types prisma/backfill-seo.ts",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset --force"
   },

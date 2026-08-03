@@ -16,18 +16,22 @@
  *    Funktion die statischen Katalogdaten. Der Shop bleibt damit auch ohne
  *    laufende API vollständig lesbar und crawlbar – wie bisher.
  *
- * Die API kennt nur die veränderlichen Felder. Redaktionelle Inhalte, die es
- * in der Datenbank nicht gibt (Downloads, Suchbegriffe, kuratierte verwandte
- * Produkte), werden aus dem Katalogeintrag desselben Slugs übernommen.
+ * Die Datenbank führt das Produkt vollständig – bis hin zu Suchbegriffen,
+ * Nebenkeywords und kuratierten verwandten Produkten. Was dort leer bleibt,
+ * ergänzt der Katalogeintrag desselben Slugs; fehlt auch der, greifen die
+ * Standardwerte (allgemeine FAQ, Standard-Downloads). Ein im Adminbereich
+ * angelegtes Produkt ist damit von sich aus vollständig.
  */
 
 import { cache } from 'react';
 
 import {
   buildSpecRows,
+  commonFaqs,
   formatDimension,
   getProduct as getCatalogProduct,
   products as catalogProducts,
+  standardDownloads,
   type Availability,
   type ConditionSlug,
   type ContainerSpecs,
@@ -88,6 +92,11 @@ interface ApiProduct {
   seoTitle: string | null;
   seoDescription: string | null;
   focusKeyword: string | null;
+  // Optional, weil Storefront und API getrennt ausgerollt werden: Zwischen
+  // beiden Deployments antwortet die API kurzzeitig noch ohne diese Felder.
+  secondaryKeywords?: string[];
+  keywords?: string[];
+  relatedSlugs?: string[];
   updatedAt: string;
   images: ApiImage[];
   categories: { isPrimary: boolean; category: { slug: string } }[];
@@ -166,6 +175,17 @@ async function fetchAll(): Promise<ApiProduct[] | null> {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+/**
+ * Liste von Zeichenketten aus einer Antwort, die das Feld auch weglassen darf.
+ *
+ * Storefront und API werden getrennt ausgerollt, und zwischengespeicherte
+ * Antworten überdauern ein Deployment. Ein Feld, das die API noch nicht
+ * kennt, darf die Produktseiten deshalb nicht zum Absturz bringen.
+ */
+function asStringList(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
 }
 
 function asSpecRows(value: unknown): SpecRow[] | undefined {
@@ -263,7 +283,7 @@ function minimalSpecRows(dto: ApiProduct, specs: ContainerSpecs): SpecRow[] {
 }
 
 function mergeImages(dto: ApiProduct, base: Product | undefined): ProductImage[] {
-  const images = [...dto.images]
+  const images = (Array.isArray(dto.images) ? [...dto.images] : [])
     .sort((a, b) => a.sortOrder - b.sortOrder)
     .map((image) => ({
       publicId: image.publicId,
@@ -281,8 +301,15 @@ function toProduct(dto: ApiProduct): Product {
   const base = getCatalogProduct(dto.slug);
   const specs = mergeSpecs(dto, base);
 
-  const categorySlugs = dto.categories.map((link) => link.category.slug);
-  const primary = dto.categories.find((link) => link.isPrimary)?.category.slug;
+  const links = Array.isArray(dto.categories) ? dto.categories : [];
+  const categorySlugs = links.map((link) => link.category.slug);
+  const primary = links.find((link) => link.isPrimary)?.category.slug;
+
+  const description = asStringList(dto.description);
+  const highlights = asStringList(dto.highlights);
+  const keywords = asStringList(dto.keywords);
+  const secondaryKeywords = asStringList(dto.secondaryKeywords);
+  const related = asStringList(dto.relatedSlugs);
 
   return {
     id: dto.id,
@@ -290,8 +317,8 @@ function toProduct(dto: ApiProduct): Product {
     sku: dto.sku,
     name: dto.name,
     tagline: dto.tagline,
-    description: dto.description.length > 0 ? dto.description : (base?.description ?? []),
-    highlights: dto.highlights.length > 0 ? dto.highlights : (base?.highlights ?? []),
+    description: description.length > 0 ? description : (base?.description ?? []),
+    highlights: highlights.length > 0 ? highlights : (base?.highlights ?? []),
     categorySlugs: categorySlugs.length > 0 ? categorySlugs : (base?.categorySlugs ?? []),
     primaryCategory: primary ?? categorySlugs[0] ?? base?.primaryCategory ?? '',
     condition: conditionSlugs[dto.condition] ?? base?.condition ?? 'gebraucht',
@@ -305,11 +332,14 @@ function toProduct(dto: ApiProduct): Product {
     images: mergeImages(dto, base),
     specs,
     specRows: mergeSpecRows(dto, base, specs),
-    faqs: asFaqs(dto.faqs) ?? base?.faqs ?? [],
-    // In der Datenbank nicht gepflegt – aus dem Katalog übernehmen.
-    downloads: base?.downloads ?? [],
-    related: base?.related ?? [],
-    keywords: base?.keywords ?? [],
+    // Ohne eigene FAQ bekommt das Produkt wenigstens die allgemeinen – sonst
+    // fehlten der Seite ein ganzer Abschnitt und die FAQPage-Auszeichnung.
+    faqs: asFaqs(dto.faqs) ?? base?.faqs ?? commonFaqs,
+    // Die drei Standard-PDFs gelten für jeden Container; in der Datenbank
+    // werden sie deshalb nicht je Produkt gepflegt.
+    downloads: base?.downloads ?? standardDownloads,
+    related: related.length > 0 ? related : (base?.related ?? []),
+    keywords: keywords.length > 0 ? keywords : (base?.keywords ?? []),
     warrantyMonths: dto.warrantyMonths,
     featured: dto.isFeatured,
     bestseller: dto.isBestseller,
@@ -320,7 +350,11 @@ function toProduct(dto: ApiProduct): Product {
       title: dto.seoTitle || base?.seo.title || dto.name,
       description: dto.seoDescription || base?.seo.description || dto.tagline,
       focusKeyword: dto.focusKeyword || base?.seo.focusKeyword || dto.name,
-      ...(base?.seo.secondaryKeywords ? { secondaryKeywords: base.seo.secondaryKeywords } : {}),
+      ...(secondaryKeywords.length > 0
+        ? { secondaryKeywords }
+        : base?.seo.secondaryKeywords
+          ? { secondaryKeywords: base.seo.secondaryKeywords }
+          : {}),
     },
   };
 }

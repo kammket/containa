@@ -199,6 +199,9 @@ export interface AdminProduct {
   seoTitle: string | null;
   seoDescription: string | null;
   focusKeyword: string | null;
+  secondaryKeywords: string[];
+  keywords: string[];
+  relatedSlugs: string[];
   isActive: boolean;
   isBestseller: boolean;
   isFeatured: boolean;

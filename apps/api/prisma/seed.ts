@@ -127,6 +127,9 @@ async function seedProducts() {
       seoTitle: product.seo.title,
       seoDescription: product.seo.description,
       focusKeyword: product.seo.focusKeyword,
+      secondaryKeywords: product.seo.secondaryKeywords ?? [],
+      keywords: product.keywords,
+      relatedSlugs: product.related,
     };
 
     const saved = await prisma.product.upsert({

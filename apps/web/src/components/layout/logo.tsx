@@ -25,7 +25,7 @@ interface LogoProps {
  * liegt: Ohne Vorrang lädt es spät und verschiebt das Layout.
  */
 export function Logo({ className, inverted = false, size = 'md', withTagline = true }: LogoProps) {
-  const dimensions = size === 'lg' ? { width: 260, height: 69 } : { width: 200, height: 53 };
+  const dimensions = size === 'lg' ? { width: 220, height: 58 } : { width: 170, height: 45 };
 
   return (
     <Link
@@ -39,8 +39,8 @@ export function Logo({ className, inverted = false, size = 'md', withTagline = t
         width={dimensions.width}
         height={dimensions.height}
         priority
-        className={cn('h-auto w-auto', size === 'lg' ? 'max-h-16' : 'max-h-12')}
-        sizes="(max-width: 640px) 200px, 260px"
+        className={cn('h-auto w-auto', size === 'lg' ? 'max-h-13' : 'max-h-10')}
+        sizes="(max-width: 640px) 170px, 220px"
       />
       {withTagline && (
         <span

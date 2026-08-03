@@ -10,8 +10,14 @@ type ProductInput = Omit<Product, 'specRows' | 'downloads'> & {
   downloads?: Product['downloads'];
 };
 
-/** Standard-Downloads, die auf jeder Produktseite angeboten werden. */
-const standardDownloads: Product['downloads'] = [
+/**
+ * Standard-Downloads, die auf jeder Produktseite angeboten werden.
+ *
+ * Exportiert, damit die Storefront sie auch Produkten mitgeben kann, die im
+ * Adminbereich entstanden sind: Die drei PDFs gelten für jeden Container, eine
+ * Pflege je Produkt wäre reine Wiederholung.
+ */
+export const standardDownloads: Product['downloads'] = [
   {
     label: 'Maßblatt & technische Zeichnung',
     description: 'Bemaßte Ansichten und Schnitte als PDF für Ihre Planung.',
@@ -35,8 +41,14 @@ const standardDownloads: Product['downloads'] = [
   },
 ];
 
-/** FAQs, die für alle Container gelten und je Produkt ergänzt werden. */
-const commonFaqs: ProductFaq[] = [
+/**
+ * FAQs, die für alle Container gelten und je Produkt ergänzt werden.
+ *
+ * Ebenfalls exportiert: Ein im Adminbereich angelegtes Produkt hätte sonst
+ * überhaupt keine FAQ – und damit weder den Abschnitt auf der Seite noch die
+ * FAQPage-Auszeichnung für die Suchergebnisse.
+ */
+export const commonFaqs: ProductFaq[] = [
   {
     question: 'Wie läuft die Anlieferung ab?',
     answer:

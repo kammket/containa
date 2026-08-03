@@ -157,6 +157,16 @@ model Product {
   seoTitle       String?
   seoDescription String?
   focusKeyword   String?
+  /// Weitere Suchbegriffe für die semantische interne Verlinkung
+  secondaryKeywords String[]
+
+  /// Begriffe für die Instant-Suche der Storefront – ohne sie findet die Suche
+  /// ein Produkt nur über Name und Kurztext
+  keywords String[]
+
+  /// Kuratierte verwandte Produkte als Slugs. Leer heißt: Die Storefront füllt
+  /// aus derselben Kategorie auf.
+  relatedSlugs String[]
 
   images     ProductImage[]
   categories ProductCategory[]
