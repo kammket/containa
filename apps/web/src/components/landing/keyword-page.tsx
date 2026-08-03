@@ -22,7 +22,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { getProductsBySlugs } from '@/lib/live-catalog';
+import { getProductsByFilter, getProductsBySlugs } from '@/lib/live-catalog';
 import { breadcrumbSchema, faqSchema, jsonLdGraph } from '@/lib/schema';
 
 /**
@@ -34,7 +34,11 @@ import { breadcrumbSchema, faqSchema, jsonLdGraph } from '@/lib/schema';
 export async function KeywordLandingPage({ page }: { page: LandingPage }) {
   const crumbs = breadcrumbs({ name: page.seo.focusKeyword, href: routes.landing(page.slug) });
 
-  const products = await getProductsBySlugs(page.productSlugs);
+  // Gruppenseiten wählen live aus dem Katalog, kuratierte Seiten über ihre
+  // feste Liste.
+  const products = page.productFilter
+    ? await getProductsByFilter(page.productFilter, 8)
+    : await getProductsBySlugs(page.productSlugs);
 
   const categories = page.categorySlugs
     .map((slug) => getCategory(slug))

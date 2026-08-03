@@ -13,7 +13,15 @@ import { ogImageUrl } from './images';
 const TITLE_SUFFIX = ` | ${brand.name}`;
 const MAX_TITLE = 60;
 
-/** Hängt den Markennamen an, sofern der Titel dadurch nicht zu lang wird. */
+/**
+ * Hängt den Markennamen an, sofern der Titel dadurch nicht zu lang wird.
+ *
+ * Diese Funktion ist die einzige Stelle, die darüber entscheidet. Das
+ * `title.template` des Root-Layouts hängt den Namen bedingungslos an, weshalb
+ * `buildMetadata` seine Titel als `absolute` ausgibt – sonst stünde die Marke
+ * bei jedem Titel doppelt im Ergebnis und fräße rund 15 der etwa 60 Zeichen,
+ * die Google in den Suchergebnissen anzeigt.
+ */
 export function withBrand(title: string): string {
   if (title.includes(brand.name)) return title;
   return title.length + TITLE_SUFFIX.length <= MAX_TITLE ? `${title}${TITLE_SUFFIX}` : title;
@@ -47,7 +55,8 @@ export function buildMetadata({
   const ogImage = image ? ogImageUrl(image) : absoluteUrl('/og-default.png');
 
   return {
-    title: withBrand(seo.title),
+    // `absolute` umgeht das Template des Root-Layouts – siehe `withBrand`.
+    title: { absolute: withBrand(seo.title) },
     description: seo.description,
     keywords: [seo.focusKeyword, ...(seo.secondaryKeywords ?? [])],
     alternates: {

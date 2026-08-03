@@ -29,7 +29,7 @@ export function BlogCard({
       <div className="relative aspect-[16/9] overflow-hidden bg-stone-100">
         <Image
           src={imageSrc(post.image.publicId, { width: 720, height: 405 })}
-          alt=""
+          alt={post.image.alt}
           fill
           sizes="(max-width: 768px) 92vw, 32vw"
           placeholder="blur"

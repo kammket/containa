@@ -43,7 +43,10 @@ export function ProductCard({ product, priority = false, className, compact }: P
           {cover && (
             <Image
               src={imageSrc(cover.publicId, { width: 640, height: 480 })}
-              alt=""
+              // Der umgebende Link ist aria-hidden, Screenreader lesen den Text
+              // daneben. Für die Bildersuche zählt das Attribut trotzdem – und
+              // Produktfotos sind in diesem Markt eine eigene Einstiegsquelle.
+              alt={cover.alt}
               fill
               sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 24vw"
               className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"

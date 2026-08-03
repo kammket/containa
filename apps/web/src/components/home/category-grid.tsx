@@ -36,7 +36,7 @@ export function CategoryGrid() {
           >
             <Image
               src={imageSrc(category.image.publicId, { width: 800, height: 600 })}
-              alt=""
+              alt={category.image.alt}
               fill
               sizes="(max-width: 640px) 92vw, (max-width: 1024px) 96vw, 48vw"
               placeholder="blur"

@@ -182,6 +182,19 @@ export interface City {
   seo: SeoMeta;
 }
 
+/**
+ * Auswahlregel für die Produktliste einer Landingpage.
+ *
+ * Alternative zur festen Slugliste: Seiten, die eine Produktgruppe abdecken
+ * („gebrauchte 20-Füßer"), sollen auch Produkte zeigen, die erst später im
+ * Adminbereich entstehen. Eine eingefrorene Liste würde das verhindern.
+ */
+export interface ProductFilter {
+  sizes?: SizeSlug[];
+  conditions?: ConditionSlug[];
+  categorySlugs?: string[];
+}
+
 export interface LandingPage {
   slug: string;
   h1: string;
@@ -190,6 +203,8 @@ export interface LandingPage {
   intro: string[];
   /** Slugs der hervorgehobenen Produkte */
   productSlugs: string[];
+  /** Statt `productSlugs`: Produkte live aus dem Katalog auswählen. */
+  productFilter?: ProductFilter;
   /** Slugs der verlinkten Kategorien */
   categorySlugs: string[];
   sections: { heading: string; body: string[] }[];

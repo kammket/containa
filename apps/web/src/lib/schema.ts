@@ -195,7 +195,11 @@ export function productSchema(product: Product, productReviews: Review[] = []): 
     '@type': 'Product',
     '@id': `${absoluteUrl(routes.product(product.slug))}#product`,
     name: product.name,
-    description: product.tagline,
+    // Die vollständige Beschreibung, nicht nur der Kurztext: Google zieht
+    // dieses Feld für Produkt-Rich-Results und Merchant-Listings heran, und
+    // ein Satz mit 86 Zeichen trägt dort nichts.
+    description:
+      product.description.length > 0 ? product.description.join(' ') : product.tagline,
     sku: product.sku,
     mpn: product.sku,
     image: product.images.map((img) => ogImageUrl(img.publicId)),

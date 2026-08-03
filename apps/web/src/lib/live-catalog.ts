@@ -37,6 +37,7 @@ import {
   type ContainerSpecs,
   type Product,
   type ProductFaq,
+  type ProductFilter,
   type ProductImage,
   type SizeSlug,
   type SpecRow,
@@ -410,6 +411,28 @@ export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
 export async function getBestsellers(limit = 8): Promise<Product[]> {
   const all = await getProducts();
   return all.filter((product) => product.bestseller).slice(0, limit);
+}
+
+/**
+ * Produkte nach Größe, Zustand und Kategorie. Grundlage der Landingpages, die
+ * eine Produktgruppe abdecken statt einer festen Auswahl – neue Produkte aus
+ * dem Adminbereich erscheinen dort ohne Codeänderung.
+ */
+export async function getProductsByFilter(
+  filter: ProductFilter,
+  limit?: number,
+): Promise<Product[]> {
+  const all = await getProducts();
+
+  const matching = all.filter(
+    (product) =>
+      (!filter.sizes || filter.sizes.includes(product.size)) &&
+      (!filter.conditions || filter.conditions.includes(product.condition)) &&
+      (!filter.categorySlugs ||
+        filter.categorySlugs.some((slug) => product.categorySlugs.includes(slug))),
+  );
+
+  return limit === undefined ? matching : matching.slice(0, limit);
 }
 
 /** Mehrere Produkte in der Reihenfolge der übergebenen Slugs. */

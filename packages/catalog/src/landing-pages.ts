@@ -504,6 +504,441 @@ export const landingPages: LandingPage[] = [
       secondaryKeywords: ['ISO Container kaufen', 'Schiffscontainer Preise', 'Seecontainer ISO'],
     },
   },
+
+  {
+    slug: 'lagercontainer-kaufen',
+    kicker: 'Lagerraum ohne Mietvertrag',
+    h1: 'Lagercontainer kaufen – abschließbarer Stauraum ab 1.190 €',
+    intro: [
+      'Ein Lagercontainer kostet einmalig, was eine angemietete Lagerfläche in ein bis zwei Jahren verschlingt. Er steht auf Ihrem Grundstück, ist rund um die Uhr zugänglich, braucht kein Fundament und lässt sich verkaufen, wenn der Bedarf endet. Für Handwerk, Landwirtschaft, Vereine und Gewerbe ist das die günstigste Form von trockenem, abschließbarem Stauraum.',
+      'Wir liefern geprüft wind- und wasserdichte Container in allen gängigen Größen zum Festpreis inklusive Anlieferung. Vom 10-Fuß-Container für Werkzeug und Geräte bis zum 40-Fuß-High-Cube für Paletten- und Langgutlagerung.',
+    ],
+    productSlugs: [],
+    productFilter: { categorySlugs: ['lagercontainer'] },
+    categorySlugs: ['lagercontainer', '20-fuss-container', 'gebrauchte-container', 'container-zubehoer'],
+    sections: [
+      {
+        heading: 'Welche Größe brauchen Sie wirklich?',
+        body: [
+          'Der 20-Fuß-Container ist mit 33 m³ Volumen und 14,8 m² Stellfläche das meistverkaufte Format. Er fasst rund zehn Europaletten in einer Lage und trägt bis zu 28 Tonnen – mehr, als die allermeisten Lagernutzungen je ausreizen.',
+          'Reicht das nicht, ist der 40-Fuß-Container mit 68 m³ die logische Erweiterung. Er braucht allerdings eine Zufahrt ab 4,0 m Breite und eine Stellfläche von gut 30 m². Wo der Platz knapp ist, sind zwei 20-Füßer flexibler als ein 40-Füßer, weil sie sich auf dem Gelände unabhängig positionieren lassen.',
+          'Für Werkzeug, Gartengeräte, Vereinsmaterial oder Baustellenausrüstung genügt oft der 10-Fuß-Container mit knapp drei Metern Länge. Er passt in Hofeinfahrten, in denen ein 20-Füßer nicht mehr rangiert werden kann.',
+        ],
+      },
+      {
+        heading: 'Kaufen statt mieten – die Rechnung',
+        body: [
+          'Ein 20-Fuß-Lagercontainer zur Miete kostet je nach Region 80 bis 150 € netto im Monat, zuzüglich An- und Abtransport. Nach zwölf bis achtzehn Monaten haben Sie den Kaufpreis eines gebrauchten Containers erreicht – ab diesem Punkt lagern Sie kostenlos.',
+          'Hinzu kommt der Restwert. Gebrauchte Seecontainer verlieren langsam an Wert; ein gepflegter Container lässt sich nach Jahren noch zu einem erheblichen Teil des Kaufpreises weiterverkaufen. Eine Miete ist dagegen vollständig verbraucht.',
+          'Kurzfristiger Bedarf unter einem Jahr spricht weiterhin für die Miete. Alles darüber rechnet sich im Kauf – deshalb finden Sie unter „Container mieten" auch unsere ehrliche Einschätzung, wann welche Variante passt.',
+        ],
+      },
+      {
+        heading: 'Kondenswasser und Belüftung',
+        body: [
+          'Der häufigste Fehler beim Lagercontainer ist die fehlende Belüftung. Stahl reagiert schnell auf Temperaturwechsel; feuchte Luft schlägt sich nachts an der kalten Decke nieder und tropft auf das Lagergut. Vier Belüftungsgitter zur Querlüftung lösen das Problem für unter 200 €.',
+          'Bei empfindlichem Gut – Elektronik, Papier, Textilien – empfehlen wir zusätzlich Granulat-Luftentfeuchter und eine Lagerung auf Paletten statt direkt auf dem Sperrholzboden. Wer den Container dauerhaft als Werkstatt nutzt, sollte über eine Dämmung nachdenken; wir übernehmen das im Umbau.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Was kostet ein Lagercontainer?',
+        answer:
+          'Gebrauchte 20-Fuß-Lagercontainer beginnen bei 1.190 € netto, 10-Fuß-Container bei 1.590 € netto und gebrauchte 40-Füßer bei 2.190 € netto. Neuwertige One-Trip-Container liegen zwischen 2.290 € und 5.890 € netto. Hinzu kommt die Lieferpauschale nach Postleitzahl.',
+      },
+      {
+        question: 'Ist mein Lagergut im Container versichert?',
+        answer:
+          'Nicht automatisch. Der Container selbst gehört nach der Lieferung Ihnen und lässt sich über die Gebäude- oder Inhaltsversicherung mit abdecken – sprechen Sie das mit Ihrem Versicherer ab, da ein Container je nach Aufstellung als Gebäudebestandteil oder als bewegliche Sache eingestuft wird.',
+      },
+      {
+        question: 'Wie sichere ich den Container gegen Einbruch?',
+        answer:
+          'Die Standard-Verriegelung lässt sich mit einem Bolzenschneider angreifen. Ein aufgeschweißter Schlosskasten umschließt das Vorhängeschloss vollständig und ist die wirksamste einfache Maßnahme. Wir schweißen ihn auf Wunsch bereits vor der Anlieferung an.',
+      },
+      {
+        question: 'Brauche ich für einen Lagercontainer eine Baugenehmigung?',
+        answer:
+          'Für die reine Lagernutzung sind Container in vielen Bundesländern bis zu einer bestimmten Größe verfahrensfrei; die Grenzen stehen in der jeweiligen Landesbauordnung. Im Außenbereich, bei dauerhafter Aufstellung oder bei Aufenthaltsnutzung ist eine Genehmigung erforderlich. Klären Sie das vorab mit Ihrem Bauamt.',
+      },
+      {
+        question: 'Kann der Container auf Rasen oder Schotter stehen?',
+        answer:
+          'Auf Schotter ja, sofern der Untergrund verdichtet und tragfähig ist. Auf gewachsenem Rasen sackt der Container mit der Zeit ungleichmäßig ein, wodurch sich der Rahmen verzieht und die Türen klemmen. Vier Betonplatten oder Fundamentblöcke unter den Eckbeschlägen verhindern das zuverlässig.',
+      },
+    ],
+    seo: {
+      title: 'Lagercontainer kaufen – abschließbar ab 1.190 € netto',
+      description:
+        'Lagercontainer kaufen statt mieten: 10, 20 und 40 Fuß, wind- und wasserdicht, abschließbar. Festpreis inklusive Anlieferung, deutschlandweite Lieferung in 3–7 Werktagen.',
+      focusKeyword: 'Lagercontainer kaufen',
+      secondaryKeywords: [
+        'Lagercontainer Preise',
+        'Materialcontainer kaufen',
+        'Lagerbox kaufen',
+        'Container Lagerraum',
+      ],
+    },
+  },
+  {
+    slug: 'buerocontainer-kaufen',
+    kicker: 'Arbeitsplatz zum Festpreis',
+    h1: 'Bürocontainer kaufen – bezugsfertig ab 7.900 €',
+    intro: [
+      'Ein Bürocontainer schafft dort einen vollwertigen Arbeitsplatz, wo kein Gebäude steht: auf der Baustelle, dem Betriebshof, dem Werksgelände oder als Erweiterung, wenn das Bürogebäude aus allen Nähten platzt. Er kommt gedämmt, verkabelt und beheizbar an – anschließen und arbeiten.',
+      'Unsere Bürocontainer sind aus Seecontainern aufgebaut, nicht aus Leichtbaumodulen. Das macht sie schwerer, aber auch deutlich robuster gegen Einbruch, Wind und wiederholtes Umsetzen. Wer den Container mehrfach versetzt, merkt den Unterschied im dritten Jahr.',
+    ],
+    productSlugs: [],
+    productFilter: { categorySlugs: ['buerocontainer'] },
+    categorySlugs: ['buerocontainer', 'umbau-container', 'wohncontainer', '20-fuss-container'],
+    sections: [
+      {
+        heading: 'Was im Bürocontainer enthalten ist',
+        body: [
+          'Unsere ausgebauten Bürocontainer haben eine umlaufende Dämmung nach GEG-Anforderung, Vinylboden, weiße Wandpaneele, Deckenleuchten, Steckdosen mit FI-geschütztem Unterverteiler, Kunststofffenster mit Rollladen und eine gedämmte Eingangstür mit Sicherheitsschloss. Eine Elektroheizung ist eingebaut.',
+          'Der 20-Fuß-Bürocontainer bietet rund 13 m² Bürofläche – ausreichend für zwei Arbeitsplätze plus Besprechungstisch. Der 40-Fuß-Container wird als Zweiraumlösung geliefert: ein größeres Büro und ein separater Raum für Besprechung, Umkleide oder Archiv.',
+          'Klimaanlage, Netzwerkverkabelung, zusätzliche Fenster und ein individueller RAL-Farbton lassen sich im Umbau ergänzen. Sprechen Sie uns vor der Bestellung darauf an – nachträglich ist jeder Eingriff teurer.',
+        ],
+      },
+      {
+        heading: 'Genehmigung: hier wird es ernst',
+        body: [
+          'Anders als beim Lagercontainer ist ein Bürocontainer ein Aufenthaltsraum. Damit greift die Landesbauordnung praktisch immer: Es braucht in der Regel eine Baugenehmigung, und die Anforderungen an Raumhöhe, Belichtung, Rettungsweg und Wärmeschutz sind einzuhalten.',
+          'Auf einer Baustelle gilt die Aufstellung meist als Baustelleneinrichtung und ist mit der Baugenehmigung des Hauptvorhabens abgedeckt. Auf einem Betriebsgelände als dauerhafte Erweiterung ist ein eigener Bauantrag der Regelfall.',
+          'Wir liefern Ihnen auf Anfrage Maßzeichnungen und die technischen Angaben, die Ihr Architekt oder Statiker für den Antrag braucht. Den Antrag selbst stellen Sie – die Genehmigungsfähigkeit hängt von Grundstück und Bebauungsplan ab und lässt sich aus der Ferne nicht beurteilen.',
+        ],
+      },
+      {
+        heading: 'Kaufen oder mieten?',
+        body: [
+          'Bürocontainer zur Miete liegen bei 180 bis 350 € netto im Monat. Bei einer Bauzeit von sechs Monaten ist die Miete klar günstiger. Ab etwa drei Jahren Nutzungsdauer kippt die Rechnung zugunsten des Kaufs, und ab dann bleibt Ihnen zusätzlich der Restwert.',
+          'Wer regelmäßig auf wechselnden Baustellen arbeitet, fährt mit dem Kauf fast immer besser: Der Container wird mitgenommen statt jedes Mal neu angemietet, und die Ausstattung bleibt die gewohnte.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Was kostet ein Bürocontainer?',
+        answer:
+          'Ein ausgebauter 20-Fuß-Bürocontainer kostet 7.900 € netto, die 40-Fuß-Variante mit zwei Räumen 16.900 € netto. Beide Preise verstehen sich inklusive Dämmung, Elektroinstallation, Heizung, Fenstern mit Rollladen und Bodenbelag – zuzüglich Lieferpauschale.',
+      },
+      {
+        question: 'Ist der Bürocontainer im Winter warm genug?',
+        answer:
+          'Ja. Die umlaufende Dämmung und die eingebaute Elektroheizung halten den Raum auch bei Frost auf Arbeitstemperatur. Der Verbrauch hängt von der Aufstellung ab – ein windgeschützter Standort und eine gedämmte Unterlüftung des Bodens senken ihn spürbar.',
+      },
+      {
+        question: 'Welchen Stromanschluss brauche ich?',
+        answer:
+          'Für Beleuchtung, Steckdosen und Heizung genügt ein 230-V-Anschluss mit 16 A, abgesichert über den mitgelieferten Unterverteiler. Bei zusätzlicher Klimaanlage oder mehreren Heizgeräten empfehlen wir einen Starkstromanschluss mit 400 V.',
+      },
+      {
+        question: 'Kann ich mehrere Bürocontainer koppeln?',
+        answer:
+          'Ja. Container lassen sich nebeneinander stellen und über einen Wanddurchbruch verbinden oder übereinander stapeln, wobei die Eckbeschläge die Last tragen. Für Kombinationen ab zwei Einheiten ist ein statischer Nachweis erforderlich, den wir über unser Partnerbüro erstellen lassen.',
+      },
+    ],
+    seo: {
+      title: 'Bürocontainer kaufen – ausgebaut ab 7.900 € netto',
+      description:
+        'Bürocontainer kaufen: gedämmt, beheizbar, mit Elektroinstallation und Fenstern. 20 und 40 Fuß, aus robustem Seecontainer statt Leichtbaumodul. Festpreis inkl. Lieferung.',
+      focusKeyword: 'Bürocontainer kaufen',
+      secondaryKeywords: [
+        'Bürocontainer Preise',
+        'Baustellencontainer kaufen',
+        'Raumcontainer Büro',
+        'Containerbüro',
+      ],
+    },
+  },
+  {
+    slug: 'kuehlcontainer-kaufen',
+    kicker: 'Durchgehende Kühlkette',
+    h1: 'Kühlcontainer kaufen – Reefer ab 6.900 €',
+    intro: [
+      'Ein Kühlcontainer – im Fachjargon Reefer – ist ein vollwertiger Kühlraum, der sich anliefern und anschließen lässt. Er hält Temperaturen von −25 °C bis +25 °C und regelt sie selbständig nach. Für Gastronomie, Lebensmittelhandel, Landwirtschaft, Events und Pharmalogistik ersetzt er einen gemauerten Kühlraum zum Bruchteil der Kosten.',
+      'Wir führen generalüberholte Reefer mit geprüftem Kälteaggregat. Generalüberholt heißt bei uns: Aggregat gewartet und im Dauerlauf getestet, Dichtungen erneuert, Innenraum gereinigt, Temperaturprotokoll dokumentiert.',
+    ],
+    productSlugs: [],
+    productFilter: { categorySlugs: ['kuehlcontainer'] },
+    categorySlugs: ['kuehlcontainer', 'umbau-container', '20-fuss-container', '40-fuss-container'],
+    sections: [
+      {
+        heading: 'Kühlen oder tiefkühlen?',
+        body: [
+          'Beide unserer Reefer decken den gesamten Bereich von −25 °C bis +25 °C ab. Entscheidend ist nicht der Container, sondern der Stromverbrauch: Im Kühlbetrieb bei +2 °C liegt er je nach Außentemperatur bei 3 bis 6 kWh pro Stunde, im Tiefkühlbetrieb bei −20 °C etwa doppelt so hoch.',
+          'Der 20-Fuß-Reefer bietet 28 m³ nutzbares Volumen, der 40-Fuß-High-Cube 67 m³. Beachten Sie, dass das Kälteaggregat Bauraum kostet – der Innenraum ist deutlich kürzer als bei einem Standardcontainer gleicher Baugröße.',
+          'Für die Lagerung von Lebensmitteln zum Verkauf gelten die Anforderungen der Lebensmittelhygiene-Verordnung. Die dokumentierte Temperaturaufzeichnung, die unsere Aggregate leisten, ist dafür regelmäßig eine Voraussetzung.',
+        ],
+      },
+      {
+        heading: 'Stromanschluss – der Punkt, an dem es hakt',
+        body: [
+          'Reefer brauchen Starkstrom: 400 V Drehstrom mit 32 A über CEE-Stecker. Eine Haushaltssteckdose reicht nicht, und ein normaler Baustromverteiler oft ebenfalls nicht. Prüfen Sie das vor der Bestellung – es ist der häufigste Grund, warum ein gelieferter Reefer nicht sofort in Betrieb gehen kann.',
+          'Steht kein passender Anschluss zur Verfügung, ist ein Dieselgenerator mit mindestens 15 kVA die übliche Zwischenlösung, etwa bei Veranstaltungen oder in der Erntesaison auf dem Feld. Wir nennen Ihnen die konkrete Anschlussleistung des jeweiligen Aggregats.',
+        ],
+      },
+      {
+        heading: 'Aufstellung und Wartung',
+        body: [
+          'Der Reefer muss waagerecht stehen, damit das Kondensat sauber abläuft, und rundum belüftet sein – das Aggregat gibt die entzogene Wärme nach außen ab. Halten Sie vor der Aggregatseite mindestens einen Meter frei und stellen Sie den Container nicht in eine geschlossene Nische.',
+          'Das Kälteaggregat ist wartungspflichtig wie jede Kälteanlage. Rechnen Sie mit einer jährlichen Wartung und, abhängig von der Füllmenge des Kältemittels, mit einer gesetzlich vorgeschriebenen Dichtheitsprüfung nach der F-Gase-Verordnung.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Was kostet ein Kühlcontainer?',
+        answer:
+          'Ein generalüberholter 20-Fuß-Reefer kostet 6.900 € netto, der 40-Fuß-High-Cube-Reefer 12.900 € netto. Beide mit geprüftem Kälteaggregat, erneuerten Dichtungen und dokumentiertem Temperaturtest – zuzüglich Lieferpauschale nach Postleitzahl.',
+      },
+      {
+        question: 'Welchen Stromanschluss braucht ein Reefer?',
+        answer:
+          '400 V Drehstrom mit 32 A über CEE-Stecker. Eine 230-V-Steckdose genügt nicht. Ohne festen Anschluss lässt sich der Container über einen Dieselgenerator ab etwa 15 kVA betreiben, was bei Veranstaltungen und in der Erntesaison die übliche Lösung ist.',
+      },
+      {
+        question: 'Wie hoch ist der Stromverbrauch?',
+        answer:
+          'Im Kühlbetrieb bei +2 °C rechnen Sie mit 3 bis 6 kWh pro Stunde, im Tiefkühlbetrieb bei −20 °C etwa mit dem Doppelten. Der tatsächliche Wert hängt stark von Außentemperatur, Türöffnungshäufigkeit und Beladung ab.',
+      },
+      {
+        question: 'Kann ich einen Kühlcontainer als normales Lager nutzen?',
+        answer:
+          'Ja. Bei ausgeschaltetem Aggregat bleibt ein hervorragend gedämmter, dichter Raum mit Edelstahl-Innenauskleidung und Aluminiumboden – deutlich besser als ein Standardcontainer, aber auch deutlich teurer. Für reine Lagerung lohnt das nur, wenn Sie die Dämmung wirklich brauchen.',
+      },
+    ],
+    seo: {
+      title: 'Kühlcontainer kaufen – Reefer ab 6.900 € netto',
+      description:
+        'Kühlcontainer kaufen: generalüberholte Reefer von −25 °C bis +25 °C, 20 und 40 Fuß. Aggregat geprüft, Dichtungen erneuert, Temperaturprotokoll. Festpreis inkl. Lieferung.',
+      focusKeyword: 'Kühlcontainer kaufen',
+      secondaryKeywords: [
+        'Reefer Container kaufen',
+        'Kühlcontainer Preise',
+        'Tiefkühlcontainer kaufen',
+        'Kühlzelle Container',
+      ],
+    },
+  },
+  {
+    slug: 'wohncontainer-kaufen',
+    kicker: 'Vollausbau, bezugsfertig',
+    h1: 'Wohncontainer kaufen – schlüsselfertig ab 38.900 €',
+    intro: [
+      'Ein Wohncontainer ist die Antwort, wenn schnell dauerhafter Wohnraum entstehen soll: als Ferienhaus, Tiny House, Personalunterkunft, Bürogebäude mit Übernachtung oder als Einliegerwohnung auf dem eigenen Grundstück. Er kommt fertig ausgebaut mit Bad, Küche und Heizung an und ist nach Anschluss von Strom, Wasser und Abwasser bezugsfertig.',
+      'Grundlage ist ein 40-Fuß-High-Cube-Container mit knapp 2,70 m Innenhöhe. Anders als beim Standardcontainer bleibt nach Dämmung und Bodenaufbau genug lichte Höhe für ein Wohngefühl, das diesen Namen verdient.',
+    ],
+    productSlugs: [],
+    productFilter: { categorySlugs: ['wohncontainer'] },
+    categorySlugs: ['wohncontainer', 'umbau-container', 'buerocontainer', 'high-cube-container'],
+    sections: [
+      {
+        heading: 'Was der Vollausbau umfasst',
+        body: [
+          'Umlaufende Dämmung nach Vorgabe des Gebäudeenergiegesetzes, Dampfsperre, Innenverkleidung, Vinyl- oder Laminatboden, Wohnraumfenster mit Dreifachverglasung und Rollladen, gedämmte Haustür, Elektroinstallation mit Verteiler, Sanitärinstallation mit Dusche und WC, Küchenzeile mit Anschlüssen sowie eine Infrarot- oder Elektroheizung.',
+          'Die Aufteilung planen wir mit Ihnen: ein offener Wohn-Ess-Bereich mit abgetrenntem Schlafzimmer ist die häufigste Lösung, ebenso zwei getrennte Schlafräume für Personalunterkünfte. Die Trennwände sind nicht tragend und lassen sich später versetzen.',
+          'Nicht enthalten sind Fundament, Hausanschlüsse, Außentreppe und Möblierung. Für diese Gewerke arbeiten wir mit örtlichen Betrieben zusammen oder Sie beauftragen sie selbst – wir liefern die Maßangaben.',
+        ],
+      },
+      {
+        heading: 'Baurecht: der entscheidende Punkt',
+        body: [
+          'Ein Wohncontainer ist baurechtlich ein Gebäude. Es braucht eine Baugenehmigung, das Grundstück muss bebaubar sein, und der Bebauungsplan muss die Wohnnutzung zulassen. Im Außenbereich nach § 35 BauGB ist eine Genehmigung nur in eng begrenzten Ausnahmefällen zu bekommen.',
+          'Zusätzlich sind die Anforderungen an Wärmeschutz, Schallschutz, Brandschutz, Rettungswege und Standsicherheit nachzuweisen. Unser Ausbau ist darauf ausgelegt, den Nachweis führt aber Ihr Architekt oder Bauvorlageberechtigter anhand des konkreten Vorhabens.',
+          'Klären Sie die Genehmigungsfähigkeit unbedingt vor der Bestellung. Ein Wohncontainer, der nicht aufgestellt werden darf, ist ein teures Missverständnis – und die Klärung kostet Sie nur ein Gespräch beim Bauamt.',
+        ],
+      },
+      {
+        heading: 'Was ein Wohncontainer nicht ist',
+        body: [
+          'Er ist kein billiges Fertighaus. Bezogen auf den Quadratmeter liegt ein vollausgebauter Wohncontainer im Bereich konventioneller Bauweise. Der Vorteil liegt in der Bauzeit, in der Versetzbarkeit und darin, dass die Kosten von Anfang an feststehen.',
+          'Er ist auch nicht wartungsfrei. Die Außenhaut aus Corten-Stahl braucht alle paar Jahre eine Sichtprüfung auf Lackschäden, damit sich kein Rost festsetzt. Wer das im Blick behält, hat jahrzehntelang Ruhe.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Was kostet ein Wohncontainer?',
+        answer:
+          'Unser vollausgebauter 40-Fuß-Wohncontainer kostet 38.900 € netto inklusive Dämmung, Bad, Küchenzeile, Elektro- und Sanitärinstallation sowie Heizung. Nicht enthalten sind Fundament, Hausanschlüsse, Außentreppe und Möblierung.',
+      },
+      {
+        question: 'Brauche ich für einen Wohncontainer eine Baugenehmigung?',
+        answer:
+          'Ja, praktisch immer. Ein Wohncontainer ist baurechtlich ein Gebäude mit Aufenthaltsräumen. Grundstück und Bebauungsplan müssen die Wohnnutzung zulassen, und die Nachweise zu Wärme-, Schall- und Brandschutz sind zu führen. Klären Sie das vor der Bestellung mit Ihrem Bauamt.',
+      },
+      {
+        question: 'Wie lange dauert die Fertigung?',
+        answer:
+          'Für den Vollausbau nach Ihrer Aufteilung rechnen Sie mit 8 bis 12 Wochen ab Auftragsbestätigung, zuzüglich Lieferzeit. Vorgefertigte Standardausführungen sind kurzfristiger verfügbar – fragen Sie den aktuellen Stand an.',
+      },
+      {
+        question: 'Ist der Wohncontainer winterfest?',
+        answer:
+          'Ja. Die Dämmung ist auf die Anforderungen des Gebäudeenergiegesetzes ausgelegt, die Fenster sind dreifach verglast. Wichtig ist ein frostfrei verlegter Wasseranschluss und eine unterlüftete, gedämmte Bodenkonstruktion – beides planen wir mit ein.',
+      },
+    ],
+    seo: {
+      title: 'Wohncontainer kaufen – Vollausbau ab 38.900 € netto',
+      description:
+        'Wohncontainer kaufen: 40 Fuß High Cube, vollausgebaut mit Bad, Küche, Dämmung und Heizung. Bezugsfertig nach Anschluss – mit ehrlicher Auskunft zum Baurecht.',
+      focusKeyword: 'Wohncontainer kaufen',
+      secondaryKeywords: [
+        'Wohncontainer Preise',
+        'Tiny House Container',
+        'Containerhaus kaufen',
+        'Wohnmodul Container',
+      ],
+    },
+  },
+  {
+    slug: '20-fuss-container-gebraucht-kaufen',
+    kicker: 'Der günstigste Weg zu 33 m³',
+    h1: '20 Fuß Container gebraucht kaufen – geprüft ab 1.190 €',
+    intro: [
+      'Ein gebrauchter 20-Fuß-Container ist das beste Preis-Leistungs-Verhältnis im gesamten Sortiment. Er hat seine Zeit im Seeverkehr hinter sich, ist im Lichttest auf Dichtheit geprüft und kostet weniger als die Hälfte eines neuwertigen Containers – bei identischem Innenvolumen von 33 m³.',
+      'Gebrauchsspuren gehören dazu und sind kein Mangel: Kratzer, Dellen im Wellblech, Farbunterschiede durch werkseitige Ausbesserungen und Flugrost an den Kanten. Auf Funktion, Dichtheit und Tragfähigkeit hat das keinen Einfluss. Wer den Container hinter der Halle aufstellt, zahlt für makellose Optik unnötig drauf.',
+    ],
+    productSlugs: [],
+    productFilter: { sizes: ['20ft'], conditions: ['gebraucht', 'generalueberholt'] },
+    categorySlugs: ['gebrauchte-container', '20-fuss-container', 'lagercontainer', 'one-trip-container'],
+    sections: [
+      {
+        heading: 'Worauf Sie beim Gebrauchtkauf achten müssen',
+        body: [
+          'Entscheidend ist die Dichtheit, nicht die Optik. Ein Container gilt als wind- und wasserdicht, wenn im Lichttest bei geschlossenen Türen von innen kein Tageslicht durch Wände, Dach oder Türdichtungen zu sehen ist. Jeder Container, den wir als gebraucht verkaufen, hat diesen Test bestanden.',
+          'Prüfen Sie zweitens den Boden. Die 28 mm starke Sperrholzplatte muss vollflächig tragfähig und trocken sein; durchgetretene oder aufgequollene Stellen sind teuer zu ersetzen. Drittens die Verriegelung: Die vier Verschlussstangen müssen leichtgängig laufen und die Nocken sauber greifen.',
+          'Und viertens die CSC-Plakette. Sie dokumentiert Baujahr und Prüfstatus. Für die Lagernutzung an Land ist sie nicht zwingend, für jeden möglichen Weiterverkauf oder Transport aber bares Geld wert.',
+        ],
+      },
+      {
+        heading: 'Gebraucht, generalüberholt oder One-Trip?',
+        body: [
+          'Gebraucht ist der Container, der aus dem Umlauf kommt: geprüft dicht, sichtbar benutzt, günstigster Preis. Für Lagerung, Baustelle und alles, was nicht repräsentativ sein muss, die vernünftige Wahl.',
+          'Generalüberholt bedeutet, dass wir zusätzlich Roststellen behandelt, Dichtungen erneuert und den Container neu lackiert haben. Optisch nah an neuwertig, im Preis dazwischen – sinnvoll, wenn der Container sichtbar steht, das Budget für One-Trip aber nicht reicht.',
+          'One-Trip heißt: eine einzige Überfahrt, danach aus dem Umlauf genommen. Praktisch neuwertig, in Wunschfarbe lieferbar, rund doppelt so teuer wie gebraucht. Steht der Container vor dem Betriebsgebäude oder im Vorgarten, ist der Aufpreis meist gut angelegt.',
+        ],
+      },
+      {
+        heading: 'Was der 20-Füßer fasst',
+        body: [
+          'Bei 5,90 m Innenlänge, 2,35 m Breite und 2,39 m Höhe passen rund zehn Europaletten in einer Lage, gestapelt entsprechend mehr. Das Volumen von 33 m³ entspricht ungefähr dem Hausrat einer Drei-Zimmer-Wohnung.',
+          'Die zulässige Zuladung von gut 28 Tonnen wird in der Lagernutzung praktisch nie erreicht – Sie stoßen deutlich früher an die Volumengrenze. Für schwere Punktlasten wie Maschinen sollte die Last über den Boden verteilt werden, damit die Sperrholzplatte nicht durchdrückt.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Was kostet ein gebrauchter 20-Fuß-Container?',
+        answer:
+          'Bei uns beginnt der geprüfte gebrauchte 20-Fuß-Seecontainer bei 1.190 € netto. Zum Vergleich: Ein One-Trip-Container derselben Größe liegt bei rund 2.590 € netto. Hinzu kommt in beiden Fällen die Lieferpauschale nach Postleitzahl.',
+      },
+      {
+        question: 'Wie alt sind gebrauchte Container?',
+        answer:
+          'Die verfügbaren Einheiten sind typischerweise zwischen 11 und 15 Jahre alt. Das genaue Baujahr steht auf der CSC-Plakette und teilen wir Ihnen zur konkreten Containernummer auf Anfrage mit.',
+      },
+      {
+        question: 'Kann ich mir den Container vorher ansehen?',
+        answer:
+          'Wir senden Ihnen vor der Auslieferung Fotos des konkreten Containers, damit Sie den tatsächlichen Zustand kennen. Eine Besichtigung vor Ort ist nach Terminabsprache möglich, sofern die Einheit auf einem unserer Depotstandorte steht.',
+      },
+      {
+        question: 'Kann ich den Farbton auswählen?',
+        answer:
+          'Bei Gebrauchtcontainern nicht. Wir liefern in der jeweils verfügbaren Farbe, überwiegend Blau, Rot oder Grau. Ist der Farbton entscheidend, kommen ein generalüberholter Container in Wunschlackierung oder ein One-Trip-Container in RAL-Wunschfarbe infrage.',
+      },
+      {
+        question: 'Bekomme ich auf einen Gebrauchtcontainer Garantie?',
+        answer:
+          'Ja. Wir geben 12 Monate Garantie auf Wind- und Wasserdichtheit. Sichtbare Gebrauchsspuren, die bei Übergabe dokumentiert sind, sind davon ausgenommen – sie sind Merkmal der Ware und kein Mangel.',
+      },
+    ],
+    seo: {
+      title: '20 Fuß Container gebraucht kaufen – ab 1.190 € netto',
+      description:
+        'Gebrauchte 20-Fuß-Container kaufen: im Lichttest geprüft wind- und wasserdicht, 33 m³, mit CSC-Plakette. Mit Prüfliste für den Gebrauchtkauf und 12 Monaten Garantie.',
+      focusKeyword: '20 Fuß Container gebraucht kaufen',
+      secondaryKeywords: [
+        'gebrauchter 20 Fuß Seecontainer',
+        '20ft Container gebraucht',
+        'Seecontainer gebraucht kaufen',
+        '20 Fuß Lagercontainer gebraucht',
+      ],
+    },
+  },
+  {
+    slug: '40-fuss-container-gebraucht-kaufen',
+    kicker: '68 m³ zum Gebrauchtpreis',
+    h1: '40 Fuß Container gebraucht kaufen – geprüft ab 2.190 €',
+    intro: [
+      'Der gebrauchte 40-Fuß-Container bietet das doppelte Volumen eines 20-Füßers bei weit weniger als dem doppelten Preis. Mit 68 m³ und 12,03 m Innenlänge ist er die wirtschaftlichste Lösung für Langgut, Palettenlagerung in zwei Reihen und alles, was am Stück lang ist.',
+      'Wie bei allen Gebrauchtcontainern gilt: Er ist im Lichttest auf Dichtheit geprüft, trägt Gebrauchsspuren und kostet dafür einen Bruchteil eines neuwertigen Containers. Prüfen Sie vor dem Kauf allerdings die Zufahrt – ein 40-Füßer stellt deutlich höhere Anforderungen als ein 20-Füßer.',
+    ],
+    productSlugs: [],
+    productFilter: { sizes: ['40ft'], conditions: ['gebraucht', 'generalueberholt'] },
+    categorySlugs: ['gebrauchte-container', '40-fuss-container', 'high-cube-container', 'lagercontainer'],
+    sections: [
+      {
+        heading: 'Zufahrt und Stellfläche prüfen',
+        body: [
+          'Ein 40-Fuß-Container ist 12,19 m lang. Das Lieferfahrzeug braucht entsprechend Platz zum Rangieren: eine Zufahrtsbreite ab 4,0 m, eine hindernisfreie Höhe von 4,2 m und eine gerade Anfahrstrecke, auf der das Fahrzeug den Container abkippen oder abkranen kann.',
+          'Die Stellfläche selbst muss rund 30 m² tragfähig und weitgehend eben sein. Unter jedem der vier Eckbeschläge gehört ein tragfähiges Punktauflager; bei einem 40-Füßer empfehlen wir zusätzlich zwei Auflager in der Mitte, weil sich der lange Rahmen sonst über die Jahre durchbiegt.',
+          'Wo die Zufahrt nicht reicht, sind zwei 20-Fuß-Container die praktikablere Lösung: gleiche Gesamtkapazität, halbe Anforderung an den Rangierraum und flexibler auf dem Gelände zu verteilen.',
+        ],
+      },
+      {
+        heading: 'Standard oder High Cube?',
+        body: [
+          'Der Standard-40-Füßer misst innen 2,39 m in der Höhe, der High Cube 2,70 m. Der Aufpreis für den High Cube ist gering, der Gewinn erheblich: rund 9 m³ mehr Volumen und genug lichte Höhe, um nach einer späteren Dämmung noch aufrecht zu stehen.',
+          'Wer den Container später zur Werkstatt, zum Büro oder zum Wohnraum umbauen will, sollte ausschließlich High Cube kaufen. Nach Bodenaufbau und Deckendämmung bleiben beim Standardcontainer knapp 2,20 m – das fühlt sich niedrig an und ist für Aufenthaltsräume baurechtlich oft nicht ausreichend.',
+        ],
+      },
+      {
+        heading: 'Preisvorteil gegenüber zwei 20-Füßern',
+        body: [
+          'Zwei gebrauchte 20-Fuß-Container kosten zusammen rund 2.380 € netto und bieten 66 m³. Ein gebrauchter 40-Füßer liegt bei 2.190 € netto für 68 m³ – bei einer statt zwei Lieferungen.',
+          'Der Vorteil kehrt sich um, sobald die Zufahrt eng ist oder Sie die Container an verschiedenen Stellen brauchen. Rechnen Sie deshalb nicht nur den Kaufpreis, sondern auch die Lieferpauschale und die Gegebenheiten vor Ort – unser Lieferkostenrechner gibt Ihnen beide Varianten zur Postleitzahl aus.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Was kostet ein gebrauchter 40-Fuß-Container?',
+        answer:
+          'Der geprüfte gebrauchte 40-Fuß-Seecontainer beginnt bei 2.190 € netto. Ein neuwertiger 40-Fuß-High-Cube-Container in One-Trip-Qualität liegt bei rund 4.490 € netto. Hinzu kommt jeweils die Lieferpauschale nach Postleitzahl.',
+      },
+      {
+        question: 'Welche Zufahrt braucht die Anlieferung?',
+        answer:
+          'Mindestens 4,0 m Breite, 4,2 m hindernisfreie Höhe und eine gerade Anfahrstrecke zum Abkippen oder Abkranen. Ist die Zufahrt enger, prüfen wir die Anlieferung per Autokran – oder zwei 20-Fuß-Container werden zur besseren Lösung.',
+      },
+      {
+        question: 'Lohnt sich der High Cube?',
+        answer:
+          'Fast immer. Der Aufpreis ist gering, Sie gewinnen rund 9 m³ Volumen und 31 cm Innenhöhe. Wenn Sie den Container später dämmen oder ausbauen wollen, ist High Cube praktisch Voraussetzung – beim Standardcontainer bleiben danach nur noch gut 2,20 m.',
+      },
+      {
+        question: 'Kann ich einen 40-Fuß-Container später versetzen?',
+        answer:
+          'Ja, per Kranfahrzeug oder Absetzkipper. Wichtig ist, dass der Container leer und der Rahmen nicht verzogen ist – deshalb die Empfehlung, ihn von Anfang an auf sechs Punktauflagern waagerecht zu stellen. Wir übernehmen das Umsetzen auf Anfrage.',
+      },
+    ],
+    seo: {
+      title: '40 Fuß Container gebraucht kaufen – ab 2.190 € netto',
+      description:
+        'Gebrauchte 40-Fuß-Container kaufen: 68 m³, im Lichttest geprüft, mit CSC-Plakette. Mit ehrlichem Vergleich zu zwei 20-Füßern und allen Anforderungen an die Zufahrt.',
+      focusKeyword: '40 Fuß Container gebraucht kaufen',
+      secondaryKeywords: [
+        'gebrauchter 40 Fuß Seecontainer',
+        '40ft Container gebraucht',
+        '40 Fuß High Cube gebraucht',
+        'großer Lagercontainer gebraucht',
+      ],
+    },
+  },
 ];
 
 export const landingPagesBySlug = new Map(landingPages.map((p) => [p.slug, p]));
