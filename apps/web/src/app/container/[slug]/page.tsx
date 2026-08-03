@@ -10,9 +10,7 @@ import {
   formatPriceCompact,
   getCategory,
   grossFromNet,
-  lowestPriceInCategory,
   navCategories,
-  productsInCategory,
   routes,
 } from '@emc/catalog';
 
@@ -29,6 +27,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { blurDataUrl, imageSrc } from '@/lib/images';
+import { getLowestPriceInCategory, getProductsInCategory } from '@/lib/live-catalog';
 import { breadcrumbSchema, collectionSchema, faqSchema, jsonLdGraph } from '@/lib/schema';
 import { buildMetadata } from '@/lib/seo';
 
@@ -59,8 +58,8 @@ export default async function CategoryPage({ params }: PageProps) {
   const category = getCategory(slug);
   if (!category) notFound();
 
-  const items = productsInCategory(category.slug);
-  const from = lowestPriceInCategory(category.slug);
+  const items = await getProductsInCategory(category.slug);
+  const from = await getLowestPriceInCategory(category.slug);
 
   const crumbs = breadcrumbs(
     { name: 'Container', href: routes.shop },

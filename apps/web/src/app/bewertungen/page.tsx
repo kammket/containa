@@ -6,7 +6,6 @@ import {
   aggregateRating,
   averageRating,
   breadcrumbs,
-  getProduct,
   reviews,
   routes,
   testimonials,
@@ -16,6 +15,7 @@ import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
 import { Button } from '@/components/ui/button';
 import { RatingStars } from '@/components/ui/rating';
+import { getProducts } from '@/lib/live-catalog';
 import { breadcrumbSchema, jsonLdGraph, organizationSchema } from '@/lib/schema';
 import { buildMetadata } from '@/lib/seo';
 import { formatDate } from '@/lib/utils';
@@ -31,7 +31,8 @@ export const metadata: Metadata = buildMetadata({
   path: routes.reviews,
 });
 
-export default function ReviewsPage() {
+export default async function ReviewsPage() {
+  const products = await getProducts();
   const crumbs = breadcrumbs({ name: 'Bewertungen', href: routes.reviews });
   const overall = averageRating();
 
@@ -105,7 +106,9 @@ export default function ReviewsPage() {
           <h2 className="font-display text-2xl font-bold text-navy-950">Alle Bewertungen</h2>
           <ul className="mt-8 grid gap-5 md:grid-cols-2">
             {reviews.map((review) => {
-              const product = review.productSlug ? getProduct(review.productSlug) : undefined;
+              const product = review.productSlug
+                ? products.find((item) => item.slug === review.productSlug)
+                : undefined;
               return (
                 <li
                   key={review.id}

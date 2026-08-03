@@ -19,11 +19,17 @@ deutschen Markt.
 Produkte, Kategorien, Städte, Ratgeberinhalte, Preislogik und SEO-Metadaten
 liegen in `packages/catalog` – nicht in der Datenbank und nicht doppelt.
 
-* Die **Storefront** erzeugt daraus zur Bauzeit statische Seiten. Alle 128
-  Seiten sind vorgerendert; es gibt keine Datenbankabfrage im Auslieferungspfad.
-  Fällt die API aus, bleibt der gesamte Shop lesbar und crawlbar.
+* Die **Storefront** erzeugt daraus statische Seiten. Fällt die API aus, bleibt
+  der gesamte Shop lesbar und crawlbar – dann eben mit dem Katalogstand.
 * Die **API** übernimmt denselben Katalog per Seed in die Datenbank und
-  verwaltet ab dort die veränderlichen Teile: Bestand, Bestellungen, Anfragen.
+  verwaltet ab dort die veränderlichen Teile: Produkte, Bestand, Bestellungen,
+  Anfragen.
+* **Produktdaten holt die Storefront live aus der API** und legt sie über den
+  Katalogeintrag. Alles, was der Adminbereich pflegt – Preis, Bestand, Texte,
+  Maße, Fotos, Sichtbarkeit –, ist damit auf der Seite sichtbar. Die Seiten
+  bleiben statisch ausgeliefert und erneuern sich nach spätestens einer Minute;
+  beim Speichern im Adminbereich meldet die API das der Storefront, die
+  betroffenen Seiten sind dann sofort aktuell.
 * Beide teilen sich dieselbe **Preislogik** (`pricing.ts`). Der Betrag, den die
   Kundschaft im Warenkorb sieht, wird von exakt demselben Code berechnet, den
   der Server beim Anlegen der Bestellung erneut ausführt.
@@ -90,7 +96,7 @@ der Konsole aus. Notieren Sie es – es lässt sich später nicht auslesen.
 
 ### SEO
 
-* Alle 128 Seiten statisch vorgerendert
+* Alle Seiten statisch vorgerendert
 * 20 Städteseiten (`/seecontainer-berlin` …) mit individuellem Text je Stadt –
   ein Test im CI stellt sicher, dass kein Duplicate Content entsteht
 * 8 Landingpages für kaufstarke Suchbegriffe (`/seecontainer-kaufen`,
@@ -117,11 +123,12 @@ der Konsole aus. Notieren Sie es – es lässt sich später nicht auslesen.
 
 ### Adminbereich
 
-Bewusst auf drei Aufgaben begrenzt – Inhalte, Preise und Rechtstexte leben
-versioniert im Code, nicht in einer Datenbankmaske:
+Bewusst auf drei Aufgaben begrenzt – redaktionelle Inhalte und Rechtstexte
+leben versioniert im Code, nicht in einer Datenbankmaske:
 
 1. **Produkte** – anlegen, bearbeiten, Bilder hochladen und sortieren,
-   im Shop ein- und ausblenden
+   im Shop ein- und ausblenden. Änderungen erscheinen unmittelbar in der
+   Storefront.
 2. **Bestellungen** – Liste, Detailansicht, Statuspflege, Zahlungsbestätigung,
    Rechnungsdownload
 3. **Anfragen** – Kontakt- und Angebotsanfragen mit Status und interner Notiz

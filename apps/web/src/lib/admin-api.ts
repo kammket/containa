@@ -169,18 +169,36 @@ export interface AdminProductImage {
   sortOrder: number;
 }
 
+/**
+ * Produkt im Adminbereich – vollständig, so wie die API es liefert.
+ *
+ * Alle Felder, die das Formular bearbeitet, müssen hier stehen. Fehlt eines,
+ * startet das Formular mit einem Standardwert und überschreibt beim Speichern
+ * den gepflegten Wert in der Datenbank.
+ */
 export interface AdminProduct {
   id: string;
   slug: string;
   sku: string;
   name: string;
   tagline: string;
+  description: string[];
+  highlights: string[];
   priceNet: number;
   compareAtNet: number | null;
   stock: number;
   size: string;
   condition: string;
   availability: string;
+  leadTimeDaysMin: number;
+  leadTimeDaysMax: number;
+  warrantyMonths: number;
+  lengthMm: number;
+  widthMm: number;
+  heightMm: number;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  focusKeyword: string | null;
   isActive: boolean;
   isBestseller: boolean;
   isFeatured: boolean;

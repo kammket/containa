@@ -3,12 +3,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import { breadcrumbs, categories, products, routes } from '@emc/catalog';
+import { breadcrumbs, categories, routes } from '@emc/catalog';
 
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
 import { Button } from '@/components/ui/button';
 import { blurDataUrl, imageSrc } from '@/lib/images';
+import { getProducts } from '@/lib/live-catalog';
 import { breadcrumbSchema, jsonLdGraph } from '@/lib/schema';
 import { buildMetadata } from '@/lib/seo';
 
@@ -23,7 +24,8 @@ export const metadata: Metadata = buildMetadata({
   path: routes.gallery,
 });
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const products = await getProducts();
   const crumbs = breadcrumbs({ name: 'Galerie', href: routes.gallery });
 
   // Alle Produktbilder als flache Galerie, Kategorie-Titelbilder vorangestellt

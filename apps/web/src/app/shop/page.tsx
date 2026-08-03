@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { breadcrumbs, navCategories, products, routes } from '@emc/catalog';
+import { breadcrumbs, navCategories, routes } from '@emc/catalog';
 
 import { ProductCard } from '@/components/commerce/product-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
 import { ProductFilters } from '@/components/shop/product-filters';
 import { toFacet } from '@/components/shop/facets';
+import { getProducts } from '@/lib/live-catalog';
 import { breadcrumbSchema, jsonLdGraph } from '@/lib/schema';
 import { buildMetadata } from '@/lib/seo';
 
@@ -22,7 +23,8 @@ export const metadata: Metadata = buildMetadata({
   path: routes.shop,
 });
 
-export default function ShopPage() {
+export default async function ShopPage() {
+  const products = await getProducts();
   const crumbs = breadcrumbs({ name: 'Container', href: routes.shop });
 
   // Karten serverseitig rendern, Filterung arbeitet nur auf den Metadaten.

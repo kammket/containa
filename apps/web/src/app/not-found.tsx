@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { ArrowRight, Home, Search } from 'lucide-react';
 
-import { bestsellers, navCategories, routes } from '@emc/catalog';
+import { navCategories, routes } from '@emc/catalog';
 
 import { ProductCard } from '@/components/commerce/product-card';
 import { Button } from '@/components/ui/button';
+import { getBestsellers } from '@/lib/live-catalog';
 
 export const metadata = {
   title: 'Seite nicht gefunden (404)',
@@ -17,8 +18,8 @@ export const metadata = {
  * Statt einer Sackgasse bietet sie konkrete Wege weiter: Suche, Kategorien und
  * die meistgekauften Container. Das reduziert Absprünge spürbar.
  */
-export default function NotFound() {
-  const suggestions = bestsellers(4);
+export default async function NotFound() {
+  const suggestions = await getBestsellers(4);
 
   return (
     <>

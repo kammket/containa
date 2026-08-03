@@ -15,6 +15,7 @@ import {
 } from '@emc/catalog';
 
 import { SearchHeader } from './search-dialog';
+import { useSearchIndex } from '@/lib/use-search-index';
 import { cn } from '@/lib/utils';
 
 const typeMeta: Record<SearchEntryType, { label: string; icon: typeof Package }> = {
@@ -33,8 +34,12 @@ export function SearchPanel({ onNavigate }: { onNavigate: () => void }) {
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
   const router = useRouter();
+  const index = useSearchIndex();
 
-  const results = useMemo(() => (query.trim() ? search(query, { limit: 8 }) : []), [query]);
+  const results = useMemo(
+    () => (query.trim() ? search(query, { limit: 8, index }) : []),
+    [query, index],
+  );
 
   useEffect(() => {
     setActiveIndex(0);

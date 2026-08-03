@@ -10,12 +10,12 @@ import {
   landingPages,
   navigation,
   postsInCategory,
-  products,
   routes,
 } from '@emc/catalog';
 
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
+import { getProducts } from '@/lib/live-catalog';
 import { breadcrumbSchema, jsonLdGraph } from '@/lib/schema';
 import { buildMetadata } from '@/lib/seo';
 
@@ -60,7 +60,8 @@ const legalLinks = [
   { href: routes.cookies, label: 'Cookie-Richtlinie' },
 ];
 
-export default function SitemapPage() {
+export default async function SitemapPage() {
+  const products = await getProducts();
   const crumbs = breadcrumbs({ name: 'Sitemap', href: routes.sitemapPage });
 
   return (

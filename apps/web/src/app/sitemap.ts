@@ -9,11 +9,11 @@ import {
   cities,
   landingPages,
   postsInCategory,
-  products,
   routes,
 } from '@emc/catalog';
 
 import { ogImageUrl } from '@/lib/images';
+import { getProducts } from '@/lib/live-catalog';
 
 /**
  * XML-Sitemap.
@@ -24,7 +24,8 @@ import { ogImageUrl } from '@/lib/images';
  * enthalten – sie sind über robots.txt und Meta-Robots von der Indexierung
  * ausgenommen.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const products = await getProducts();
   const now = new Date();
 
   // `satisfies` erhält die Literaltypen von changeFrequency beim späteren map()

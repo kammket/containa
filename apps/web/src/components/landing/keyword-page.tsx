@@ -5,7 +5,6 @@ import {
   breadcrumbs,
   formatPrice,
   getCategory,
-  getProduct,
   grossFromNet,
   navCategories,
   containerPriceRange,
@@ -23,6 +22,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { getProductsBySlugs } from '@/lib/live-catalog';
 import { breadcrumbSchema, faqSchema, jsonLdGraph } from '@/lib/schema';
 
 /**
@@ -31,12 +31,10 @@ import { breadcrumbSchema, faqSchema, jsonLdGraph } from '@/lib/schema';
  * Aufbau folgt der Suchintention: Antwort zuerst (Preise, Verfügbarkeit),
  * dann Produkte, dann vertiefender Text und FAQ.
  */
-export function KeywordLandingPage({ page }: { page: LandingPage }) {
+export async function KeywordLandingPage({ page }: { page: LandingPage }) {
   const crumbs = breadcrumbs({ name: page.seo.focusKeyword, href: routes.landing(page.slug) });
 
-  const products = page.productSlugs
-    .map((slug) => getProduct(slug))
-    .filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const products = await getProductsBySlugs(page.productSlugs);
 
   const categories = page.categorySlugs
     .map((slug) => getCategory(slug))

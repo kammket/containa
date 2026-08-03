@@ -10,11 +10,8 @@ import {
   discountPercent,
   formatPrice,
   getCategory,
-  getProduct,
   grossFromNet,
   lowestMonthlyRate,
-  products,
-  relatedProducts,
   reviewsForProduct,
   routes,
   vatAmount,
@@ -39,6 +36,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { toSnapshot } from '@/lib/cart-snapshot';
+import { getProductBySlug, getProducts, getRelatedProducts } from '@/lib/live-catalog';
 import { breadcrumbSchema, faqSchema, jsonLdGraph, productSchema } from '@/lib/schema';
 import { buildMetadata } from '@/lib/seo';
 
@@ -46,16 +44,22 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-/** Alle Produktseiten werden zur Bauzeit statisch erzeugt. */
-export function generateStaticParams() {
+/** Alle bekannten Produktseiten werden zur Bauzeit statisch erzeugt. */
+export async function generateStaticParams() {
+  const products = await getProducts();
   return products.map((product) => ({ slug: product.slug }));
 }
 
-export const dynamicParams = false;
+/**
+ * Produkte, die nach dem Build im Adminbereich entstehen, gibt es zur Bauzeit
+ * noch nicht. Sie werden beim ersten Aufruf gerendert und danach wie jede
+ * andere Seite ausgeliefert.
+ */
+export const dynamicParams = true;
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await getProductBySlug(slug);
   if (!product) return {};
 
   return buildMetadata({
@@ -69,13 +73,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProductPage({ params }: PageProps) {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await getProductBySlug(slug);
   if (!product) notFound();
 
   const category = getCategory(product.primaryCategory);
   const reviews = reviewsForProduct(product.slug);
   const rating = averageRating(product.slug);
-  const related = relatedProducts(product.slug, 4);
+  const related = await getRelatedProducts(product.slug, 4);
   const condition = conditions.find((c) => c.slug === product.condition);
 
   const gross = grossFromNet(product.priceNet);

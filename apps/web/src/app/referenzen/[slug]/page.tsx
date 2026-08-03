@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 
-import { breadcrumbs, caseStudies, getCaseStudy, getProduct, routes } from '@emc/catalog';
+import { breadcrumbs, caseStudies, getCaseStudy, routes } from '@emc/catalog';
 
 import { ProductCard } from '@/components/commerce/product-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
 import { Button } from '@/components/ui/button';
 import { blurDataUrl, imageSrc } from '@/lib/images';
+import { getProductsBySlugs } from '@/lib/live-catalog';
 import { breadcrumbSchema, caseStudySchema, jsonLdGraph } from '@/lib/schema';
 import { buildMetadata } from '@/lib/seo';
 
@@ -42,9 +43,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
   const study = getCaseStudy(slug);
   if (!study) notFound();
 
-  const products = study.productSlugs
-    .map((s) => getProduct(s))
-    .filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const products = await getProductsBySlugs(study.productSlugs);
 
   const others = caseStudies.filter((s) => s.slug !== study.slug);
 

@@ -22,6 +22,7 @@ import { CreateProductDto } from '../products/dto/create-product.dto';
 import { QueryProductsDto } from '../products/dto/query-products.dto';
 import { UpdateProductDto } from '../products/dto/update-product.dto';
 import { ProductsService } from '../products/products.service';
+import { StorefrontRevalidationService } from '../products/storefront-revalidation.service';
 import { UploadsService } from '../uploads/uploads.service';
 import { AuditService } from './audit.service';
 import { ReorderImagesDto } from './dto/reorder-images.dto';
@@ -42,6 +43,7 @@ export class AdminProductsController {
     private readonly products: ProductsService,
     private readonly uploads: UploadsService,
     private readonly audit: AuditService,
+    private readonly revalidation: StorefrontRevalidationService,
   ) {}
 
   @Get()
@@ -61,6 +63,7 @@ export class AdminProductsController {
   async create(@Body() dto: CreateProductDto, @CurrentUser() user: JwtPayload) {
     const product = await this.products.create(dto);
     await this.audit.log(user.sub, 'CREATE', 'Product', product.id, { slug: product.slug });
+    this.revalidation.trigger(`Produkt angelegt: ${product.slug}`);
     return product;
   }
 
@@ -73,6 +76,7 @@ export class AdminProductsController {
   ) {
     const product = await this.products.update(id, dto);
     await this.audit.log(user.sub, 'UPDATE', 'Product', id, dto as Record<string, unknown>);
+    this.revalidation.trigger(`Produkt bearbeitet: ${product.slug}`);
     return product;
   }
 
@@ -81,6 +85,7 @@ export class AdminProductsController {
   async deactivate(@Param('id') id: string, @CurrentUser() user: JwtPayload) {
     const product = await this.products.deactivate(id);
     await this.audit.log(user.sub, 'DEACTIVATE', 'Product', id);
+    this.revalidation.trigger(`Produkt ausgeblendet: ${product.slug}`);
     return product;
   }
 
@@ -89,6 +94,7 @@ export class AdminProductsController {
   async activate(@Param('id') id: string, @CurrentUser() user: JwtPayload) {
     const product = await this.products.activate(id);
     await this.audit.log(user.sub, 'ACTIVATE', 'Product', id);
+    this.revalidation.trigger(`Produkt eingeblendet: ${product.slug}`);
     return product;
   }
 
@@ -134,6 +140,7 @@ export class AdminProductsController {
       publicId: uploaded.publicId,
     });
 
+    this.revalidation.trigger(`Bild hochgeladen: ${product.slug}`);
     return image;
   }
 
@@ -145,6 +152,7 @@ export class AdminProductsController {
     await this.audit.log(user.sub, 'DELETE_IMAGE', 'Product', image.productId, {
       publicId: image.publicId,
     });
+    this.revalidation.trigger(`Bild gelöscht: ${image.publicId}`);
     return { deleted: true };
   }
 
@@ -153,7 +161,9 @@ export class AdminProductsController {
     summary: 'Bilderreihenfolge ändern',
     description: 'Das erste Bild der Liste wird zum Titelbild des Produkts.',
   })
-  reorderImages(@Param('id') id: string, @Body() dto: ReorderImagesDto) {
-    return this.products.reorderImages(id, dto.imageIds);
+  async reorderImages(@Param('id') id: string, @Body() dto: ReorderImagesDto) {
+    const images = await this.products.reorderImages(id, dto.imageIds);
+    this.revalidation.trigger(`Bilderreihenfolge geändert: ${id}`);
+    return images;
   }
 }

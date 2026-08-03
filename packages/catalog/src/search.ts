@@ -4,6 +4,7 @@ import { cities } from './cities.ts';
 import { landingPages } from './landing-pages.ts';
 import { products } from './products.ts';
 import { routes } from './routes.ts';
+import type { Product } from './types.ts';
 
 /**
  * Leichtgewichtiger Suchindex für die Instant-Suche. Bewusst ohne externe
@@ -61,8 +62,15 @@ function entry(partial: Omit<SearchEntry, 'haystack'> & { keywords?: string[] })
   return { ...rest, haystack };
 }
 
-export const searchIndex: SearchEntry[] = [
-  ...products.map((p) =>
+/**
+ * Produkteinträge des Suchindex.
+ *
+ * Als Funktion und nicht als feste Liste, damit die Storefront den Index auch
+ * aus den Live-Produktdaten der API erzeugen kann – sonst zeigte die Suche
+ * nach einer Preisänderung im Adminbereich weiterhin den alten Preis.
+ */
+export function productSearchEntries(items: Product[]): SearchEntry[] {
+  return items.map((p) =>
     entry({
       id: `p:${p.slug}`,
       type: 'produkt',
@@ -74,7 +82,11 @@ export const searchIndex: SearchEntry[] = [
       image: p.images[0]?.publicId,
       keywords: [...p.keywords, p.sku, p.size, p.condition, ...p.categorySlugs],
     }),
-  ),
+  );
+}
+
+export const searchIndex: SearchEntry[] = [
+  ...productSearchEntries(products),
   ...categories.map((c) =>
     entry({
       id: `c:${c.slug}`,
@@ -126,6 +138,8 @@ export const searchIndex: SearchEntry[] = [
 export interface SearchOptions {
   limit?: number;
   types?: SearchEntryType[];
+  /** Abweichender Index, etwa mit Live-Produktdaten. Standard: `searchIndex`. */
+  index?: SearchEntry[];
 }
 
 /**
@@ -134,11 +148,11 @@ export interface SearchOptions {
  * präzisere Ergebnisse als eine reine Teilstringsuche.
  */
 export function search(query: string, options: SearchOptions = {}): SearchEntry[] {
-  const { limit = 8, types } = options;
+  const { limit = 8, types, index = searchIndex } = options;
   const terms = normalize(query).split(' ').filter(Boolean);
   if (terms.length === 0) return [];
 
-  const pool = types ? searchIndex.filter((e) => types.includes(e.type)) : searchIndex;
+  const pool = types ? index.filter((e) => types.includes(e.type)) : index;
 
   const scored: { entry: SearchEntry; score: number }[] = [];
 

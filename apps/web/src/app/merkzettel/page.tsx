@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 
-import { products, routes } from '@emc/catalog';
+import { routes } from '@emc/catalog';
 
 import { ProductCard } from '@/components/commerce/product-card';
 import { WishlistView } from '@/components/commerce/wishlist-view';
+import { getProducts } from '@/lib/live-catalog';
 import { privateMetadata } from '@/lib/seo';
 
 export const metadata: Metadata = privateMetadata(
@@ -12,7 +13,9 @@ export const metadata: Metadata = privateMetadata(
   routes.wishlist,
 );
 
-export default function WishlistPage() {
+export default async function WishlistPage() {
+  const products = await getProducts();
+
   // Alle Karten serverseitig rendern; der Client blendet nur die gemerkten ein.
   const cards = Object.fromEntries(
     products.map((product) => [product.slug, <ProductCard key={product.slug} product={product} />]),

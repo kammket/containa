@@ -3,10 +3,8 @@ import Link from 'next/link';
 import { ArrowRight, Building2, MapPin, Wrench } from 'lucide-react';
 
 import {
-  bestsellers,
   blogPostsByDate,
   citiesByPopulation,
-  featuredProducts,
   routes,
   topFaqs,
   trustSignals,
@@ -29,6 +27,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { getBestsellers, getFeaturedProducts } from '@/lib/live-catalog';
 import { faqSchema, jsonLdGraph } from '@/lib/schema';
 import { buildMetadata } from '@/lib/seo';
 
@@ -72,9 +71,9 @@ const useCases = [
   },
 ];
 
-export default function HomePage() {
-  const featured = featuredProducts(4);
-  const popular = bestsellers(4);
+export default async function HomePage() {
+  const featured = await getFeaturedProducts(4);
+  const popular = await getBestsellers(4);
   const posts = blogPostsByDate.slice(0, 3);
   const topCities = citiesByPopulation.slice(0, 12);
 

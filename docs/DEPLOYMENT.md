@@ -76,6 +76,11 @@ JWT_EXPIRES_IN=15m
 CORS_ORIGINS=https://emccontainer.com,https://www.emccontainer.com
 APP_URL=https://emccontainer.com
 
+# Meldet der Storefront jede Produktänderung, damit sie sofort sichtbar wird.
+# Derselbe Wert muss auf Vercel stehen. Fehlt er, erneuern sich die Seiten
+# stattdessen von selbst nach einer Minute.
+REVALIDATE_SECRET=<viertes Geheimnis>
+
 ENABLE_SWAGGER=false
 ```
 
@@ -169,9 +174,18 @@ Serverfunktionen sollen nicht über den Atlantik laufen.
 ```bash
 NEXT_PUBLIC_API_URL=https://api.emccontainer.com
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=<Ihre Cloud>
+
+# Gegenstück zu REVALIDATE_SECRET auf Railway – exakt derselbe Wert.
+REVALIDATE_SECRET=<viertes Geheimnis>
 ```
 
-Beide Werte landen im Browser-Bundle. Legen Sie hier niemals Geheimnisse ab.
+Die beiden `NEXT_PUBLIC_`-Werte landen im Browser-Bundle. Legen Sie dort
+niemals Geheimnisse ab. `REVALIDATE_SECRET` hat bewusst kein Präfix und bleibt
+damit auf dem Server.
+
+Ohne `REVALIDATE_SECRET` funktioniert der Shop vollständig; Änderungen aus dem
+Adminbereich erscheinen dann lediglich erst nach bis zu einer Minute statt
+sofort.
 
 Ohne Cloudinary erzeugt die Storefront deterministische SVG-Platzhalter statt
 Produktfotos. Layout und Funktion bleiben vollständig erhalten – die Seite ist

@@ -101,28 +101,30 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
           slug: product.slug,
           sku: product.sku,
           tagline: product.tagline,
-          descriptionText: '',
-          highlightsText: '',
+          // Absätze und Vorteile liegen als Listen vor und werden im Formular
+          // als Text bearbeitet – beim Speichern läuft die Umkehrung.
+          descriptionText: product.description.join('\n\n'),
+          highlightsText: product.highlights.join('\n'),
           priceEuro: centsToEuro(product.priceNet),
           compareAtEuro: centsToEuro(product.compareAtNet),
           condition: product.condition as FormValues['condition'],
           size: product.size as FormValues['size'],
           availability: product.availability as FormValues['availability'],
           stock: product.stock,
-          leadTimeDaysMin: 3,
-          leadTimeDaysMax: 7,
-          warrantyMonths: 12,
-          lengthMm: 6058,
-          widthMm: 2438,
-          heightMm: 2591,
+          leadTimeDaysMin: product.leadTimeDaysMin,
+          leadTimeDaysMax: product.leadTimeDaysMax,
+          warrantyMonths: product.warrantyMonths,
+          lengthMm: product.lengthMm,
+          widthMm: product.widthMm,
+          heightMm: product.heightMm,
           categorySlugs: product.categories.map((c) => c.category.slug),
           primaryCategory:
             product.categories.find((c) => c.isPrimary)?.category.slug ??
             product.categories[0]?.category.slug ??
             '',
-          seoTitle: '',
-          seoDescription: '',
-          focusKeyword: '',
+          seoTitle: product.seoTitle ?? '',
+          seoDescription: product.seoDescription ?? '',
+          focusKeyword: product.focusKeyword ?? '',
           isActive: product.isActive,
           isBestseller: product.isBestseller,
           isFeatured: product.isFeatured,
@@ -173,7 +175,10 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
         size: values.size,
         availability: values.availability,
         priceNet: euroToCents(values.priceEuro),
-        ...(values.compareAtEuro ? { compareAtNet: euroToCents(values.compareAtEuro) } : {}),
+        // Ein leeres Feld heißt „kein Streichpreis". Würde das Feld dann
+        // weggelassen, ließe sich ein einmal gesetzter Streichpreis nie
+        // wieder entfernen.
+        compareAtNet: values.compareAtEuro ? euroToCents(values.compareAtEuro) : 0,
         stock: values.stock,
         leadTimeDaysMin: values.leadTimeDaysMin,
         leadTimeDaysMax: values.leadTimeDaysMax,
@@ -183,9 +188,12 @@ export function ProductForm({ product }: { product?: AdminProduct }) {
         heightMm: values.heightMm,
         categorySlugs: values.categorySlugs,
         primaryCategory: values.primaryCategory,
-        ...(values.seoTitle ? { seoTitle: values.seoTitle } : {}),
-        ...(values.seoDescription ? { seoDescription: values.seoDescription } : {}),
-        ...(values.focusKeyword ? { focusKeyword: values.focusKeyword } : {}),
+        // Ebenfalls immer mitschicken: Ein geleertes Feld soll auch in der
+        // Datenbank leer werden. Die Storefront greift dann auf Produktname
+        // bzw. Kurztext zurück.
+        seoTitle: values.seoTitle,
+        seoDescription: values.seoDescription,
+        focusKeyword: values.focusKeyword,
         isActive: values.isActive,
         isBestseller: values.isBestseller,
         isFeatured: values.isFeatured,

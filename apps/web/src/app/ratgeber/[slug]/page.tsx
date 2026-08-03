@@ -10,7 +10,6 @@ import {
   breadcrumbs,
   getBlogPost,
   getCategory,
-  getProduct,
   relatedPosts,
   routes,
   type BlogBlock,
@@ -22,6 +21,7 @@ import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
 import { Button } from '@/components/ui/button';
 import { blurDataUrl, imageSrc } from '@/lib/images';
+import { getProductsBySlugs } from '@/lib/live-catalog';
 import { articleSchema, breadcrumbSchema, jsonLdGraph } from '@/lib/schema';
 import { buildMetadata } from '@/lib/seo';
 import { formatDate, slugify } from '@/lib/utils';
@@ -71,9 +71,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     .filter((block): block is Extract<BlogBlock, { type: 'h2' }> => block.type === 'h2')
     .map((block) => ({ id: slugify(block.text), text: block.text }));
 
-  const linkedProducts = post.relatedProducts
-    .map((s) => getProduct(s))
-    .filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const linkedProducts = await getProductsBySlugs(post.relatedProducts);
 
   const linkedCategories = post.relatedCategories
     .map((s) => getCategory(s))

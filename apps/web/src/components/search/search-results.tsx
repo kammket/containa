@@ -16,6 +16,7 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useSearchIndex } from '@/lib/use-search-index';
 import { cn } from '@/lib/utils';
 
 const typeMeta: Record<SearchEntryType, { label: string; plural: string; icon: typeof Package }> = {
@@ -37,7 +38,12 @@ export function SearchResults() {
   const [query, setQuery] = useState(initial);
   const [typeFilter, setTypeFilter] = useState<SearchEntryType | null>(null);
 
-  const allResults = useMemo(() => (query.trim() ? search(query, { limit: 60 }) : []), [query]);
+  const index = useSearchIndex();
+
+  const allResults = useMemo(
+    () => (query.trim() ? search(query, { limit: 60, index }) : []),
+    [query, index],
+  );
 
   const results = typeFilter ? allResults.filter((r) => r.type === typeFilter) : allResults;
 

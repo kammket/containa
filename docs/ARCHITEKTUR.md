@@ -11,18 +11,18 @@ SEO-Metadaten liegen in `packages/catalog` und werden von Storefront und API
 gemeinsam genutzt.
 
 **Warum:** Die Alternative wäre, alles in der Datenbank zu halten und die
-Storefront zur Laufzeit abfragen zu lassen. Das hätte drei Nachteile: Jede
+Storefront bei jedem Aufruf abfragen zu lassen. Das hätte drei Nachteile: Jede
 Seite bräuchte eine Datenbankabfrage im Auslieferungspfad, ein API-Ausfall
 würde den gesamten Shop unsichtbar machen, und Inhalte mit SEO-Bezug wären
 nicht versioniert.
 
-So dagegen sind alle 128 Seiten zur Bauzeit fertig gerendert. Der Shop bleibt
-lesbar und crawlbar, auch wenn die API nicht antwortet.
-
-**Preis dafür:** Neue Städteseiten und Ratgeberbeiträge erfordern ein Deploy.
-Für Inhalte, die sich selten ändern und SEO-relevant sind, ist das der
-richtige Kompromiss – für Preise und Bestand wäre es der falsche, deshalb
-liegen die in der Datenbank.
+**Wo der Katalog endet:** Produkte pflegt der Adminbereich in der Datenbank.
+Der Katalog liefert für sie deshalb nur noch die Grundlage – Downloads,
+Suchbegriffe, kuratierte Verweise – und den Notfallstand. Was die Storefront
+tatsächlich zeigt, kommt aus der API (siehe „Produktdaten kommen live aus der
+API"). Städte, Ratgeber und Rechtstexte bleiben ausschließlich im Katalog und
+erfordern für eine Änderung weiterhin ein Deploy. Für Inhalte, die sich selten
+ändern und SEO-relevant sind, ist das der richtige Kompromiss.
 
 ---
 
@@ -118,17 +118,33 @@ umgehen, die der Katalogtest im CI leistet.
 
 ---
 
-## Statische Seiten statt Server-Rendering
+## Produktdaten kommen live aus der API
 
-Alle Produkt-, Kategorie-, Städte-, Landing- und Ratgeberseiten entstehen über
-`generateStaticParams` mit `dynamicParams = false`.
+**Entscheidung:** Alles, was der Adminbereich pflegt – Preise, Bestand,
+Verfügbarkeit, Texte, Maße, Fotos, Sichtbarkeit –, holt die Storefront über
+`src/lib/live-catalog.ts` aus der API und legt es über den Katalogeintrag
+desselben Slugs.
 
-Dynamisch gerendert wird nur, was es sein muss: Bestellbestätigung,
-Adminunterseiten.
+**Warum:** Ohne das ginge im Adminbereich zwar alles zu speichern, auf der
+Seite erschiene aber nichts davon. Ein Shop, dessen Preispflege folgenlos
+bleibt, ist schlimmer als einer ohne Adminbereich – dort weiß man wenigstens,
+dass ein Deploy nötig ist.
 
-Live-Bestand holt die Storefront bei Bedarf per `fetchLiveStock()` nach. Schlägt
-das fehl, bleibt der statisch gerenderte Stand stehen – die Seite funktioniert
-weiter.
+Drei Eigenschaften machen das verträglich mit dem statischen Ansatz:
+
+1. **Der Abruf wird zwischengespeichert.** Die Seiten bleiben statisch
+   ausgeliefert und erneuern sich höchstens einmal pro Minute.
+2. **Speichern wirkt sofort.** Nach jeder Produktänderung meldet die API das
+   an `/api/revalidate` der Storefront; die betroffenen Seiten werden dann
+   unmittelbar neu erzeugt statt nach Ablauf der Minute.
+3. **Ausfall ändert nichts.** Antwortet die API nicht oder ist die Datenbank
+   leer, rendert jede Seite aus dem statischen Katalog. Der Shop bleibt
+   vollständig lesbar und crawlbar.
+
+Produktseiten laufen deshalb mit `dynamicParams = true`: Ein im Adminbereich
+neu angelegtes Produkt gab es zur Bauzeit noch nicht und würde sonst auf 404
+laufen. Kategorie-, Städte-, Landing- und Ratgeberseiten bleiben bei
+`dynamicParams = false` – ihre Slugs stehen im Katalog fest.
 
 ---
 
