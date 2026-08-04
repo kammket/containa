@@ -110,12 +110,24 @@ export class AuthController {
 
   private cookieOptions() {
     const isProduction = this.config.get<string>('NODE_ENV') === 'production';
+
     return {
       httpOnly: true,
       secure: isProduction,
-      // 'strict' würde den Cookie bei Weiterleitungen vom Zahlungsanbieter
-      // zurück ins Admin-Panel unterdrücken; 'lax' ist hier der richtige Wert.
-      sameSite: 'lax' as const,
+      /**
+       * In Produktion läuft die API auf einer anderen Domain als die
+       * Storefront (Railway gegenüber der Shopdomain). Für den Browser ist der
+       * Aufruf damit „cross-site": Einen Cookie mit `SameSite=Lax` speichert er
+       * in dieser Lage gar nicht erst. Die Anmeldung sah trotzdem erfolgreich
+       * aus, weil das Access-Token im Antwortkörper steht – nach dessen
+       * Ablauf nach 15 Minuten schlug aber jede Erneuerung fehl und damit
+       * jede Änderung im Adminbereich.
+       *
+       * `None` verlangt zwingend `Secure`, weshalb lokal ohne HTTPS weiterhin
+       * `Lax` gilt. Dort liegen Storefront und API ohnehin auf localhost und
+       * sind damit same-site.
+       */
+      sameSite: isProduction ? ('none' as const) : ('lax' as const),
       path: '/api/v1/auth',
       signed: false,
     };

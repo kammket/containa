@@ -283,8 +283,17 @@ function minimalSpecRows(dto: ApiProduct, specs: ContainerSpecs): SpecRow[] {
   ];
 }
 
-function mergeImages(dto: ApiProduct, base: Product | undefined): ProductImage[] {
-  const images = (Array.isArray(dto.images) ? [...dto.images] : [])
+/**
+ * Bilder eines Produkts – immer die der Datenbank, auch wenn es keine gibt.
+ *
+ * Bewusst **ohne** Rückfall auf die Katalogbilder: Wer im Adminbereich alle
+ * Fotos eines Produkts löscht, bekäme sonst genau die gelöschten Bilder
+ * wieder zu sehen, weil der Katalogeintrag sie weiterhin führt. Das Löschen
+ * wäre damit wirkungslos. Ein Produkt ohne Bild zeigt lieber keines – die
+ * Galerie blendet sich dann aus – als ein Bild, das gerade entfernt wurde.
+ */
+function mergeImages(dto: ApiProduct): ProductImage[] {
+  return (Array.isArray(dto.images) ? [...dto.images] : [])
     .sort((a, b) => a.sortOrder - b.sortOrder)
     .map((image) => ({
       publicId: image.publicId,
@@ -292,10 +301,6 @@ function mergeImages(dto: ApiProduct, base: Product | undefined): ProductImage[]
       width: image.width ?? 1200,
       height: image.height ?? 900,
     }));
-
-  // Ohne hinterlegte Bilder bliebe die Produktseite ohne Abbildung – dann
-  // greifen die Katalogbilder desselben Produkts.
-  return images.length > 0 ? images : (base?.images ?? []);
 }
 
 function toProduct(dto: ApiProduct): Product {
@@ -330,7 +335,7 @@ function toProduct(dto: ApiProduct): Product {
     availability: availabilitySlugs[dto.availability] ?? 'auf-lager',
     leadTimeDays: [dto.leadTimeDaysMin, dto.leadTimeDaysMax],
     stock: dto.stock,
-    images: mergeImages(dto, base),
+    images: mergeImages(dto),
     specs,
     specRows: mergeSpecRows(dto, base, specs),
     // Ohne eigene FAQ bekommt das Produkt wenigstens die allgemeinen – sonst

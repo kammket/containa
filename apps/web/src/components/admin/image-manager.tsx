@@ -13,11 +13,21 @@ import { AdminApiError, adminApi, type AdminProductImage } from '@/lib/admin-api
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ACCEPTED = 'image/jpeg,image/png,image/webp,image/avif';
 
+/** Fehlermeldung aus einem beliebigen Fehlerwert. */
+function messageOf(error: unknown, fallback: string): string {
+  return error instanceof AdminApiError ? error.message : fallback;
+}
+
 /**
  * Bildverwaltung eines Produkts.
  *
  * Der Upload läuft über die API nach Cloudinary – das API-Secret bleibt auf
  * dem Server. Die Reihenfolge bestimmt, welches Bild als Titelbild erscheint.
+ *
+ * Mehrere Dateien werden nacheinander übertragen, nicht gleichzeitig: Die API
+ * lädt jede Datei einzeln zu Cloudinary hoch, und bei einem Fehler soll
+ * erkennbar bleiben, welche Datei betroffen ist. Die Reihenfolge der Auswahl
+ * bleibt dadurch außerdem die Reihenfolge im Shop.
  */
 export function ImageManager({
   productId,
@@ -32,46 +42,85 @@ export function ImageManager({
   const fileInput = useRef<HTMLInputElement>(null);
   const [alt, setAlt] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
 
   const invalidate = () =>
     queryClient.invalidateQueries({ queryKey: ['admin', 'product', productId] });
 
   const upload = useMutation({
-    mutationFn: (file: File) => adminApi.products.uploadImage(productId, file, alt),
-    onSuccess: () => {
+    mutationFn: async (files: File[]) => {
+      const failed: string[] = [];
+
+      for (const [index, file] of files.entries()) {
+        setProgress({ done: index, total: files.length });
+        try {
+          // Bei mehreren Dateien den Alt-Text durchnummerieren – identische
+          // Alt-Texte an allen Bildern eines Produkts helfen niemandem.
+          const altText =
+            alt.trim() && files.length > 1 ? `${alt.trim()} (${index + 1})` : alt.trim();
+          await adminApi.products.uploadImage(productId, file, altText);
+        } catch (caught) {
+          failed.push(`${file.name}: ${messageOf(caught, 'Upload fehlgeschlagen.')}`);
+        }
+      }
+
+      setProgress(null);
+      return failed;
+    },
+    onSuccess: (failed) => {
       setAlt('');
       if (fileInput.current) fileInput.current.value = '';
+      setError(failed.length > 0 ? failed.join(' · ') : null);
       void invalidate();
     },
-    onError: (caught) =>
-      setError(
-        caught instanceof AdminApiError ? caught.message : 'The image could not be uploaded.',
-      ),
+    onError: (caught) => {
+      setProgress(null);
+      setError(messageOf(caught, 'The images could not be uploaded.'));
+    },
   });
 
   const remove = useMutation({
     mutationFn: (imageId: string) => adminApi.products.deleteImage(imageId),
-    onSuccess: invalidate,
+    onSuccess: () => {
+      setError(null);
+      void invalidate();
+    },
+    // Ohne diese Behandlung schlug das Löschen stumm fehl: Das Bild blieb
+    // stehen, ohne dass eine Meldung erschien.
+    onError: (caught) => setError(messageOf(caught, 'The image could not be deleted.')),
   });
 
   const reorder = useMutation({
     mutationFn: (imageIds: string[]) => adminApi.products.reorderImages(productId, imageIds),
-    onSuccess: invalidate,
+    onSuccess: () => {
+      setError(null);
+      void invalidate();
+    },
+    onError: (caught) => setError(messageOf(caught, 'The order could not be saved.')),
   });
 
-  const onFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onFilesSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const selected = Array.from(event.target.files ?? []);
+    if (selected.length === 0) return;
 
     // Vorabprüfung im Browser; die verbindliche Prüfung macht die API.
-    if (file.size > MAX_FILE_SIZE) {
-      setError('The file is larger than 10 MB.');
+    const tooLarge = selected.filter((file) => file.size > MAX_FILE_SIZE);
+    if (tooLarge.length > 0) {
+      setError(
+        `Diese Dateien sind größer als 10 MB und wurden übersprungen: ${tooLarge
+          .map((file) => file.name)
+          .join(', ')}`,
+      );
+    }
+
+    const usable = selected.filter((file) => file.size <= MAX_FILE_SIZE);
+    if (usable.length === 0) {
       event.target.value = '';
       return;
     }
 
-    upload.mutate(file);
+    upload.mutate(usable);
   };
 
   const move = (index: number, direction: -1 | 1) => {
@@ -84,8 +133,10 @@ export function ImageManager({
     reorder.mutate(next.map((image) => image.id));
   };
 
+  const busy = upload.isPending || remove.isPending || reorder.isPending;
+
   return (
-    <Card title="Product images">
+    <Card title={`Product images${images.length > 0 ? ` (${images.length})` : ''}`}>
       {images.length > 0 ? (
         <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {images.map((image, index) => (
@@ -125,7 +176,7 @@ export function ImageManager({
                   <button
                     type="button"
                     onClick={() => move(index, -1)}
-                    disabled={index === 0 || reorder.isPending}
+                    disabled={index === 0 || busy}
                     aria-label="Nach vorne verschieben"
                     className="cursor-pointer rounded-md p-1.5 text-stone-400 transition-colors hover:bg-stone-100 hover:text-navy-800 disabled:cursor-not-allowed disabled:opacity-30"
                   >
@@ -134,7 +185,7 @@ export function ImageManager({
                   <button
                     type="button"
                     onClick={() => move(index, 1)}
-                    disabled={index === images.length - 1 || reorder.isPending}
+                    disabled={index === images.length - 1 || busy}
                     aria-label="Nach hinten verschieben"
                     className="cursor-pointer rounded-md p-1.5 text-stone-400 transition-colors hover:bg-stone-100 hover:text-navy-800 disabled:cursor-not-allowed disabled:opacity-30"
                   >
@@ -146,11 +197,15 @@ export function ImageManager({
                     onClick={() => {
                       if (confirm(`Delete image “${image.alt}”?`)) remove.mutate(image.id);
                     }}
-                    disabled={remove.isPending}
+                    disabled={busy}
                     aria-label="Delete image"
-                    className="ml-auto cursor-pointer rounded-md p-1.5 text-stone-400 transition-colors hover:bg-danger-50 hover:text-danger-600 disabled:opacity-30"
+                    className="ml-auto cursor-pointer rounded-md p-1.5 text-stone-400 transition-colors hover:bg-danger-50 hover:text-danger-600 disabled:cursor-not-allowed disabled:opacity-30"
                   >
-                    <Trash2 className="size-3.5" aria-hidden />
+                    {remove.isPending ? (
+                      <Loader2 className="size-3.5 animate-spin" aria-hidden />
+                    ) : (
+                      <Trash2 className="size-3.5" aria-hidden />
+                    )}
                   </button>
                 </div>
               </div>
@@ -167,7 +222,7 @@ export function ImageManager({
       <div className="mt-5 border-t border-stone-100 pt-5">
         <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
           <div>
-            <Label htmlFor="image-alt">Alt text for the next image</Label>
+            <Label htmlFor="image-alt">Alt text for the next images</Label>
             <Input
               id="image-alt"
               value={alt}
@@ -176,7 +231,7 @@ export function ImageManager({
             />
             <p className="mt-1.5 text-2xs text-stone-500">
               Describes the image for screen readers and image search. We use the product name if
-              you leave this empty.
+              you leave this empty; with several files we number the text automatically.
             </p>
           </div>
 
@@ -185,14 +240,15 @@ export function ImageManager({
               ref={fileInput}
               type="file"
               accept={ACCEPTED}
-              onChange={onFileSelected}
+              multiple
+              onChange={onFilesSelected}
               className="sr-only"
               id="image-upload"
             />
             <Button
               type="button"
               onClick={() => fileInput.current?.click()}
-              disabled={upload.isPending}
+              disabled={busy}
               className="w-full sm:w-auto"
             >
               {upload.isPending ? (
@@ -200,13 +256,20 @@ export function ImageManager({
               ) : (
                 <ImagePlus aria-hidden />
               )}
-              <span>{upload.isPending ? 'Uploading …' : 'Upload image'}</span>
+              <span>
+                {upload.isPending
+                  ? progress
+                    ? `Uploading ${progress.done + 1} / ${progress.total} …`
+                    : 'Uploading …'
+                  : 'Upload images'}
+              </span>
             </Button>
           </div>
         </div>
 
         <p className="mt-3 text-2xs text-stone-500">
-          JPEG, PNG, WebP or AVIF · 10 MB maximum · recommended at least 1,200 × 900 pixels
+          JPEG, PNG, WebP or AVIF · 10 MB maximum per file · recommended at least 1,200 × 900
+          pixels · select several files at once to upload them in one go
         </p>
 
         {error && (
