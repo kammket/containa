@@ -139,8 +139,9 @@ export class ProductsService {
   }
 
   /**
-   * Produkte werden nicht gelöscht, sondern deaktiviert.
-   * Bestellungen behalten damit ihre Produktreferenz und bleiben nachvollziehbar.
+   * Deaktivieren blendet ein Produkt im Shop aus, ohne es zu verlieren – der
+   * Regelfall, wenn etwas vorübergehend nicht lieferbar ist. Endgültiges
+   * Entfernen macht `remove`.
    */
   async deactivate(id: string) {
     await this.findByIdForAdmin(id);
@@ -158,6 +159,38 @@ export class ProductsService {
       data: { isActive: true },
       include: productInclude,
     });
+  }
+
+  /**
+   * Produkt endgültig entfernen.
+   *
+   * Deaktivieren bleibt der Normalfall: Es ist umkehrbar und hält den
+   * Katalogeintrag vor. Löschen ist für Produkte gedacht, die es nie hätte
+   * geben sollen – Tippfehler beim Anlegen, Testdatensätze, Doppelanlagen.
+   *
+   * Bestellungen bleiben davon unberührt: `OrderItem` hält Artikelnummer,
+   * Slug, Name und Preis als eigene Kopie fest und die Produktreferenz steht
+   * auf `onDelete: SetNull`. Eine Bestellung von vor drei Monaten bleibt also
+   * vollständig lesbar, auch wenn das Produkt heute verschwindet.
+   *
+   * Bilder und Kategoriezuordnungen räumt die Datenbank per Kaskade ab. Die
+   * Dateien bei Cloudinary hängen nicht an der Datenbank – deshalb gibt diese
+   * Methode ihre publicIds zurück, damit der Aufrufer auch dort aufräumt.
+   */
+  async remove(id: string) {
+    const product = await this.findByIdForAdmin(id);
+
+    const orderItems = await this.prisma.orderItem.count({ where: { productId: id } });
+
+    await this.prisma.product.delete({ where: { id } });
+
+    return {
+      slug: product.slug,
+      name: product.name,
+      publicIds: product.images.map((image) => image.publicId),
+      /** Anzahl Bestellpositionen, die das Produkt nur noch als Kopie führen. */
+      orderItems,
+    };
   }
 
   // ── Bilder ───────────────────────────────────────────────────────────────

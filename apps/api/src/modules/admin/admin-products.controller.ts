@@ -15,6 +15,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import type { JwtPayload } from '../auth/auth.service';
@@ -31,8 +32,12 @@ import { ReorderImagesDto } from './dto/reorder-images.dto';
  * Produktverwaltung im Adminbereich.
  *
  * Umfang bewusst eng: Produkte anlegen, bearbeiten, Bilder hochladen und
- * sortieren, Produkte aktivieren oder deaktivieren. Gelöscht wird nichts –
- * Bestellungen sollen ihre Produktreferenz behalten.
+ * sortieren, Produkte ein- und ausblenden sowie endgültig löschen.
+ *
+ * Ausblenden ist der Regelfall und umkehrbar. Löschen ist es nicht und bleibt
+ * deshalb dem OWNER vorbehalten – gedacht für Fehlanlagen und Testdatensätze,
+ * nicht für ausverkaufte Ware. Bestellungen überstehen es unbeschadet, weil
+ * `OrderItem` die Produktdaten zum Bestellzeitpunkt selbst festhält.
  */
 @ApiTags('Admin – Produkte')
 @ApiBearerAuth('admin')
@@ -96,6 +101,35 @@ export class AdminProductsController {
     await this.audit.log(user.sub, 'ACTIVATE', 'Product', id);
     this.revalidation.trigger(`Produkt eingeblendet: ${product.slug}`);
     return product;
+  }
+
+  @Delete(':id')
+  @Roles('OWNER')
+  @ApiOperation({
+    summary: 'Produkt endgültig löschen',
+    description:
+      'Entfernt das Produkt samt Bildern unwiderruflich. Bestellungen bleiben ' +
+      'vollständig lesbar, weil sie die Produktdaten selbst festhalten. Zum ' +
+      'bloßen Ausblenden im Shop stattdessen /deactivate verwenden.',
+  })
+  async remove(@Param('id') id: string, @CurrentUser() user: JwtPayload) {
+    const removed = await this.products.remove(id);
+
+    // Erst nach dem erfolgreichen Löschen in der Datenbank: Schlägt Cloudinary
+    // fehl, bleibt höchstens eine verwaiste Datei zurück – ein halb gelöschtes
+    // Produkt wäre schlimmer. `deleteImage` schluckt Fehler bereits selbst.
+    await Promise.all(removed.publicIds.map((publicId) => this.uploads.deleteImage(publicId)));
+
+    await this.audit.log(user.sub, 'DELETE', 'Product', id, {
+      slug: removed.slug,
+      name: removed.name,
+      images: removed.publicIds.length,
+      orderItems: removed.orderItems,
+    });
+
+    this.revalidation.trigger(`Produkt gelöscht: ${removed.slug}`);
+
+    return { deleted: true, slug: removed.slug, orderItems: removed.orderItems };
   }
 
   // ── Bilder ───────────────────────────────────────────────────────────────

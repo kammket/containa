@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { ZoomIn } from 'lucide-react';
+import { ImageOff, ZoomIn } from 'lucide-react';
 import { useState } from 'react';
 
 import type { ProductImage } from '@emc/catalog';
@@ -22,8 +22,11 @@ export function ProductGallery({ images, name }: { images: ProductImage[]; name:
   const [zooming, setZooming] = useState(false);
   const [origin, setOrigin] = useState({ x: 50, y: 50 });
 
+  // Ein Produkt ohne hinterlegtes Foto darf die halbe Seite nicht leer lassen –
+  // das sieht nach einem Fehler aus. Stattdessen ein sichtbarer Hinweis, der
+  // die Spalte füllt und erklärt, wie man an Bilder kommt.
   const active = images[activeIndex];
-  if (!active) return null;
+  if (!active) return <GalleryPlaceholder name={name} />;
 
   const onMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -98,6 +101,21 @@ export function ProductGallery({ images, name }: { images: ProductImage[]; name:
         Gebrauchtcontainern abweichen – Fotos des konkreten Containers senden wir auf Anfrage.
       </p>
       <span className="sr-only">Produktbilder für {name}</span>
+    </div>
+  );
+}
+
+/** Platzhalter für Produkte, zu denen noch kein Foto hinterlegt ist. */
+function GalleryPlaceholder({ name }: { name: string }) {
+  return (
+    <div className="flex aspect-[4/3] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-stone-300 bg-stone-50 px-6 text-center">
+      <ImageOff className="size-8 text-stone-400" aria-hidden />
+      <p className="text-sm font-semibold text-navy-900">Fotos folgen in Kürze</p>
+      <p className="max-w-xs text-sm leading-relaxed text-stone-500">
+        Zu diesem Container liegen uns noch keine Aufnahmen vor. Aktuelle Fotos senden wir Ihnen
+        gern auf Anfrage zu.
+      </p>
+      <span className="sr-only">Keine Produktbilder für {name} vorhanden</span>
     </div>
   );
 }

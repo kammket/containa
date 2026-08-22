@@ -291,6 +291,14 @@ export const adminApi = {
       adminFetch<AdminProduct>(`/admin/products/${id}/activate`, { method: 'PATCH' }),
     deactivate: (id: string) =>
       adminFetch<AdminProduct>(`/admin/products/${id}/deactivate`, { method: 'PATCH' }),
+    /**
+     * Endgültiges Löschen. Nicht umkehrbar und nur für OWNER – zum bloßen
+     * Ausblenden im Shop `deactivate` verwenden.
+     */
+    remove: (id: string) =>
+      adminFetch<{ deleted: boolean; slug: string; orderItems: number }>(`/admin/products/${id}`, {
+        method: 'DELETE',
+      }),
     uploadImage: (id: string, file: File, alt: string) => {
       const form = new FormData();
       form.append('file', file);

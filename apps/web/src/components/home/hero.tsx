@@ -121,6 +121,9 @@ export function Hero() {
             height={620}
             priority
             fetchPriority="high"
+            // Ein Vektor hat keine sinnvolle Rastergröße: Ein `srcSet` über
+            // mehrere Breiten zeigte ohnehin immer auf dieselbe Datei.
+            unoptimized
             className="h-auto w-full max-w-xl drop-shadow-2xl lg:max-w-none"
           />
         </div>

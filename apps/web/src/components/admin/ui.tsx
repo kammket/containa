@@ -1,7 +1,9 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+import * as Dialog from '@radix-ui/react-dialog';
+import { AlertTriangle, Loader2 } from 'lucide-react';
 
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 /**
@@ -195,5 +197,81 @@ export function DataTable({
         <tbody className="divide-y divide-stone-100">{children}</tbody>
       </table>
     </div>
+  );
+}
+
+/**
+ * Rückfrage vor einer nicht umkehrbaren Aktion.
+ *
+ * Ein natives `confirm()` würde es auch tun, wie beim Löschen einzelner
+ * Bilder. Für Aktionen, die einen ganzen Datensatz entfernen, ist das zu
+ * wenig: Hier soll vorher schwarz auf weiß stehen, was genau verschwindet und
+ * was davon unberührt bleibt. Radix übernimmt Fokusfalle, Escape und die
+ * ARIA-Auszeichnung.
+ */
+export function ConfirmDialog({
+  open,
+  onOpenChange,
+  title,
+  description,
+  details,
+  confirmLabel,
+  onConfirm,
+  pending = false,
+  error,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: string;
+  description: React.ReactNode;
+  details?: React.ReactNode;
+  confirmLabel: string;
+  onConfirm: () => void;
+  pending?: boolean;
+  error?: string | null;
+}) {
+  return (
+    <Dialog.Root open={open} onOpenChange={(next) => !pending && onOpenChange(next)}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-navy-950/50 backdrop-blur-[2px]" />
+        <Dialog.Content className="fixed top-1/2 left-1/2 z-50 w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-stone-200 bg-white p-6 shadow-card-hover focus:outline-none">
+          <div className="flex gap-4">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-danger-50 text-danger-600">
+              <AlertTriangle className="size-5" aria-hidden />
+            </span>
+            <div className="min-w-0">
+              <Dialog.Title className="font-display text-base font-bold text-navy-950">
+                {title}
+              </Dialog.Title>
+              <Dialog.Description className="mt-1.5 text-sm leading-relaxed text-stone-600">
+                {description}
+              </Dialog.Description>
+              {details && <div className="mt-3">{details}</div>}
+            </div>
+          </div>
+
+          {error && (
+            <p
+              role="alert"
+              className="mt-4 rounded-lg bg-danger-50 px-3.5 py-2.5 text-sm text-danger-700"
+            >
+              {error}
+            </p>
+          )}
+
+          <div className="mt-6 flex justify-end gap-2">
+            <Dialog.Close asChild>
+              <Button variant="outline" size="sm" disabled={pending}>
+                Cancel
+              </Button>
+            </Dialog.Close>
+            <Button variant="danger" size="sm" onClick={onConfirm} disabled={pending}>
+              {pending && <Loader2 className="animate-spin" aria-hidden />}
+              {confirmLabel}
+            </Button>
+          </div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

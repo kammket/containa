@@ -32,11 +32,16 @@ export function isCloudinaryConfigured(): boolean {
 /**
  * Baut eine Cloudinary-URL mit automatischer Format- und Qualitätswahl.
  * `f_auto` liefert AVIF/WebP je nach Browser, `q_auto` wählt die Kompression.
+ *
+ * Die Breite hier ist nur der Ausgangswert: Für `next/image` schreibt der
+ * Loader sie je `srcSet`-Element um (src/lib/image-loader.ts). Ein `dpr_auto`
+ * würde die Pixeldichte dann ein zweites Mal aufschlagen und steht deshalb
+ * nicht in der Liste.
  */
 export function cloudinaryUrl(publicId: string, options: ImageOptions = {}): string {
   const { width, height, crop = 'fill', quality = 'auto' } = options;
 
-  const transforms = ['f_auto', `q_${quality}`, 'dpr_auto'];
+  const transforms = ['f_auto', `q_${quality}`];
   if (width) transforms.push(`w_${width}`);
   if (height) transforms.push(`h_${height}`);
   if (width && height) transforms.push(`c_${crop}`);

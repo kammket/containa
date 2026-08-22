@@ -3,12 +3,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Eye, EyeOff, Plus, Search } from 'lucide-react';
+import { Eye, EyeOff, Plus, Search, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 import { formatPrice, grossFromNet } from '@emc/catalog';
 
 import {
+  ConfirmDialog,
   Content,
   DataTable,
   EmptyState,
@@ -18,7 +19,7 @@ import {
 } from '@/components/admin/ui';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { adminApi, type AdminProduct } from '@/lib/admin-api';
+import { AdminApiError, adminApi, type AdminProduct } from '@/lib/admin-api';
 import { cn } from '@/lib/utils';
 
 const sizeLabels: Record<string, string> = {
@@ -39,6 +40,9 @@ const conditionLabels: Record<string, string> = {
 
 export default function AdminProductsPage() {
   const [search, setSearch] = useState('');
+  /** Produkt, für das die Löschabfrage offen ist. */
+  const [pendingDelete, setPendingDelete] = useState<AdminProduct | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const products = useQuery({
@@ -52,6 +56,21 @@ export default function AdminProductsPage() {
         ? adminApi.products.deactivate(product.id)
         : adminApi.products.activate(product.id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin', 'products'] }),
+  });
+
+  const remove = useMutation({
+    mutationFn: (product: AdminProduct) => adminApi.products.remove(product.id),
+    onSuccess: () => {
+      setPendingDelete(null);
+      setDeleteError(null);
+      void queryClient.invalidateQueries({ queryKey: ['admin', 'products'] });
+    },
+    // Der häufigste Fehlschlag ist eine fehlende Berechtigung (nur OWNER darf
+    // löschen). Die Abfrage bleibt offen und zeigt die Meldung der API.
+    onError: (caught) =>
+      setDeleteError(
+        caught instanceof AdminApiError ? caught.message : 'The product could not be deleted.',
+      ),
   });
 
   return (
@@ -165,7 +184,7 @@ export default function AdminProductsPage() {
                           : 'bg-stone-100 text-stone-500',
                       )}
                     >
-                      <span>{product.isActive ? 'Visible' : 'Ausgeblendet'}</span>
+                      <span>{product.isActive ? 'Visible' : 'Hidden'}</span>
                     </span>
                   </td>
 
@@ -174,8 +193,8 @@ export default function AdminProductsPage() {
                       type="button"
                       onClick={() => toggleActive.mutate(product)}
                       disabled={toggleActive.isPending}
-                      title={product.isActive ? 'Im Shop ausblenden' : 'Im Shop anzeigen'}
-                      aria-label={product.isActive ? 'Im Shop ausblenden' : 'Im Shop anzeigen'}
+                      title={product.isActive ? 'Hide in shop' : 'Show in shop'}
+                      aria-label={product.isActive ? 'Hide in shop' : 'Show in shop'}
                       className="cursor-pointer rounded-lg p-2 text-stone-400 transition-colors hover:bg-stone-100 hover:text-navy-800 disabled:opacity-50"
                     >
                       {product.isActive ? (
@@ -183,6 +202,20 @@ export default function AdminProductsPage() {
                       ) : (
                         <Eye className="size-4" aria-hidden />
                       )}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDeleteError(null);
+                        setPendingDelete(product);
+                      }}
+                      disabled={remove.isPending}
+                      title="Delete permanently"
+                      aria-label={`Delete ${product.name} permanently`}
+                      className="cursor-pointer rounded-lg p-2 text-stone-400 transition-colors hover:bg-danger-50 hover:text-danger-600 disabled:opacity-50"
+                    >
+                      <Trash2 className="size-4" aria-hidden />
                     </button>
                   </td>
                 </tr>
@@ -194,7 +227,7 @@ export default function AdminProductsPage() {
             title={search ? 'No matches' : 'No products yet'}
             description={
               search
-                ? `Zu „${search}" wurde nichts gefunden. Versuchen Sie einen anderen Begriff.`
+                ? `Nothing matched “${search}”. Try a different term.`
                 : 'Create your first product, or import the catalogue with the seed.'
             }
             action={
@@ -210,6 +243,34 @@ export default function AdminProductsPage() {
           />
         )}
       </Content>
+
+      <ConfirmDialog
+        open={pendingDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPendingDelete(null);
+            setDeleteError(null);
+          }
+        }}
+        title="Delete product permanently?"
+        description={
+          <>
+            <strong className="font-semibold text-navy-900">{pendingDelete?.name}</strong> and all
+            of its images will be removed for good. This cannot be undone.
+          </>
+        }
+        details={
+          <ul className="space-y-1 text-sm text-stone-600">
+            <li>· {pendingDelete?.images.length ?? 0} image(s) will be deleted</li>
+            <li>· Past orders keep their record and stay readable</li>
+            <li>· To take it off the shop temporarily, cancel and use the eye icon instead</li>
+          </ul>
+        }
+        confirmLabel="Delete product"
+        pending={remove.isPending}
+        error={deleteError}
+        onConfirm={() => pendingDelete && remove.mutate(pendingDelete)}
+      />
     </>
   );
 }

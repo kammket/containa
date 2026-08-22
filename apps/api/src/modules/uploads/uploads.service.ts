@@ -112,14 +112,29 @@ export class UploadsService {
     });
   }
 
+  /**
+   * Löscht die Datei bei Cloudinary – und wirft dabei bewusst nie.
+   *
+   * Aufgerufen wird das immer **nach** dem Löschen in der Datenbank. Ein
+   * Fehler hier könnte den Datensatz nicht mehr zurückholen; er würde nur eine
+   * bereits erfolgreiche Löschung als gescheitert melden. Übrig bliebe
+   * höchstens eine verwaiste Datei bei Cloudinary – unschön, aber harmlos.
+   *
+   * Das schließt den Fall „Cloudinary gar nicht konfiguriert" ein: Dann gibt
+   * es dort auch nichts zu löschen. Ohne diese Ausnahme meldete das Löschen
+   * eines Produkts oder Bildes einen 503, obwohl es funktioniert hatte.
+   */
   async deleteImage(publicId: string): Promise<void> {
-    this.assertConfigured();
+    if (!this.configured) {
+      this.logger.warn(
+        `Cloudinary ist nicht konfiguriert – Bild ${publicId} wurde nur in der Datenbank entfernt.`,
+      );
+      return;
+    }
 
     try {
       await cloudinary.uploader.destroy(publicId);
     } catch (error) {
-      // Das Bild ist in der Datenbank bereits entfernt – ein verwaister
-      // Cloudinary-Eintrag ist unschön, aber kein Grund für einen Fehler.
       this.logger.warn(`Bild ${publicId} konnte bei Cloudinary nicht gelöscht werden`, error);
     }
   }

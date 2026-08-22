@@ -19,10 +19,18 @@ const nextConfig = {
   },
 
   images: {
-    formats: ['image/avif', 'image/webp'],
+    // Bilder gehen nicht über den Bildoptimierer von Vercel, sondern über
+    // einen eigenen Loader: Produktfotos direkt an das CDN von Cloudinary,
+    // lokale Dateien unverändert. Begründung in src/lib/image-loader.ts.
+    loader: 'custom',
+    loaderFile: './src/lib/image-loader.ts',
+    // Bestimmen weiterhin, welche Breiten im `srcSet` landen – der eigene
+    // Loader setzt sie in Cloudinary-Transformationen um. `formats` und
+    // `minimumCacheTTL` galten nur für den eingebauten Optimierer und sind
+    // deshalb entfallen; Format und Cache-Zeit steuert jetzt Cloudinary
+    // selbst über `f_auto`.
     deviceSizes: [360, 420, 640, 750, 828, 1080, 1200, 1600, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 60 * 60 * 24 * 30,
     remotePatterns: [{ protocol: 'https', hostname: 'res.cloudinary.com', pathname: '/**' }],
   },
 
