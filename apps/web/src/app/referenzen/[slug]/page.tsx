@@ -11,6 +11,7 @@ import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
 import { Button } from '@/components/ui/button';
 import { blurDataUrl, imageSrc } from '@/lib/images';
+import { anyListingImage, productHeroImage } from '@/lib/hero-images';
 import { getProductsBySlugs } from '@/lib/live-catalog';
 import { breadcrumbSchema, caseStudySchema, jsonLdGraph } from '@/lib/schema';
 import { buildMetadata } from '@/lib/seo';
@@ -42,6 +43,11 @@ export default async function CaseStudyPage({ params }: PageProps) {
   const { slug } = await params;
   const study = getCaseStudy(slug);
   if (!study) notFound();
+
+  // Foto des Containers, um den es in der Referenz geht – das Katalogbild ist
+  // nur der Rückfall.
+  const hero =
+    (await productHeroImage(study.productSlugs)) ?? (await anyListingImage()) ?? study.image;
 
   const products = await getProductsBySlugs(study.productSlugs);
 
@@ -86,13 +92,13 @@ export default async function CaseStudyPage({ params }: PageProps) {
         <div className="container-page py-12 lg:py-16">
           <figure className="relative mb-10 aspect-[16/9] overflow-hidden rounded-2xl bg-stone-100">
             <Image
-              src={imageSrc(study.image.publicId, { width: 1400, height: 790 })}
-              alt={study.image.alt}
+              src={imageSrc(hero.publicId, { width: 1400, height: 790 })}
+              alt={hero.alt}
               fill
               priority
               sizes="100vw"
               placeholder="blur"
-              blurDataURL={blurDataUrl(study.image.publicId)}
+              blurDataURL={blurDataUrl(hero.publicId)}
               className="object-cover"
             />
           </figure>

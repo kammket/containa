@@ -27,6 +27,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { blurDataUrl, imageSrc } from '@/lib/images';
+import { anyListingImage, categoryHeroImage } from '@/lib/hero-images';
 import { getLowestPriceInCategory, getProductsInCategory } from '@/lib/live-catalog';
 import { breadcrumbSchema, collectionSchema, faqSchema, jsonLdGraph } from '@/lib/schema';
 import { buildMetadata } from '@/lib/seo';
@@ -61,6 +62,11 @@ export default async function CategoryPage({ params }: PageProps) {
   const items = await getProductsInCategory(category.slug);
   const from = await getLowestPriceInCategory(category.slug);
 
+  // Aufmacher aus dem echten Bestand; das Katalogbild ist nur der Rückfall,
+  // falls die Kategorie (noch) kein Produkt mit Foto enthält.
+  const hero =
+    (await categoryHeroImage(category.slug)) ?? (await anyListingImage()) ?? category.image;
+
   const crumbs = breadcrumbs(
     { name: 'Container', href: routes.shop },
     { name: category.name, href: routes.category(category.slug) },
@@ -86,13 +92,13 @@ export default async function CategoryPage({ params }: PageProps) {
       {/* Kopfbereich */}
       <section className="relative isolate overflow-hidden bg-navy-950">
         <Image
-          src={imageSrc(category.image.publicId, { width: 1600, height: 700 })}
+          src={imageSrc(hero.publicId, { width: 1600, height: 700 })}
           alt=""
           fill
           priority
           sizes="100vw"
           placeholder="blur"
-          blurDataURL={blurDataUrl(category.image.publicId)}
+          blurDataURL={blurDataUrl(hero.publicId)}
           className="object-cover opacity-25"
         />
         <div

@@ -11,23 +11,33 @@ import {
   routes,
 } from '@emc/catalog';
 
+import { categoryHeroImage } from '@/lib/hero-images';
 import { blurDataUrl, imageSrc } from '@/lib/images';
 import { cn } from '@/lib/utils';
 
 /**
  * Kategorieübersicht. Die ersten beiden Kacheln sind hervorgehoben, weil
  * 20- und 40-Fuß-Container zusammen den Großteil der Nachfrage ausmachen.
+ *
+ * Nur diese beiden Kacheln tragen ein Bild – gezeigt wird das Titelfoto eines
+ * lieferbaren Containers aus der jeweiligen Kategorie, damit sie zum Hero
+ * darüber passen und keinen grauen Platzhalter zeigen.
  */
-export function CategoryGrid() {
+export async function CategoryGrid() {
   const featured = categories.filter((c) =>
     ['20-fuss-container', '40-fuss-container'].includes(c.slug),
   );
   const rest = categories.filter((c) => !featured.includes(c)).slice(0, 8);
 
+  const featuredImages = await Promise.all(
+    featured.map(async (category) => (await categoryHeroImage(category.slug)) ?? category.image),
+  );
+
   return (
     <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {featured.map((category, index) => {
         const from = lowestPriceInCategory(category.slug);
+        const image = featuredImages[index] ?? category.image;
         return (
           <Link
             key={category.slug}
@@ -35,12 +45,12 @@ export function CategoryGrid() {
             className="group relative col-span-1 flex min-h-56 flex-col justify-end overflow-hidden rounded-2xl bg-navy-900 p-5 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card-hover sm:col-span-2 lg:min-h-72"
           >
             <Image
-              src={imageSrc(category.image.publicId, { width: 800, height: 600 })}
-              alt={category.image.alt}
+              src={imageSrc(image.publicId, { width: 800, height: 600 })}
+              alt={image.alt}
               fill
               sizes="(max-width: 640px) 92vw, (max-width: 1024px) 96vw, 48vw"
               placeholder="blur"
-              blurDataURL={blurDataUrl(category.image.publicId)}
+              blurDataURL={blurDataUrl(image.publicId)}
               className="object-cover opacity-45 transition-all duration-500 group-hover:scale-105 group-hover:opacity-55"
               priority={index === 0}
             />

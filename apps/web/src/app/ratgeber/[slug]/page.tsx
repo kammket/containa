@@ -21,6 +21,7 @@ import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
 import { Button } from '@/components/ui/button';
 import { blurDataUrl, imageSrc } from '@/lib/images';
+import { anyListingImage, productHeroImage } from '@/lib/hero-images';
 import { getProductsBySlugs } from '@/lib/live-catalog';
 import { articleSchema, breadcrumbSchema, jsonLdGraph } from '@/lib/schema';
 import { buildMetadata } from '@/lib/seo';
@@ -56,6 +57,14 @@ export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
   const post = getBlogPost(slug);
   if (!post) notFound();
+
+  // Aufmacher aus dem echten Bestand: das Titelfoto eines der Produkte, auf
+  // die der Beitrag verweist. Das Katalogbild ist nur der Rückfall.
+  // Verweist der Beitrag nur auf Zubehör, das nicht im Bestand ist, greift
+  // ein allgemeines Containerfoto – immer noch besser als der graue
+  // Platzhalter des nie hochgeladenen Katalogbilds.
+  const hero =
+    (await productHeroImage(post.relatedProducts)) ?? (await anyListingImage()) ?? post.image;
 
   const category = blogCategoriesBySlug.get(post.categorySlug);
   const related = relatedPosts(post.slug, 3);
@@ -123,13 +132,13 @@ export default async function BlogPostPage({ params }: PageProps) {
             <div className="min-w-0">
               <figure className="relative mb-10 aspect-[16/9] overflow-hidden rounded-2xl bg-stone-100">
                 <Image
-                  src={imageSrc(post.image.publicId, { width: 1200, height: 675 })}
-                  alt={post.image.alt}
+                  src={imageSrc(hero.publicId, { width: 1200, height: 675 })}
+                  alt={hero.alt}
                   fill
                   priority
                   sizes="(max-width: 1024px) 100vw, 62vw"
                   placeholder="blur"
-                  blurDataURL={blurDataUrl(post.image.publicId)}
+                  blurDataURL={blurDataUrl(hero.publicId)}
                   className="object-cover"
                 />
               </figure>
