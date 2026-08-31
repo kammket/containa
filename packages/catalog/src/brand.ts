@@ -24,24 +24,24 @@ export const contact = {
   mobile: '+49 163 5393159',
   mobileHref: 'tel:+491635393159',
   whatsapp: '+49 163 5393159',
-  email: 'info@emccontainer.com',
-  emailHref: 'mailto:info@emccontainer.com',
+  email: 'contact@emccontainer.com',
+  emailHref: 'mailto:contact@emccontainer.com',
   salesEmail: 'vertrieb@emccontainer.com',
   supportEmail: 'service@emccontainer.com',
   fax: '+49 2661 9578849',
 } as const;
 
 export const address = {
-  street: 'Industriestraße 12',
-  postalCode: '57610',
-  city: 'Altenkirchen',
-  region: 'Rheinland-Pfalz',
+  street: 'Fürst-Bismarck-Str. 21',
+  postalCode: '47119',
+  city: 'Duisburg',
+  region: 'Nordrhein-Westfalen',
   country: 'Deutschland',
   countryCode: 'DE',
-  lat: 50.6889,
-  lng: 7.6431,
+  lat: 51.4556,
+  lng: 6.7311,
   /** Google-Maps-Einbettung ohne Tracking-Cookies (Consent-pflichtig, siehe CookieBanner) */
-  mapsQuery: 'Industriestraße+12,+57610+Altenkirchen',
+  mapsQuery: 'Fürst-Bismarck-Str.+21,+47119+Duisburg',
 } as const;
 
 export const openingHours = [
@@ -54,13 +54,12 @@ export const openingHours = [
 ] as const;
 
 export const legal = {
-  managingDirector: 'Emmanuel Ndifor',
-  registerCourt: 'Amtsgericht Montabaur',
-  registerNumber: 'HRB 28941',
-  vatId: 'DE327845192',
-  taxNumber: '32/650/12345',
+  managingDirector: 'Christoph Bachmann',
+  registerCourt: 'Amtsgericht Duisburg',
+  registerNumber: 'HRB 35066',
+  vatId: 'DE330443785',
   /** Verantwortlich i. S. d. § 18 Abs. 2 MStV */
-  contentResponsible: 'Emmanuel Ndifor, Industriestraße 12, 57610 Altenkirchen',
+  contentResponsible: 'Christoph Bachmann, Fürst-Bismarck-Str. 21, 47119 Duisburg',
   dsbEmail: 'datenschutz@emccontainer.com',
   disputeResolution: 'https://ec.europa.eu/consumers/odr/',
 } as const;

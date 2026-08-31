@@ -11,7 +11,6 @@ import {
   discountPercent,
   formatPrice,
   grossFromNet,
-  monthlyRate,
   netFromGross,
   quoteDelivery,
   vatAmount,
@@ -54,13 +53,6 @@ describe('Preislogik', () => {
     assert.equal(discountPercent(119000, 145000), 18);
     assert.equal(discountPercent(119000, 119000), null);
     assert.equal(discountPercent(119000), null);
-  });
-
-  it('berechnet die Monatsrate annuitätisch', () => {
-    const rate = monthlyRate(1000000, 12, 0.049);
-    assert.ok(rate > 83000 && rate < 87000, `unerwartete Rate: ${rate}`);
-    // Zinsfrei = einfache Division
-    assert.equal(monthlyRate(1200000, 12, 0), 100000);
   });
 });
 

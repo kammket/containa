@@ -51,7 +51,6 @@ export const imprintSections: LegalSection[] = [
     heading: 'Umsatzsteuer-Identifikationsnummer',
     body: [
       `Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz: ${legal.vatId}`,
-      `Steuernummer: ${legal.taxNumber}`,
     ],
   },
   {
@@ -190,7 +189,7 @@ export const privacySections: LegalSection[] = [
       '- Recht auf Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)',
       '- Recht auf Widerruf einer erteilten Einwilligung (Art. 7 Abs. 3 DSGVO)',
       `Zur Ausübung Ihrer Rechte genügt eine formlose Nachricht an ${legal.dsbEmail}.`,
-      'Darüber hinaus haben Sie das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren (Art. 77 DSGVO). Zuständig ist für uns der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Rheinland-Pfalz.',
+      'Darüber hinaus haben Sie das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren (Art. 77 DSGVO). Zuständig ist für uns die Landesbeauftragte für Datenschutz und Informationsfreiheit Nordrhein-Westfalen (LDI NRW).',
     ],
   },
   {

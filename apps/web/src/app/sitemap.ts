@@ -42,7 +42,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       { url: absoluteUrl(routes.delivery), changeFrequency: 'monthly', priority: 0.6 },
       { url: absoluteUrl(routes.installation), changeFrequency: 'monthly', priority: 0.6 },
       { url: absoluteUrl(routes.modifications), changeFrequency: 'monthly', priority: 0.7 },
-      { url: absoluteUrl(routes.financing), changeFrequency: 'monthly', priority: 0.6 },
       { url: absoluteUrl(routes.reviews), changeFrequency: 'weekly', priority: 0.6 },
       { url: absoluteUrl(routes.caseStudies), changeFrequency: 'monthly', priority: 0.6 },
       { url: absoluteUrl(routes.gallery), changeFrequency: 'monthly', priority: 0.5 },

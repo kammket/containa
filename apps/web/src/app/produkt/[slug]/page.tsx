@@ -11,7 +11,6 @@ import {
   formatPrice,
   getCategory,
   grossFromNet,
-  lowestMonthlyRate,
   reviewsForProduct,
   routes,
   vatAmount,
@@ -23,7 +22,6 @@ import { DeliveryChecker } from '@/components/home/delivery-checker';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
 import { BuyBox } from '@/components/product/buy-box';
-import { FinanceCalculator } from '@/components/product/finance-calculator';
 import { ProductGallery } from '@/components/product/gallery';
 import { ReviewList, ReviewSummary } from '@/components/product/review-list';
 import { SpecTable } from '@/components/product/spec-table';
@@ -85,7 +83,6 @@ export default async function ProductPage({ params }: PageProps) {
   const gross = grossFromNet(product.priceNet);
   const compareGross = product.compareAtNet ? grossFromNet(product.compareAtNet) : undefined;
   const discount = discountPercent(product.priceNet, product.compareAtNet);
-  const financing = lowestMonthlyRate(gross);
 
   const crumbs = breadcrumbs(
     { name: 'Container', href: routes.shop },
@@ -209,19 +206,6 @@ export default async function ProductPage({ params }: PageProps) {
                 />
               </div>
 
-              <p className="mt-4 text-center text-sm text-stone-600">
-                oder ab{' '}
-                <strong className="font-semibold text-navy-900">
-                  {formatPrice(financing.cents)}
-                </strong>{' '}
-                /Monat bei {financing.months} Monaten Laufzeit ·{' '}
-                <Link
-                  href="#finanzierung"
-                  className="font-medium text-navy-800 underline underline-offset-2"
-                >
-                  Finanzierung
-                </Link>
-              </p>
             </div>
 
             {/* Kernvorteile */}
@@ -337,9 +321,6 @@ export default async function ProductPage({ params }: PageProps) {
           <aside className="space-y-5 lg:sticky lg:top-28 lg:self-start">
             <div id="lieferung" className="scroll-mt-28">
               <DeliveryChecker lengthMeters={product.specs.exterior.length / 1000} />
-            </div>
-            <div id="finanzierung" className="scroll-mt-28">
-              <FinanceCalculator priceGross={gross} />
             </div>
           </aside>
         </div>

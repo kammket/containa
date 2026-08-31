@@ -5,7 +5,7 @@ export const faqCategories = [
   { slug: 'lieferung', name: 'Lieferung & Aufstellung', icon: 'truck' },
   { slug: 'technik', name: 'Technik & Ausstattung', icon: 'wrench' },
   { slug: 'recht', name: 'Recht & Genehmigung', icon: 'scale' },
-  { slug: 'zahlung', name: 'Zahlung & Finanzierung', icon: 'euro' },
+  { slug: 'zahlung', name: 'Zahlung', icon: 'euro' },
   { slug: 'service', name: 'Garantie & Service', icon: 'shield' },
 ] as const;
 
@@ -162,18 +162,12 @@ export const faqs: Faq[] = [
       'Rechtlich in der Regel nicht, sofern Abstandsflächen eingehalten werden und keine Genehmigungspflicht besteht. Praktisch ist ein Gespräch vorab dennoch ratsam: Ein 2,6 m hoher Stahlkasten an der Grundstücksgrenze führt erfahrungsgemäß eher zu Konflikten als ein abgestimmter Standort.',
   },
 
-  // ── Zahlung & Finanzierung ────────────────────────────────────────────────
+  // ── Zahlung ───────────────────────────────────────────────────────────────
   {
     category: 'zahlung',
     question: 'Welche Zahlungsarten akzeptieren Sie?',
     answer:
       'Vorkasse per Überweisung, SEPA-Lastschrift und – für Geschäftskunden nach Bonitätsprüfung – Kauf auf Rechnung. Karten- und PayPal-Zahlungen bieten wir nicht an; dadurch sparen wir die Anbietergebühren und geben den Vorteil über den Preis weiter. Bei Vorkasse gewähren wir 2 % Skonto.',
-  },
-  {
-    category: 'zahlung',
-    question: 'Bieten Sie eine Finanzierung an?',
-    answer:
-      'Ja, mit Laufzeiten von 12 bis 60 Monaten und Zinssätzen ab 4,9 % effektiv pro Jahr. Den monatlichen Ratenbetrag berechnen Sie direkt auf der Produktseite. Die Finanzierung läuft über unseren Partner; die Bonitätsprüfung erfolgt online innerhalb weniger Minuten.',
   },
   {
     category: 'zahlung',

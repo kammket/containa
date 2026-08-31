@@ -35,7 +35,6 @@ const serviceLinks = [
   { href: routes.delivery, label: 'Lieferung & Anlieferung' },
   { href: routes.installation, label: 'Aufstellung & Fundament' },
   { href: routes.modifications, label: 'Container Umbau' },
-  { href: routes.financing, label: 'Finanzierung & Leasing' },
   { href: routes.shipping, label: 'Versandkosten' },
   { href: routes.warranty, label: 'Garantie' },
 ];

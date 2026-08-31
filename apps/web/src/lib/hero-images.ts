@@ -63,28 +63,6 @@ export const anyListingImage = cache(async (): Promise<ProductImage | null> => {
 });
 
 /**
- * Die beiden Fotos des Startseiten-Heros.
- *
- * `card` ist das freigestellte Foto neben dem Text, `backdrop` das stark
- * abgedunkelte Hintergrundbild. Bewusst zwei **verschiedene** Angebote: Dasselbe
- * Foto zweimal übereinander wirkt wie ein Darstellungsfehler. Gibt es nur ein
- * Produkt mit Foto, ist `backdrop` gleich `card` – immer noch besser als ein
- * grauer Platzhalter dahinter.
- */
-export const homeHeroImages = cache(
-  async (): Promise<{ card: ProductImage | null; backdrop: ProductImage | null }> => {
-    const card = await anyListingImage();
-    if (!card) return { card: null, backdrop: null };
-
-    const others = (await getProducts()).filter(
-      (product) => product.size !== 'sonder' && cover(product)?.publicId !== card.publicId,
-    );
-
-    return { card, backdrop: firstWithPhoto(others) ?? card };
-  },
-);
-
-/**
  * Aufmacher einer Kategorieseite – ein Container aus genau dieser Kategorie.
  *
  * Zubehör bleibt außen vor, solange die Kategorie auch Container enthält: Ein

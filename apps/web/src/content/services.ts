@@ -1,4 +1,4 @@
-import { formatPrice, grossFromNet, deliveryZones, financingTerms } from '@emc/catalog';
+import { formatPrice, grossFromNet, deliveryZones } from '@emc/catalog';
 
 import type { ServiceSection } from '@/components/layout/service-page';
 
@@ -169,73 +169,6 @@ export const installationContent = {
       question: 'Wie viel Platz brauche ich zum Öffnen der Türen?',
       answer:
         'Für die volle Öffnung von 270 Grad rund 2,5 m vor der Stirnseite. Bei beengten Verhältnissen genügen 1,5 m für eine 90-Grad-Öffnung, was für die meisten Ladevorgänge ausreicht. Bei Open-Side-Containern gilt derselbe Wert für die Längsseite.',
-    },
-  ],
-};
-
-export const financingContent = {
-  kicker: 'Laufzeiten von 12 bis 60 Monaten',
-  intro: [
-    'Sie müssen einen Container nicht auf einmal bezahlen. Über unseren Finanzierungspartner verteilen Sie den Betrag auf 12 bis 60 Monate – mit festem Zinssatz und ohne Anzahlung.',
-  ],
-  stats: [
-    { value: 'ab 4,9 %', label: 'effektiver Jahreszins' },
-    { value: '12–60', label: 'Monate Laufzeit' },
-    { value: '0 €', label: 'Anzahlung' },
-    { value: '< 5 Min.', label: 'Online-Antrag' },
-  ],
-  sections: [
-    {
-      heading: 'So funktioniert die Finanzierung',
-      body: [
-        'Sie wählen Ihren Container wie gewohnt aus und entscheiden sich im Bestellprozess für die Finanzierung. Die Bonitätsprüfung läuft online und dauert in der Regel wenige Minuten. Nach Zusage schließen Sie den Vertrag digital ab.',
-        'Wir liefern den Container wie bei jeder anderen Zahlungsart – die Finanzierung wirkt sich weder auf Lieferzeit noch auf Preis aus. Der Kaufpreis wird vollständig vom Finanzierungspartner an uns gezahlt, Sie zahlen anschließend die vereinbarten Monatsraten.',
-        'Eine vorzeitige vollständige Rückzahlung ist jederzeit möglich. Die Vorfälligkeitsentschädigung ist gesetzlich begrenzt und wird Ihnen im Vertrag transparent ausgewiesen.',
-      ],
-    },
-    {
-      heading: 'Konditionen im Überblick',
-      body: [
-        'Die Zinssätze steigen mit der Laufzeit. Eine kürzere Laufzeit bedeutet höhere Monatsraten, aber geringere Gesamtkosten.',
-      ],
-      table: {
-        head: ['Laufzeit', 'Effektiver Jahreszins'],
-        rows: financingTerms.map((term) => [
-          `${term.months} Monate`,
-          `${(term.annualRate * 100).toLocaleString('de-DE', { minimumFractionDigits: 1 })} %`,
-        ]),
-      },
-      checklist: [
-        'Keine Anzahlung erforderlich',
-        'Feste Rate über die gesamte Laufzeit',
-        'Sondertilgung und vorzeitige Ablösung jederzeit möglich',
-        'Für Privat- und Geschäftskunden',
-        'Den konkreten Ratenbetrag berechnen Sie auf jeder Produktseite',
-      ],
-    },
-    {
-      heading: 'Leasing für Geschäftskunden',
-      body: [
-        'Für Unternehmen bieten wir alternativ Leasing an. Die Leasingraten sind in der Regel vollständig als Betriebsausgabe absetzbar und belasten die Bilanz nicht – anders als ein finanzierter Kauf, der als Anlagevermögen aktiviert wird.',
-        'Ob Leasing oder Finanzierung günstiger ist, hängt von Ihrer steuerlichen Situation ab. Wir erstellen Ihnen beide Varianten zum Vergleich; die steuerliche Bewertung sollten Sie mit Ihrem Steuerberater abstimmen.',
-      ],
-    },
-  ] satisfies ServiceSection[],
-  faqs: [
-    {
-      question: 'Welche Unterlagen brauche ich?',
-      answer:
-        'Für Privatkunden: Personalausweis und die letzten drei Gehaltsabrechnungen. Für Geschäftskunden: Handelsregisterauszug und die letzten beiden Jahresabschlüsse bzw. bei jungen Unternehmen eine betriebswirtschaftliche Auswertung.',
-    },
-    {
-      question: 'Was passiert bei Ablehnung?',
-      answer:
-        'Sie können die Bestellung mit einer anderen Zahlungsart abschließen oder kostenfrei stornieren. Eine abgelehnte Finanzierungsanfrage verpflichtet Sie zu nichts.',
-    },
-    {
-      question: 'Ist die Finanzierung auch für gebrauchte Container möglich?',
-      answer:
-        'Ja, unabhängig vom Zustand. Voraussetzung ist lediglich ein Mindestfinanzierungsbetrag von 1.500 € brutto.',
     },
   ],
 };

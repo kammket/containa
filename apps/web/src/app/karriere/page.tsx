@@ -5,6 +5,7 @@ import { Clock, Euro, MapPin } from 'lucide-react';
 import { address, breadcrumbs, contact, routes } from '@emc/catalog';
 
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
+import { HeroPhoto } from '@/components/layout/hero-photo';
 import { JsonLd } from '@/components/layout/json-ld';
 import { Button } from '@/components/ui/button';
 import { breadcrumbSchema, jsonLdGraph } from '@/lib/schema';
@@ -101,7 +102,7 @@ export default function CareersPage() {
       <JsonLd data={jsonLdGraph(breadcrumbSchema(crumbs))} />
 
       <section className="relative isolate overflow-hidden bg-navy-950 text-white">
-        <div className="bg-grid absolute inset-0 opacity-30" aria-hidden />
+        <HeroPhoto />
         <div className="container-page relative py-12 sm:py-16">
           <Breadcrumbs items={crumbs} inverted />
           <h1 className="mt-6 max-w-3xl font-display text-3xl leading-tight font-extrabold sm:text-4xl lg:text-5xl">

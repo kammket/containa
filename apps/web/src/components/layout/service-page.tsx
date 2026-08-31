@@ -4,6 +4,7 @@ import { ArrowRight, Check } from 'lucide-react';
 import { breadcrumbs, routes } from '@emc/catalog';
 
 import { Breadcrumbs } from './breadcrumbs';
+import { HeroPhoto } from './hero-photo';
 import { JsonLd } from './json-ld';
 import { Button } from '@/components/ui/button';
 import {
@@ -38,7 +39,7 @@ interface ServicePageProps {
 
 /**
  * Einheitliches Layout für Serviceseiten (Lieferung, Aufstellung, Umbau,
- * Finanzierung …). Struktur folgt der Suchintention: Kernaussage zuerst,
+ * Versand …). Struktur folgt der Suchintention: Kernaussage zuerst,
  * dann Details, dann Fragen.
  */
 export function ServicePage({
@@ -60,7 +61,7 @@ export function ServicePage({
       />
 
       <section className="relative isolate overflow-hidden bg-navy-950 text-white">
-        <div className="bg-grid absolute inset-0 opacity-30" aria-hidden />
+        <HeroPhoto />
         <div className="container-page relative py-12 sm:py-16">
           <Breadcrumbs items={crumbs} inverted />
 

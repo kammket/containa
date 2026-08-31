@@ -132,33 +132,3 @@ export function quoteDelivery(
 
   return { zone, priceNet: free ? 0 : priceNet, free, days: zone.days };
 }
-
-/** Finanzierungskonditionen für den Ratenrechner auf Produktseiten. */
-export const financingTerms = [
-  { months: 12, annualRate: 0.049 },
-  { months: 24, annualRate: 0.059 },
-  { months: 36, annualRate: 0.064 },
-  { months: 48, annualRate: 0.069 },
-  { months: 60, annualRate: 0.074 },
-] as const;
-
-/**
- * Annuitätische Monatsrate in Cent.
- * @param principalCents Finanzierungsbetrag (brutto) in Cent
- */
-export function monthlyRate(principalCents: number, months: number, annualRate: number): number {
-  const i = annualRate / 12;
-  if (i === 0) return Math.round(principalCents / months);
-  const factor = (i * Math.pow(1 + i, months)) / (Math.pow(1 + i, months) - 1);
-  return Math.round(principalCents * factor);
-}
-
-/** Günstigste darstellbare Monatsrate – für „ab X €/Monat"-Badges. */
-export function lowestMonthlyRate(principalCents: number): { cents: number; months: number } {
-  let best = { cents: Number.POSITIVE_INFINITY, months: 0 };
-  for (const term of financingTerms) {
-    const cents = monthlyRate(principalCents, term.months, term.annualRate);
-    if (cents < best.cents) best = { cents, months: term.months };
-  }
-  return best;
-}

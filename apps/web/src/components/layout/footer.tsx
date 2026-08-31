@@ -21,7 +21,6 @@ const serviceLinks = [
   { href: routes.delivery, label: 'Lieferung & Anlieferung' },
   { href: routes.installation, label: 'Aufstellung & Fundament' },
   { href: routes.modifications, label: 'Container Umbau' },
-  { href: routes.financing, label: 'Finanzierung' },
   { href: routes.quote, label: 'Angebot anfordern' },
   { href: routes.trackOrder, label: 'Sendungsverfolgung' },
   { href: routes.downloads, label: 'Downloads' },

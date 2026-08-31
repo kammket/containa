@@ -12,15 +12,6 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { RatingStars } from '@/components/ui/rating';
-import { homeHeroImages } from '@/lib/hero-images';
-import { blurDataUrl, imageSrc } from '@/lib/images';
-
-/**
- * Rückfallbild, falls kein Angebot mit Foto ermittelbar ist (API nicht
- * erreichbar). Die Datei liegt nicht in Cloudinary; ausgeliefert wird dann der
- * Ersatzplatzhalter – wie bisher.
- */
-const fallbackImage = 'emc/hero/container-yard';
 
 const proofPoints = [
   { icon: Truck, label: 'Lieferung in 3–7 Werktagen', sub: 'deutschlandweit' },
@@ -33,26 +24,20 @@ const proofPoints = [
  * geladen; alle Texte stehen im HTML, damit der Inhalt ohne JavaScript sofort
  * sichtbar ist.
  *
- * Gezeigt wird das Titelfoto eines echten Angebots aus dem Bestand – siehe
- * `homeHeroImage`. Vorher stand hier eine Vektorgrafik über einem
- * Hintergrundbild, das es in Cloudinary nie gab.
+ * Das Foto füllt den gesamten Hero als Hintergrund – kein separates Bild
+ * neben dem Text.
  */
-export async function Hero() {
-  const { card: listing, backdrop } = await homeHeroImages();
-  const backdropId = backdrop?.publicId ?? fallbackImage;
-
+export function Hero() {
   return (
     <section className="relative isolate overflow-hidden bg-navy-950">
       <Image
-        src={imageSrc(backdropId, { width: 1920, height: 1080 })}
+        src="/hero-terminal.jpg"
         alt=""
         fill
         priority
         fetchPriority="high"
-        sizes="100vw"
-        placeholder="blur"
-        blurDataURL={blurDataUrl(backdropId)}
-        className="object-cover opacity-35"
+        unoptimized
+        className="object-cover opacity-45"
       />
       <div
         className="absolute inset-0 bg-gradient-to-br from-navy-950 via-navy-950/85 to-navy-900/60"
@@ -60,7 +45,7 @@ export async function Hero() {
       />
       <div className="bg-grid absolute inset-0 opacity-40" aria-hidden />
 
-      <div className="container-page relative grid items-center gap-10 py-20 sm:py-24 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-8 lg:py-28">
+      <div className="container-page relative py-20 sm:py-24 lg:py-28">
         <div className="max-w-2xl">
           <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
             <span className="size-1.5 rounded-full bg-success-600" aria-hidden />
@@ -115,35 +100,6 @@ export async function Hero() {
             </p>
           </div>
         </div>
-
-        {/*
-          Foto eines lieferbaren Containers aus dem Bestand statt einer
-          Illustration – es zeigt, was Kundinnen und Kunden tatsächlich
-          bekommen. Ohne erreichbare API bleibt die Fläche leer statt einen
-          grauen Platzhalter zu zeigen; die Textspalte trägt den Hero dann
-          allein.
-        */}
-        {listing && (
-          <div className="relative w-full lg:justify-self-end">
-            <div
-              className="absolute inset-0 -z-10 scale-90 rounded-full bg-accent-500/20 blur-3xl"
-              aria-hidden
-            />
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/15 shadow-2xl">
-              <Image
-                src={imageSrc(listing.publicId, { width: 1200, height: 900 })}
-                alt={listing.alt}
-                fill
-                priority
-                fetchPriority="high"
-                sizes="(max-width: 1024px) 92vw, 45vw"
-                placeholder="blur"
-                blurDataURL={blurDataUrl(listing.publicId)}
-                className="object-cover"
-              />
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Vertrauensleiste */}

@@ -134,7 +134,7 @@ export const landingPages: LandingPage[] = [
       {
         question: 'Welche Zahlungsarten bieten Sie an?',
         answer:
-          'Vorkasse per Überweisung, SEPA-Lastschrift und – für Geschäftskunden nach Bonitätsprüfung – Kauf auf Rechnung. Bei Vorkasse gewähren wir 2 % Skonto. Zusätzlich bieten wir Finanzierung mit Laufzeiten von 12 bis 60 Monaten an.',
+          'Vorkasse per Überweisung, SEPA-Lastschrift und – für Geschäftskunden nach Bonitätsprüfung – Kauf auf Rechnung. Bei Vorkasse gewähren wir 2 % Skonto.',
       },
       {
         question: 'Kann ich den Container vorher besichtigen?',
