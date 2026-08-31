@@ -10,10 +10,8 @@ import {
   discountPercent,
   formatPrice,
   getCategory,
-  grossFromNet,
   reviewsForProduct,
   routes,
-  vatAmount,
 } from '@emc/catalog';
 
 import { AvailabilityDot } from '@/components/commerce/availability';
@@ -80,8 +78,6 @@ export default async function ProductPage({ params }: PageProps) {
   const related = await getRelatedProducts(product.slug, 4);
   const condition = conditions.find((c) => c.slug === product.condition);
 
-  const gross = grossFromNet(product.priceNet);
-  const compareGross = product.compareAtNet ? grossFromNet(product.compareAtNet) : undefined;
   const discount = discountPercent(product.priceNet, product.compareAtNet);
 
   const crumbs = breadcrumbs(
@@ -155,11 +151,11 @@ export default async function ProductPage({ params }: PageProps) {
             <div className="mt-6 rounded-2xl border border-stone-200 bg-white p-5 shadow-card">
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                 <span className="font-display text-3xl font-extrabold text-navy-950">
-                  {formatPrice(gross)}
+                  {formatPrice(product.priceNet)}
                 </span>
-                {compareGross && (
+                {product.compareAtNet && (
                   <span className="text-lg text-stone-400 line-through">
-                    {formatPrice(compareGross)}
+                    {formatPrice(product.compareAtNet)}
                   </span>
                 )}
                 {discount !== null && (
@@ -169,14 +165,7 @@ export default async function ProductPage({ params }: PageProps) {
                 )}
               </div>
 
-              <p className="mt-1.5 text-sm text-stone-500">
-                inkl. {(0.19 * 100).toLocaleString('de-DE')} % MwSt. (
-                {formatPrice(vatAmount(product.priceNet))}) ·{' '}
-                <strong className="font-semibold text-stone-700">
-                  {formatPrice(product.priceNet)}
-                </strong>{' '}
-                netto
-              </p>
+              <p className="mt-1.5 text-sm text-stone-500">zzgl. MwSt.</p>
               <p className="mt-1 text-sm text-stone-500">
                 zzgl. Lieferung –{' '}
                 <Link

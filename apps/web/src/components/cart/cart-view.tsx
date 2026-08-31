@@ -115,12 +115,13 @@ export function CartView() {
                   />
                   <div className="text-right">
                     <p className="font-display text-lg font-bold text-navy-900">
-                      {formatPrice(line.lineGross)}
+                      {formatPrice(line.lineNet)}
                     </p>
-                    <p className="text-2xs text-stone-500">
-                      {formatPrice(line.lineNet)} netto
-                      {line.quantity > 1 && ` · ${formatPrice(line.priceNet)} je Stück`}
-                    </p>
+                    {line.quantity > 1 && (
+                      <p className="text-2xs text-stone-500">
+                        {formatPrice(line.priceNet)} je Stück
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -189,20 +190,15 @@ export function CartView() {
               </dd>
             </div>
 
-            <div className="flex items-baseline justify-between gap-3">
-              <dt className="text-stone-600">zzgl. 19 % MwSt.</dt>
-              <dd className="font-medium text-navy-900">{formatPrice(totals.vat)}</dd>
-            </div>
-
             <div className="flex items-baseline justify-between gap-3 border-t border-stone-100 pt-3">
-              <dt className="font-display text-base font-bold text-navy-900">Gesamt</dt>
+              <dt className="font-display text-base font-bold text-navy-900">Gesamt (netto)</dt>
               <dd className="font-display text-xl font-extrabold text-navy-950">
-                {totals.totalGross !== null
-                  ? formatPrice(totals.totalGross)
-                  : formatPrice(totals.subtotalGross)}
-                {totals.totalGross === null && (
-                  <span className="block text-2xs font-normal text-stone-500">zzgl. Lieferung</span>
-                )}
+                {totals.totalNet !== null
+                  ? formatPrice(totals.totalNet)
+                  : formatPrice(totals.subtotalNet)}
+                <span className="block text-2xs font-normal text-stone-500">
+                  {totals.totalNet === null ? 'zzgl. Lieferung · zzgl. MwSt.' : 'zzgl. MwSt.'}
+                </span>
               </dd>
             </div>
           </dl>

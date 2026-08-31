@@ -226,7 +226,7 @@ export function Footer() {
             ))}
           </div>
           <p className="text-xs text-white/40">
-            © {year} {brand.legalName} · USt-IdNr. {legal.vatId} · Alle Preise inkl. gesetzlicher
+            © {year} {brand.legalName} · USt-IdNr. {legal.vatId} · Alle Preise zzgl. gesetzlicher
             MwSt.
           </p>
         </div>

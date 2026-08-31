@@ -2,13 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, BadgeCheck, ShieldCheck, Truck } from 'lucide-react';
 
-import {
-  aggregateRating,
-  formatPriceCompact,
-  grossFromNet,
-  containerPriceRange,
-  routes,
-} from '@emc/catalog';
+import { aggregateRating, formatPriceCompact, containerPriceRange, routes } from '@emc/catalog';
 
 import { Button } from '@/components/ui/button';
 import { RatingStars } from '@/components/ui/rating';
@@ -93,9 +87,9 @@ export function Hero() {
             <p className="text-sm text-white/70">
               Container ab{' '}
               <strong className="font-semibold text-white">
-                {formatPriceCompact(grossFromNet(containerPriceRange.min))}
+                {formatPriceCompact(containerPriceRange.min)}
               </strong>{' '}
-              inkl. MwSt.
+              zzgl. MwSt.
             </p>
           </div>
         </div>

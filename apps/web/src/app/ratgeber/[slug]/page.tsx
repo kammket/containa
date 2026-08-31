@@ -42,10 +42,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const post = getBlogPost(slug);
   if (!post) return {};
 
+  const hero =
+    (await productHeroImage(post.relatedProducts)) ?? (await anyListingImage()) ?? post.image;
+
   return buildMetadata({
     seo: post.seo,
     path: routes.blogPost(post.slug),
-    image: post.image.publicId,
+    image: hero.publicId,
     type: 'article',
     publishedTime: post.publishedAt,
     modifiedTime: post.updatedAt,
@@ -88,7 +91,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <>
-      <JsonLd data={jsonLdGraph(articleSchema(post), breadcrumbSchema(crumbs))} />
+      <JsonLd data={jsonLdGraph(articleSchema(post, hero.publicId), breadcrumbSchema(crumbs))} />
 
       <article>
         <header className="border-b border-stone-200 bg-stone-50 pt-6 pb-10">

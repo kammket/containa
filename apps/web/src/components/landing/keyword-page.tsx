@@ -5,7 +5,6 @@ import {
   breadcrumbs,
   formatPrice,
   getCategory,
-  grossFromNet,
   navCategories,
   containerPriceRange,
   routes,
@@ -99,9 +98,9 @@ export async function KeywordLandingPage({ page }: { page: LandingPage }) {
           <p className="mt-6 text-sm text-white/60">
             Container ab{' '}
             <strong className="font-semibold text-white">
-              {formatPrice(grossFromNet(containerPriceRange.min))}
+              {formatPrice(containerPriceRange.min)}
             </strong>{' '}
-            inkl. MwSt. · CSC-zertifiziert · Lieferung deutschlandweit
+            zzgl. MwSt. · CSC-zertifiziert · Lieferung deutschlandweit
           </p>
         </div>
       </section>

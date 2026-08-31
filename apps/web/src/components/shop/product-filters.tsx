@@ -3,7 +3,7 @@
 import { X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
-import { formatPriceCompact, grossFromNet } from '@emc/catalog';
+import { formatPriceCompact } from '@emc/catalog';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -57,7 +57,7 @@ export function ProductFilters({
   const [sort, setSort] = useState<SortKey>('empfohlen');
 
   const priceBounds = useMemo(() => {
-    const values = facets.map((f) => grossFromNet(f.priceNet));
+    const values = facets.map((f) => f.priceNet);
     return { min: Math.min(...values), max: Math.max(...values) };
   }, [facets]);
 
@@ -69,7 +69,7 @@ export function ProductFilters({
       if (sizes.length > 0 && !sizes.includes(facet.size)) return false;
       if (conditionFilters.length > 0 && !conditionFilters.includes(facet.condition)) return false;
       if (inStockOnly && facet.availability !== 'auf-lager') return false;
-      if (maxPrice !== null && grossFromNet(facet.priceNet) > maxPrice) return false;
+      if (maxPrice !== null && facet.priceNet > maxPrice) return false;
       return true;
     });
 
@@ -157,7 +157,7 @@ export function ProductFilters({
             />
           </FilterGroup>
 
-          <FilterGroup label="Preis (inkl. MwSt.)">
+          <FilterGroup label="Preis (netto)">
             <label htmlFor="price-range" className="sr-only">
               Maximalpreis
             </label>

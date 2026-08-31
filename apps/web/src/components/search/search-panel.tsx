@@ -6,7 +6,6 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react
 
 import {
   formatPrice,
-  grossFromNet,
   popularSearches,
   routes,
   search,
@@ -189,7 +188,7 @@ function SearchResultRow({
         </span>
         {entry.priceNet !== undefined ? (
           <span className="shrink-0 text-sm font-bold text-navy-900">
-            {formatPrice(grossFromNet(entry.priceNet))}
+            {formatPrice(entry.priceNet)}
           </span>
         ) : (
           <span className="hidden shrink-0 text-2xs font-semibold tracking-wide text-stone-400 uppercase sm:inline">

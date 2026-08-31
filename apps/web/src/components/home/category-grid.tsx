@@ -5,7 +5,6 @@ import { ArrowUpRight } from 'lucide-react';
 import {
   categories,
   formatPriceCompact,
-  grossFromNet,
   lowestPriceInCategory,
   productsInCategory,
   routes,
@@ -64,7 +63,7 @@ export async function CategoryGrid() {
                 {category.tagline}
               </p>
               <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-accent-400">
-                {from !== null && <>ab {formatPriceCompact(grossFromNet(from))} inkl. MwSt.</>}
+                {from !== null && <>ab {formatPriceCompact(from)} zzgl. MwSt.</>}
                 <ArrowUpRight
                   className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                   aria-hidden
@@ -95,7 +94,7 @@ export async function CategoryGrid() {
             </div>
             <div className="mt-5 flex items-baseline justify-between gap-2">
               <span className="text-sm font-semibold text-navy-900">
-                {from !== null ? `ab ${formatPriceCompact(grossFromNet(from))}` : 'Auf Anfrage'}
+                {from !== null ? `ab ${formatPriceCompact(from)}` : 'Auf Anfrage'}
               </span>
               <span className="text-xs text-stone-400">
                 {count} {count === 1 ? 'Modell' : 'Modelle'}

@@ -5,7 +5,6 @@ import {
   bestsellers,
   breadcrumbs,
   formatPrice,
-  grossFromNet,
   nearbyCities,
   navCategories,
   containerPriceRange,
@@ -49,7 +48,7 @@ export function CityPage({ city }: { city: City }) {
     {
       question: `Was kostet die Anlieferung nach ${city.name}?`,
       answer: delivery
-        ? `Für einen 20-Fuß-Container liegt die Lieferpauschale in der Region ${city.name} bei rund ${formatPrice(grossFromNet(delivery.priceNet))} inkl. MwSt. (${city.hub} als nächstgelegener Umschlagplatz). Die exakten Kosten berechnen wir im Warenkorb anhand Ihrer Postleitzahl. Ab 9.500 € netto Warenwert liefern wir versandkostenfrei.`
+        ? `Für einen 20-Fuß-Container liegt die Lieferpauschale in der Region ${city.name} bei rund ${formatPrice(delivery.priceNet)} zzgl. MwSt. (${city.hub} als nächstgelegener Umschlagplatz). Die exakten Kosten berechnen wir im Warenkorb anhand Ihrer Postleitzahl. Ab 9.500 € netto Warenwert liefern wir versandkostenfrei.`
         : `Die Lieferpauschale berechnen wir im Warenkorb transparent anhand Ihrer Postleitzahl. Ab 9.500 € netto Warenwert liefern wir versandkostenfrei.`,
     },
     {
@@ -97,8 +96,8 @@ export function CityPage({ city }: { city: City }) {
             />
             <Stat
               label="Container ab"
-              value={formatPrice(grossFromNet(containerPriceRange.min))}
-              hint="inkl. MwSt."
+              value={formatPrice(containerPriceRange.min)}
+              hint="zzgl. MwSt."
             />
             <Stat label="Nächster Umschlagplatz" value={city.hub} />
             <Stat label="Einwohner" value={formatNumber(city.population)} />

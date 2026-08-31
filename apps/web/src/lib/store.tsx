@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from 'react';
 
-import { FREE_DELIVERY_THRESHOLD_NET, grossFromNet, quoteDelivery, vatAmount } from '@emc/catalog';
+import { FREE_DELIVERY_THRESHOLD_NET, quoteDelivery } from '@emc/catalog';
 
 import type { CartSnapshot } from './cart-snapshot';
 
@@ -37,20 +37,15 @@ export type { CartSnapshot };
 export interface CartLine extends CartSnapshot {
   quantity: number;
   lineNet: number;
-  lineGross: number;
 }
 
 export interface CartTotals {
   itemCount: number;
   subtotalNet: number;
-  subtotalGross: number;
   deliveryNet: number | null;
-  deliveryGross: number | null;
   deliveryFree: boolean;
   freeDeliveryRemainingNet: number;
   totalNet: number | null;
-  totalGross: number | null;
-  vat: number;
 }
 
 interface StoredLine extends CartSnapshot {
@@ -176,7 +171,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     () =>
       lines.map((line) => {
         const lineNet = line.priceNet * line.quantity;
-        return { ...line, lineNet, lineGross: grossFromNet(lineNet) };
+        return { ...line, lineNet };
       }),
     [lines],
   );
@@ -211,14 +206,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return {
       itemCount,
       subtotalNet,
-      subtotalGross: grossFromNet(subtotalNet),
       deliveryNet,
-      deliveryGross: deliveryNet !== null ? grossFromNet(deliveryNet) : null,
       deliveryFree,
       freeDeliveryRemainingNet: Math.max(0, FREE_DELIVERY_THRESHOLD_NET - subtotalNet),
       totalNet,
-      totalGross: totalNet !== null ? grossFromNet(totalNet) : null,
-      vat: vatAmount(totalNet ?? subtotalNet),
     };
   }, [cart, postalCode]);
 

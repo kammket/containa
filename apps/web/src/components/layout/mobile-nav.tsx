@@ -92,9 +92,7 @@ export function MobileNav() {
                             >
                               <span className="text-sm text-navy-800">{item.label}</span>
                               <span className="text-xs text-stone-400">
-                                {item.fromGross === null
-                                  ? ''
-                                  : `ab ${formatPriceCompact(item.fromGross)}`}
+                                {item.fromNet === null ? '' : `ab ${formatPriceCompact(item.fromNet)}`}
                               </span>
                             </Link>
                           </li>

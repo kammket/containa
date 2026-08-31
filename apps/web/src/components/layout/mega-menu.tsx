@@ -104,7 +104,7 @@ export function MegaMenu() {
                         {item.label}
                       </span>
                       <span className="text-xs font-medium text-stone-400 group-hover:text-stone-500">
-                        {item.fromGross === null ? '' : `ab ${formatPriceCompact(item.fromGross)}`}
+                        {item.fromNet === null ? '' : `ab ${formatPriceCompact(item.fromNet)}`}
                       </span>
                     </Link>
                   </li>

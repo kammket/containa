@@ -123,7 +123,7 @@ export function CheckoutForm() {
                 <RadioCard
                   value="privat"
                   label="Privatkunde"
-                  hint="Preise inkl. MwSt., 14 Tage Widerrufsrecht"
+                  hint="Preise netto, MwSt. auf der Rechnung, 14 Tage Widerrufsrecht"
                   checked={customerType === 'privat'}
                   {...register('customerType')}
                 />
@@ -269,7 +269,7 @@ export function CheckoutForm() {
             {isSubmitting
               ? 'Bestellung wird übermittelt …'
               : `Zahlungspflichtig bestellen${
-                  totals.totalGross !== null ? ` · ${formatPrice(totals.totalGross)}` : ''
+                  totals.totalNet !== null ? ` · ${formatPrice(totals.totalNet)} netto` : ''
                 }`}
           </Button>
 

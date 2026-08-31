@@ -142,15 +142,15 @@ export function OrderSummary() {
           }
         />
 
-        <Row label="zzgl. 19 % MwSt." value={formatPrice(totals.vat)} />
       </dl>
 
       <div className="flex items-baseline justify-between gap-3 border-t border-stone-100 pt-4">
-        <span className="font-display text-base font-bold text-navy-900">Gesamtbetrag</span>
+        <span className="font-display text-base font-bold text-navy-900">Gesamtbetrag (netto)</span>
         <span className="font-display text-xl font-extrabold text-navy-950">
-          {formatPrice(
-            (totals.totalGross ?? totals.subtotalGross) - Math.round(discountNet * 1.19),
-          )}
+          {formatPrice((totals.totalNet ?? totals.subtotalNet) - discountNet)}
+          <span className="block text-right text-2xs font-normal text-stone-500">
+            zzgl. MwSt. – ausgewiesen auf der Rechnung
+          </span>
         </span>
       </div>
 

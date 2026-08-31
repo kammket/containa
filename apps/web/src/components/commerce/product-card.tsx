@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Truck } from 'lucide-react';
 
-import { discountPercent, formatPrice, grossFromNet, routes, type Product } from '@emc/catalog';
+import { discountPercent, formatPrice, routes, type Product } from '@emc/catalog';
 
 import { AvailabilityDot } from './availability';
 import { WishlistButton } from './wishlist-button';
@@ -21,8 +21,6 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, priority = false, className, compact }: ProductCardProps) {
-  const gross = grossFromNet(product.priceNet);
-  const compareGross = product.compareAtNet ? grossFromNet(product.compareAtNet) : undefined;
   const discount = discountPercent(product.priceNet, product.compareAtNet);
   const cover = product.images[0];
 
@@ -117,17 +115,15 @@ export function ProductCard({ product, priority = false, className, compact }: P
           <div>
             <div className="flex items-baseline gap-2">
               <span className="font-display text-xl font-bold text-navy-900">
-                {formatPrice(gross)}
+                {formatPrice(product.priceNet)}
               </span>
-              {compareGross && (
+              {product.compareAtNet && (
                 <span className="text-sm text-stone-400 line-through">
-                  {formatPrice(compareGross)}
+                  {formatPrice(product.compareAtNet)}
                 </span>
               )}
             </div>
-            <p className="mt-0.5 text-2xs text-stone-500">
-              inkl. MwSt. · {formatPrice(product.priceNet)} netto
-            </p>
+            <p className="mt-0.5 text-2xs text-stone-500">zzgl. MwSt.</p>
           </div>
 
           {/* Über der klickbaren Kartenfläche, damit der Button erreichbar bleibt */}

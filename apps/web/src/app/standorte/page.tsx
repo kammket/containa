@@ -2,14 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, MapPin, Truck } from 'lucide-react';
 
-import {
-  breadcrumbs,
-  citiesByPopulation,
-  deliveryZones,
-  formatPrice,
-  grossFromNet,
-  routes,
-} from '@emc/catalog';
+import { breadcrumbs, citiesByPopulation, deliveryZones, formatPrice, routes } from '@emc/catalog';
 
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
@@ -70,7 +63,7 @@ export default function CitiesPage() {
                     PLZ-Bereich
                   </th>
                   <th scope="col" className="px-4 py-3 text-left font-bold text-navy-900">
-                    20 Fuß (inkl. MwSt.)
+                    20 Fuß (netto)
                   </th>
                   <th scope="col" className="px-4 py-3 text-left font-bold text-navy-900">
                     Lieferzeit
@@ -87,7 +80,7 @@ export default function CitiesPage() {
                       {zone.prefixes.map((p) => `${p}0000–${p}9999`).join(', ')}
                     </td>
                     <td className="px-4 py-3 font-medium text-navy-900">
-                      {formatPrice(grossFromNet(zone.baseNet))}
+                      {formatPrice(zone.baseNet)}
                     </td>
                     <td className="px-4 py-3 text-stone-700">
                       {zone.days[0]}–{zone.days[1]} Werktage

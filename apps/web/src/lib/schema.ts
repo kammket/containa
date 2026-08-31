@@ -4,7 +4,6 @@ import {
   aggregateRating,
   brand,
   contact,
-  grossFromNet,
   legal,
   openingHours,
   routes,
@@ -26,10 +25,11 @@ import { ogImageUrl } from './images';
 /**
  * JSON-LD-Erzeugung nach schema.org.
  *
- * Alle Preise werden brutto ausgegeben, da Google Shopping und die Rich
- * Results für den deutschen Markt Endkundenpreise inklusive Mehrwertsteuer
- * erwarten. `priceValidUntil` ist erforderlich, damit das Angebot nicht als
- * veraltet gewertet wird.
+ * Preise werden netto ausgegeben, wie auch auf der Seite selbst –
+ * `priceSpecification.valueAddedTaxIncluded: false` macht das für Google
+ * Shopping und Rich Results explizit, damit der Preis nicht als falsch
+ * gegenüber der sichtbaren Seite gewertet wird. `priceValidUntil` ist
+ * erforderlich, damit das Angebot nicht als veraltet gilt.
  */
 
 type Json = Record<string, unknown>;
@@ -185,7 +185,6 @@ export function breadcrumbSchema(items: BreadcrumbItem[]): Json {
 }
 
 export function productSchema(product: Product, productReviews: Review[] = []): Json {
-  const grossPrice = grossFromNet(product.priceNet);
   const rating =
     productReviews.length > 0
       ? productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length
@@ -240,8 +239,14 @@ export function productSchema(product: Product, productReviews: Review[] = []): 
       '@type': 'Offer',
       url: absoluteUrl(routes.product(product.slug)),
       priceCurrency: brand.currency,
-      price: schemaPrice(grossPrice),
+      price: schemaPrice(product.priceNet),
       priceValidUntil: priceValidUntil(),
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        priceCurrency: brand.currency,
+        price: schemaPrice(product.priceNet),
+        valueAddedTaxIncluded: false,
+      },
       availability: availabilityMap[product.availability],
       itemCondition:
         product.condition === 'gebraucht'
@@ -346,13 +351,13 @@ export function collectionSchema(category: Category, products: Product[]): Json 
   };
 }
 
-export function articleSchema(post: BlogPost): Json {
+export function articleSchema(post: BlogPost, imagePublicId: string = post.image.publicId): Json {
   return {
     '@type': 'BlogPosting',
     '@id': `${absoluteUrl(routes.blogPost(post.slug))}#article`,
     headline: post.title,
     description: post.excerpt,
-    image: ogImageUrl(post.image.publicId),
+    image: ogImageUrl(imagePublicId),
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
     inLanguage: 'de-DE',
@@ -419,13 +424,16 @@ export function citySchema(city: City): Json {
   };
 }
 
-export function caseStudySchema(study: CaseStudy): Json {
+export function caseStudySchema(
+  study: CaseStudy,
+  imagePublicId: string = study.image.publicId,
+): Json {
   return {
     '@type': 'Article',
     '@id': `${absoluteUrl(routes.caseStudy(study.slug))}#article`,
     headline: study.title,
     description: study.challenge,
-    image: ogImageUrl(study.image.publicId),
+    image: ogImageUrl(imagePublicId),
     author: { '@id': ORG_ID },
     publisher: { '@id': ORG_ID },
     inLanguage: 'de-DE',

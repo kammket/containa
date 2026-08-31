@@ -1,4 +1,4 @@
-import { formatPrice, grossFromNet, deliveryZones } from '@emc/catalog';
+import { formatPrice, deliveryZones } from '@emc/catalog';
 
 import type { ServiceSection } from '@/components/layout/service-page';
 
@@ -13,8 +13,8 @@ export const deliveryContent = {
     { value: '3–7', label: 'Werktage Lieferzeit' },
     { value: '16', label: 'Bundesländer' },
     {
-      value: `ab ${formatPrice(grossFromNet(deliveryZones[0]!.baseNet))}`,
-      label: 'Lieferpauschale',
+      value: `ab ${formatPrice(deliveryZones[0]!.baseNet)}`,
+      label: 'Lieferpauschale, zzgl. MwSt.',
     },
     { value: '0 €', label: 'ab 9.500 € netto' },
   ],
@@ -65,11 +65,11 @@ export const deliveryContent = {
         'Die Lieferpauschale richtet sich nach der Leitregion Ihrer Postleitzahl und der Außenlänge des Containers. Für Einheiten über 6 m kommt ein Längenzuschlag hinzu. Ab einem Nettowarenwert von 9.500 € liefern wir versandkostenfrei.',
       ],
       table: {
-        head: ['Zone', 'PLZ-Bereich', '20 Fuß (inkl. MwSt.)', 'Lieferzeit'],
+        head: ['Zone', 'PLZ-Bereich', '20 Fuß (netto)', 'Lieferzeit'],
         rows: deliveryZones.map((zone) => [
           zone.name,
           zone.prefixes.map((p) => `${p}xxxx`).join(', '),
-          formatPrice(grossFromNet(zone.baseNet)),
+          formatPrice(zone.baseNet),
           `${zone.days[0]}–${zone.days[1]} Werktage`,
         ]),
       },
@@ -259,12 +259,12 @@ export const shippingContent = {
         'Die Pauschale gilt für einen Container bis 6 m Außenlänge bei befestigter, frei anfahrbarer Stellfläche. Für längere Einheiten kommt ein Längenzuschlag je angefangenem Meter hinzu.',
       ],
       table: {
-        head: ['Zone', 'PLZ-Bereich', 'Grundpreis (inkl. MwSt.)', 'Zuschlag je Meter über 6 m'],
+        head: ['Zone', 'PLZ-Bereich', 'Grundpreis (netto)', 'Zuschlag je Meter über 6 m'],
         rows: deliveryZones.map((zone) => [
           zone.name,
           zone.prefixes.map((p) => `${p}xxxx`).join(', '),
-          formatPrice(grossFromNet(zone.baseNet)),
-          formatPrice(grossFromNet(zone.perExtraMeterNet)),
+          formatPrice(zone.baseNet),
+          formatPrice(zone.perExtraMeterNet),
         ]),
       },
     },

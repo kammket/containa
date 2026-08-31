@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Check, Minus, Plus, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 
-import { formatPrice, grossFromNet, routes } from '@emc/catalog';
+import { formatPrice, routes } from '@emc/catalog';
 
 import { Button } from '@/components/ui/button';
 import { WishlistButton } from '@/components/commerce/wishlist-button';
@@ -124,9 +124,9 @@ export function BuyBox({
         <p className="text-center text-sm text-stone-600">
           Zwischensumme:{' '}
           <strong className="font-semibold text-navy-900">
-            {formatPrice(grossFromNet(snapshot.priceNet * quantity))}
+            {formatPrice(snapshot.priceNet * quantity)}
           </strong>{' '}
-          inkl. MwSt.
+          zzgl. MwSt.
         </p>
       )}
     </div>

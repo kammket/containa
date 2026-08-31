@@ -359,7 +359,7 @@ export const landingPages: LandingPage[] = [
       {
         question: 'Sind die angegebenen Preise netto oder brutto?',
         answer:
-          'Wir weisen im Shop beide Werte aus. Der Bruttopreis inklusive 19 % Mehrwertsteuer steht im Vordergrund, der Nettopreis wird für Geschäftskunden zusätzlich angezeigt. Auf der Rechnung ist die Mehrwertsteuer gesondert ausgewiesen.',
+          'Alle Preise im Shop sind Nettopreise zuzüglich der gesetzlichen Mehrwertsteuer. Diese wird gesondert berechnet und auf der Rechnung ausgewiesen, die Sie nach Vertragsschluss erhalten.',
       },
       {
         question: 'Ist die Lieferung im Preis enthalten?',

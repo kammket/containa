@@ -223,7 +223,7 @@ export const termsSections: LegalSection[] = [
   {
     heading: '§ 3 Preise und Versandkosten',
     body: [
-      'Alle Preisangaben verstehen sich als Endpreise. Gegenüber Verbrauchern werden die Preise inklusive der gesetzlichen Umsatzsteuer ausgewiesen; der Nettopreis wird zusätzlich angezeigt.',
+      'Alle im Shop angezeigten Preise sind Nettopreise zuzüglich der gesetzlichen Umsatzsteuer. Die Umsatzsteuer wird gesondert berechnet und auf der Rechnung ausgewiesen, die der Kunde nach Vertragsschluss erhält.',
       'Die Lieferpauschale richtet sich nach der Postleitzahl des Lieferorts und der Außenlänge des Containers. Sie wird im Bestellprozess vor Absenden der Bestellung gesondert ausgewiesen.',
       'Ab einem Nettowarenwert von 9.500 EUR erfolgt die Lieferung innerhalb Deutschlands versandkostenfrei.',
       'Ist zur Anlieferung ein Autokran erforderlich, weil die Stellfläche nicht direkt anfahrbar ist, teilt der Verkäufer die Mehrkosten vor Auftragsbestätigung mit. Der Kunde kann die Bestellung in diesem Fall kostenfrei stornieren.',

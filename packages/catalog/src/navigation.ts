@@ -1,5 +1,4 @@
 import { categories, menuGroups } from './categories.ts';
-import { grossFromNet } from './pricing.ts';
 import { lowestPriceInCategory, productsInCategory } from './products.ts';
 import { routes } from './routes.ts';
 
@@ -17,8 +16,8 @@ export interface NavCategory {
   slug: string;
   label: string;
   href: string;
-  /** Günstigster Bruttopreis der Kategorie in Cent, `null` wenn leer */
-  fromGross: number | null;
+  /** Günstigster Nettopreis der Kategorie in Cent, `null` wenn leer */
+  fromNet: number | null;
   productCount: number;
 }
 
@@ -42,7 +41,7 @@ export const navigation: NavGroup[] = menuGroups.map((group) => ({
         slug: category.slug,
         label: category.navLabel,
         href: routes.category(category.slug),
-        fromGross: lowest === null ? null : grossFromNet(lowest),
+        fromNet: lowest,
         productCount: productsInCategory(category.slug).length,
       };
     }),

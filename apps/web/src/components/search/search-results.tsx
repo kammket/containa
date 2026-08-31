@@ -5,14 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Building2, FileText, MapPin, Package, Search as SearchIcon, Tag } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
-import {
-  formatPrice,
-  grossFromNet,
-  popularSearches,
-  routes,
-  search,
-  type SearchEntryType,
-} from '@emc/catalog';
+import { formatPrice, popularSearches, routes, search, type SearchEntryType } from '@emc/catalog';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -173,9 +166,9 @@ export function SearchResults() {
                       {entry.priceNet !== undefined ? (
                         <span className="shrink-0 text-right">
                           <span className="block font-display text-base font-bold text-navy-900">
-                            {formatPrice(grossFromNet(entry.priceNet))}
+                            {formatPrice(entry.priceNet)}
                           </span>
-                          <span className="block text-2xs text-stone-500">inkl. MwSt.</span>
+                          <span className="block text-2xs text-stone-500">zzgl. MwSt.</span>
                         </span>
                       ) : (
                         <span className="hidden shrink-0 rounded-full bg-stone-100 px-2.5 py-1 text-2xs font-semibold text-stone-500 sm:inline">

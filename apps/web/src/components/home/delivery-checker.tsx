@@ -3,7 +3,7 @@
 import { MapPin, Truck } from 'lucide-react';
 import { useState } from 'react';
 
-import { formatPrice, grossFromNet, quoteDelivery, type DeliveryQuote } from '@emc/catalog';
+import { formatPrice, quoteDelivery, type DeliveryQuote } from '@emc/catalog';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -83,10 +83,8 @@ export function DeliveryChecker({ lengthMeters = 6.06 }: { lengthMeters?: number
             <div className="flex items-baseline justify-between gap-3">
               <dt className="text-stone-600">Lieferpauschale</dt>
               <dd className="text-right font-bold text-navy-900">
-                {formatPrice(grossFromNet(result.priceNet))}
-                <span className="block text-2xs font-normal text-stone-500">
-                  inkl. MwSt. · {formatPrice(result.priceNet)} netto
-                </span>
+                {formatPrice(result.priceNet)}
+                <span className="block text-2xs font-normal text-stone-500">zzgl. MwSt.</span>
               </dd>
             </div>
             <div className="flex items-baseline justify-between gap-3">

@@ -9,7 +9,6 @@ import {
   categories,
   formatPriceCompact,
   getCategory,
-  grossFromNet,
   navCategories,
   routes,
 } from '@emc/catalog';
@@ -47,10 +46,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const category = getCategory(slug);
   if (!category) return {};
 
+  const hero =
+    (await categoryHeroImage(category.slug)) ?? (await anyListingImage()) ?? category.image;
+
   return buildMetadata({
     seo: category.seo,
     path: routes.category(category.slug),
-    image: category.image.publicId,
+    image: hero.publicId,
   });
 }
 
@@ -123,9 +125,9 @@ export default async function CategoryPage({ params }: PageProps) {
               <span>
                 ab{' '}
                 <strong className="font-semibold text-white">
-                  {formatPriceCompact(grossFromNet(from))}
+                  {formatPriceCompact(from)}
                 </strong>{' '}
-                inkl. MwSt.
+                zzgl. MwSt.
               </span>
             )}
             <span>Lieferung deutschlandweit</span>
@@ -234,8 +236,8 @@ export default async function CategoryPage({ params }: PageProps) {
                     </span>
                     <span className="block text-xs text-stone-500">
                       {sibling.productCount} {sibling.productCount === 1 ? 'Modell' : 'Modelle'}
-                      {sibling.fromGross !== null &&
-                        ` · ab ${formatPriceCompact(sibling.fromGross)}`}
+                      {sibling.fromNet !== null &&
+                        ` · ab ${formatPriceCompact(sibling.fromNet)}`}
                     </span>
                   </span>
                   <ArrowRight

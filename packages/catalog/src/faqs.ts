@@ -179,7 +179,7 @@ export const faqs: Faq[] = [
     category: 'zahlung',
     question: 'Sind die Preise netto oder brutto?',
     answer:
-      'Wir weisen beide Werte aus. Der Bruttopreis inklusive 19 % Mehrwertsteuer steht im Vordergrund, der Nettopreis wird für Geschäftskunden zusätzlich angezeigt. Auf der Rechnung ist die Mehrwertsteuer gesondert ausgewiesen und für Vorsteuerabzugsberechtigte erstattungsfähig.',
+      'Alle Preise im Shop sind Nettopreise zuzüglich der gesetzlichen Mehrwertsteuer. Die Mehrwertsteuer wird gesondert berechnet und auf der Rechnung ausgewiesen, die Sie nach Vertragsschluss erhalten – für Vorsteuerabzugsberechtigte ist sie dort erstattungsfähig.',
   },
 
   // ── Garantie & Service ────────────────────────────────────────────────────

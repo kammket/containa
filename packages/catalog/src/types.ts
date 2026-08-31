@@ -2,8 +2,8 @@
  * Zentrale Typdefinitionen für den EMC-Container-Katalog.
  *
  * Alle Preise werden als Nettobetrag in Cent (EUR) gespeichert. Die Anzeige
- * erfolgt gemäß PAngV brutto inkl. 19 % MwSt.; der Nettopreis wird für
- * Geschäftskunden zusätzlich ausgewiesen. Siehe `pricing.ts`.
+ * im Shop erfolgt netto; die Umsatzsteuer wird erst auf der Rechnung
+ * berechnet und ausgewiesen. Siehe `pricing.ts`.
  */
 
 export type ConditionSlug = 'neu' | 'one-trip' | 'gebraucht' | 'generalueberholt';

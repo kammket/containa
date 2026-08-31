@@ -31,10 +31,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const study = getCaseStudy(slug);
   if (!study) return {};
 
+  const hero =
+    (await productHeroImage(study.productSlugs)) ?? (await anyListingImage()) ?? study.image;
+
   return buildMetadata({
     seo: study.seo,
     path: routes.caseStudy(study.slug),
-    image: study.image.publicId,
+    image: hero.publicId,
     type: 'article',
   });
 }
@@ -60,7 +63,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
   return (
     <>
-      <JsonLd data={jsonLdGraph(caseStudySchema(study), breadcrumbSchema(crumbs))} />
+      <JsonLd data={jsonLdGraph(caseStudySchema(study, hero.publicId), breadcrumbSchema(crumbs))} />
 
       <article>
         <header className="border-b border-stone-200 bg-stone-50 pt-6 pb-10">
