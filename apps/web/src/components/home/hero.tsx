@@ -37,13 +37,12 @@ export function Hero() {
         priority
         fetchPriority="high"
         unoptimized
-        className="object-cover opacity-45"
+        className="object-cover"
       />
       <div
-        className="absolute inset-0 bg-gradient-to-br from-navy-950 via-navy-950/85 to-navy-900/60"
+        className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/60 to-navy-950/15"
         aria-hidden
       />
-      <div className="bg-grid absolute inset-0 opacity-40" aria-hidden />
 
       <div className="container-page relative py-20 sm:py-24 lg:py-28">
         <div className="max-w-2xl">
