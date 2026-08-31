@@ -23,6 +23,7 @@ import { address, bank, brand, contact, legal, products } from '@emc/catalog';
 import { termsSections, withdrawalSections, LEGAL_UPDATED_AT } from '../src/content/legal.ts';
 
 const OUT_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'public', 'downloads');
+const LOGO_PATH = join(dirname(fileURLToPath(import.meta.url)), '..', 'public', 'logo.png');
 
 const NAVY = '#0f2038';
 const ORANGE = '#e8590c';
@@ -49,21 +50,13 @@ function render(fileName: string, title: string, subtitle: string, blocks: Block
 
   // ── Titelkopf ──────────────────────────────────────────────────────────────
   doc.rect(0, 0, doc.page.width, 104).fill(NAVY);
-  doc
-    .fillColor('#ffffff')
-    .font('Helvetica-Bold')
-    .fontSize(20)
-    .text(brand.name.toUpperCase(), left, 30);
+  doc.image(LOGO_PATH, left, 16, { width: 96 });
   doc
     .fillColor(ORANGE)
     .font('Helvetica-Bold')
     .fontSize(9)
     .text(brand.claim, left, 56, { width: doc.page.width - left * 2, lineBreak: false });
-  doc
-    .fillColor('#ffffff')
-    .font('Helvetica')
-    .fontSize(8)
-    .text(`${contact.phoneDisplay}  ·  ${contact.email}  ·  ${brand.url}`, left, 74);
+  doc.fillColor('#ffffff').font('Helvetica').fontSize(8).text(contact.email, left, 74);
 
   doc.y = 132;
   doc.fillColor(NAVY).font('Helvetica-Bold').fontSize(17).text(title, left, doc.y);
