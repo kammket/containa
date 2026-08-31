@@ -60,9 +60,9 @@ export function organizationSchema(): Json {
     url: brand.url,
     logo: {
       '@type': 'ImageObject',
-      url: absoluteUrl('/logo.svg'),
-      width: 512,
-      height: 512,
+      url: absoluteUrl('/logo.png'),
+      width: 440,
+      height: 161,
     },
     image: absoluteUrl('/og-default.png'),
     description: brand.description,
