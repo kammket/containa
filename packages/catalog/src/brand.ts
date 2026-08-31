@@ -18,9 +18,9 @@ export const brand = {
 } as const;
 
 export const contact = {
-  phone: '+49 2661 9578840',
-  phoneHref: 'tel:+4926619578840',
-  phoneDisplay: '+49 (0) 2661 957 88 40',
+  phone: '+49 2661 9572843',
+  phoneHref: 'tel:+4926619572843',
+  phoneDisplay: '+49 (0) 2661 957 2843',
   mobile: '+49 163 5393159',
   mobileHref: 'tel:+491635393159',
   whatsapp: '+49 163 5393159',
