@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, BadgeCheck, ShieldCheck, Truck } from 'lucide-react';
 
@@ -20,18 +19,37 @@ const proofPoints = [
  *
  * Das Foto füllt den gesamten Hero als Hintergrund – kein separates Bild
  * neben dem Text.
+ *
+ * Als natives `<img>` statt `next/image`: Der eigene Bild-Loader (siehe
+ * image-loader.ts) liefert lokale Dateien unverändert aus und kann sie nicht
+ * verkleinern, wodurch `next/image` hier kein `srcSet` erzeugen konnte – auf
+ * dem Handy lud dieselbe 600-KB-Datei wie auf dem Desktop. Die Breitenstufen
+ * liegen als eigene Dateien vor (hero-terminal-{640,960,1280}.jpg,
+ * hero-terminal.jpg = 1600 px), das `<link rel="preload">` entspricht dem,
+ * was `next/image` mit `priority` automatisch einfügen würde.
  */
+const HERO_SRCSET =
+  '/hero-terminal-640.jpg 640w, /hero-terminal-960.jpg 960w, /hero-terminal-1280.jpg 1280w, /hero-terminal.jpg 1600w';
+
 export function Hero() {
   return (
     <section className="relative isolate overflow-hidden bg-navy-950">
-      <Image
-        src="/hero-terminal.jpg"
-        alt=""
-        fill
-        priority
+      <link
+        rel="preload"
+        as="image"
+        href="/hero-terminal-1280.jpg"
+        imageSrcSet={HERO_SRCSET}
+        imageSizes="100vw"
         fetchPriority="high"
-        unoptimized
-        className="object-cover"
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element -- next/image kann lokale Dateien über den eigenen Loader nicht verkleinern, siehe Kommentar oben */}
+      <img
+        src="/hero-terminal.jpg"
+        srcSet={HERO_SRCSET}
+        sizes="100vw"
+        alt=""
+        fetchPriority="high"
+        className="absolute inset-0 size-full object-cover"
       />
       <div
         className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/60 to-navy-950/15"
