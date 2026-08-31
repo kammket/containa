@@ -78,7 +78,7 @@ export interface ContactPayload {
   company?: string;
   subject: string;
   message: string;
-  postalCode?: string;
+  postalCode: string;
 }
 
 export function sendContactRequest(payload: ContactPayload) {

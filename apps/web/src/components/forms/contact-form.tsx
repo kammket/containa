@@ -25,9 +25,7 @@ const schema = z.object({
   postalCode: z
     .string()
     .trim()
-    .regex(/^\d{5}$/, 'Bitte geben Sie eine gültige Postleitzahl ein.')
-    .optional()
-    .or(z.literal('')),
+    .regex(/^\d{5}$/, 'Bitte geben Sie eine gültige Postleitzahl ein.'),
   subject: z.string().min(1, 'Bitte wählen Sie ein Anliegen.'),
   message: z
     .string()
@@ -77,7 +75,7 @@ export function ContactForm() {
         email: values.email,
         phone: values.phone || undefined,
         company: values.company || undefined,
-        postalCode: values.postalCode || undefined,
+        postalCode: values.postalCode,
         subject: values.subject,
         message: values.message,
       });
@@ -146,7 +144,7 @@ export function ContactForm() {
         </div>
 
         <div>
-          <Label htmlFor="postalCode">Lieferpostleitzahl (optional)</Label>
+          <Label htmlFor="postalCode">Lieferpostleitzahl *</Label>
           <Input
             id="postalCode"
             inputMode="numeric"

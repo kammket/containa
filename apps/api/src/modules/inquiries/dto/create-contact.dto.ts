@@ -26,10 +26,9 @@ export class CreateContactDto {
   @MaxLength(120)
   company?: string;
 
-  @ApiPropertyOptional({ example: '50667' })
-  @IsOptional()
+  @ApiProperty({ example: '50667' })
   @Matches(/^\d{5}$/, { message: 'Bitte geben Sie eine gültige Postleitzahl ein.' })
-  postalCode?: string;
+  postalCode!: string;
 
   @ApiProperty({ example: 'Produktberatung' })
   @IsString()
