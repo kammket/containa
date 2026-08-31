@@ -4,11 +4,12 @@ import { Clock } from 'lucide-react';
 
 import { blogCategoriesBySlug, routes, type BlogPost } from '@emc/catalog';
 
+import { anyListingImage, productHeroImage } from '@/lib/hero-images';
 import { blurDataUrl, imageSrc } from '@/lib/images';
 import { formatDate } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 
-export function BlogCard({
+export async function BlogCard({
   post,
   className,
   priority = false,
@@ -19,6 +20,10 @@ export function BlogCard({
 }) {
   const category = blogCategoriesBySlug.get(post.categorySlug);
 
+  // Aufmacher aus dem echten Bestand statt des Katalogbilds, das es in
+  // Cloudinary nie gab – siehe hero-images.ts.
+  const image = (await productHeroImage(post.relatedProducts)) ?? (await anyListingImage()) ?? post.image;
+
   return (
     <article
       className={cn(
@@ -28,12 +33,12 @@ export function BlogCard({
     >
       <div className="relative aspect-[16/9] overflow-hidden bg-stone-100">
         <Image
-          src={imageSrc(post.image.publicId, { width: 720, height: 405 })}
-          alt={post.image.alt}
+          src={imageSrc(image.publicId, { width: 720, height: 405 })}
+          alt={image.alt}
           fill
           sizes="(max-width: 768px) 92vw, 32vw"
           placeholder="blur"
-          blurDataURL={blurDataUrl(post.image.publicId)}
+          blurDataURL={blurDataUrl(image.publicId)}
           className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
           priority={priority}
         />

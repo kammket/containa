@@ -8,6 +8,7 @@ import { breadcrumbs, categories, routes } from '@emc/catalog';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
 import { Button } from '@/components/ui/button';
+import { anyListingImage, categoryHeroImage } from '@/lib/hero-images';
 import { blurDataUrl, imageSrc } from '@/lib/images';
 import { getProducts } from '@/lib/live-catalog';
 import { breadcrumbSchema, jsonLdGraph } from '@/lib/schema';
@@ -28,11 +29,19 @@ export default async function GalleryPage() {
   const products = await getProducts();
   const crumbs = breadcrumbs({ name: 'Galerie', href: routes.gallery });
 
+  // Aufmacher aus dem echten Bestand statt der Katalogbilder, die es in
+  // Cloudinary nie gab – siehe hero-images.ts.
+  const categoryImages = await Promise.all(
+    categories.map(
+      async (category) => (await categoryHeroImage(category.slug)) ?? (await anyListingImage()) ?? category.image,
+    ),
+  );
+
   // Alle Produktbilder als flache Galerie, Kategorie-Titelbilder vorangestellt
   const items = [
-    ...categories.map((category) => ({
-      publicId: category.image.publicId,
-      alt: category.image.alt,
+    ...categories.map((category, index) => ({
+      publicId: categoryImages[index]!.publicId,
+      alt: categoryImages[index]!.alt,
       caption: category.name,
       href: routes.category(category.slug),
     })),

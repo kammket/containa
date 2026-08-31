@@ -8,6 +8,7 @@ import { breadcrumbs, caseStudies, routes } from '@emc/catalog';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JsonLd } from '@/components/layout/json-ld';
 import { Button } from '@/components/ui/button';
+import { anyListingImage, productHeroImage } from '@/lib/hero-images';
 import { blurDataUrl, imageSrc } from '@/lib/images';
 import { breadcrumbSchema, jsonLdGraph } from '@/lib/schema';
 import { buildMetadata } from '@/lib/seo';
@@ -23,8 +24,16 @@ export const metadata: Metadata = buildMetadata({
   path: routes.caseStudies,
 });
 
-export default function CaseStudiesPage() {
+export default async function CaseStudiesPage() {
   const crumbs = breadcrumbs({ name: 'Referenzen', href: routes.caseStudies });
+
+  // Aufmacher aus dem echten Bestand statt der Katalogbilder, die es in
+  // Cloudinary nie gab – siehe hero-images.ts.
+  const images = await Promise.all(
+    caseStudies.map(
+      async (study) => (await productHeroImage(study.productSlugs)) ?? (await anyListingImage()) ?? study.image,
+    ),
+  );
 
   return (
     <>
@@ -50,12 +59,12 @@ export default function CaseStudiesPage() {
               <article className="group overflow-hidden rounded-2xl border border-stone-200 bg-white transition-all hover:border-stone-300 hover:shadow-card-hover lg:grid lg:grid-cols-2">
                 <div className="relative aspect-[16/10] bg-stone-100 lg:aspect-auto lg:min-h-72">
                   <Image
-                    src={imageSrc(study.image.publicId, { width: 800, height: 600 })}
-                    alt={study.image.alt}
+                    src={imageSrc(images[index]!.publicId, { width: 800, height: 600 })}
+                    alt={images[index]!.alt}
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     placeholder="blur"
-                    blurDataURL={blurDataUrl(study.image.publicId)}
+                    blurDataURL={blurDataUrl(images[index]!.publicId)}
                     className="object-cover"
                     priority={index === 0}
                   />
