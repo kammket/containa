@@ -5,7 +5,11 @@ import { brand, contact, formatPrice } from '@emc/catalog';
 import nodemailer, { type Transporter } from 'nodemailer';
 
 import { layout, orderConfirmationBody, statusUpdateBody } from './templates/order.template';
-import { contactAcknowledgementBody, quoteAcknowledgementBody } from './templates/inquiry.template';
+import {
+  contactAcknowledgementBody,
+  formatInquiryAddress,
+  quoteAcknowledgementBody,
+} from './templates/inquiry.template';
 
 type OrderWithRelations = Order & {
   items: OrderItem[];
@@ -121,13 +125,13 @@ export class MailService {
         `E-Mail: ${inquiry.email}`,
         inquiry.phone ? `Telefon: ${inquiry.phone}` : '',
         inquiry.company ? `Firma: ${inquiry.company}` : '',
+        formatInquiryAddress(inquiry) ? `Adresse: ${formatInquiryAddress(inquiry)}` : '',
         '',
         isQuote
           ? [
               `Größe: ${inquiry.size}`,
               `Zustand: ${inquiry.condition}`,
               `Anzahl: ${inquiry.quantity}`,
-              `PLZ: ${inquiry.postalCode}`,
               inquiry.usage ? `Verwendung: ${inquiry.usage}` : '',
               inquiry.deliveryDate
                 ? `Wunschtermin: ${inquiry.deliveryDate.toLocaleDateString('de-DE')}`

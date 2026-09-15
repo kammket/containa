@@ -269,7 +269,10 @@ export interface AdminInquiry {
   size: string | null;
   condition: string | null;
   quantity: number | null;
+  street: string | null;
+  houseNumber: string | null;
   postalCode: string | null;
+  city: string | null;
   deliveryDate: string | null;
   usage: string | null;
   internalNote: string | null;

@@ -74,11 +74,14 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
 export interface ContactPayload {
   name: string;
   email: string;
-  phone?: string;
+  phone: string;
   company?: string;
+  street: string;
+  houseNumber: string;
+  postalCode: string;
+  city: string;
   subject: string;
   message: string;
-  postalCode: string;
 }
 
 export function sendContactRequest(payload: ContactPayload) {
@@ -95,7 +98,10 @@ export interface QuotePayload {
   size: string;
   condition: string;
   quantity: number;
+  street: string;
+  houseNumber: string;
   postalCode: string;
+  city: string;
   deliveryDate?: string;
   usage?: string;
   message?: string;

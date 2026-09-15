@@ -16,7 +16,7 @@ import {
 } from '@/components/admin/ui';
 import { Button } from '@/components/ui/button';
 import { Label, Textarea } from '@/components/ui/input';
-import { AdminApiError, adminApi } from '@/lib/admin-api';
+import { AdminApiError, adminApi, type AdminInquiry } from '@/lib/admin-api';
 import { formatDate } from '@/lib/utils';
 
 const statusOptions = ['NEU', 'IN_BEARBEITUNG', 'BEANTWORTET', 'GESCHLOSSEN'];
@@ -176,10 +176,16 @@ export default function AdminInquiryDetailPage() {
                     }
                   />
                 )}
+                {formatAddress(data) && (
+                  <Field
+                    label="Address"
+                    value={<span className="whitespace-pre-line">{formatAddress(data)}</span>}
+                  />
+                )}
                 {data.customerType && (
                   <Field
                     label="Customer type"
-                    value={data.customerType === 'GEWERBLICH' ? 'Geschäftskunde' : 'Privatkunde'}
+                    value={data.customerType === 'GEWERBLICH' ? 'Business' : 'Private'}
                   />
                 )}
               </dl>
@@ -196,12 +202,11 @@ export default function AdminInquiryDetailPage() {
                     label="Condition"
                     value={conditionLabels[data.condition ?? ''] ?? data.condition ?? '–'}
                   />
-                  <Field label="Anzahl" value={String(data.quantity ?? 1)} />
-                  <Field label="Delivery postcode" value={data.postalCode ?? '–'} />
-                  {data.usage && <Field label="Verwendungszweck" value={data.usage} />}
+                  <Field label="Quantity" value={String(data.quantity ?? 1)} />
+                  {data.usage && <Field label="Intended use" value={data.usage} />}
                   {data.deliveryDate && (
                     <Field
-                      label="Wunschtermin"
+                      label="Preferred date"
                       value={formatDate(data.deliveryDate.slice(0, 10))}
                     />
                   )}
@@ -291,4 +296,16 @@ function Field({ label, value }: { label: string; value: React.ReactNode }) {
       <dd className="mt-0.5 text-sm text-navy-900">{value}</dd>
     </div>
   );
+}
+
+/**
+ * Anschrift zweizeilig. Anfragen aus der Zeit vor der Adresspflicht haben nur
+ * eine Postleitzahl – dann erscheint eben nur diese.
+ */
+function formatAddress(
+  inquiry: Pick<AdminInquiry, 'street' | 'houseNumber' | 'postalCode' | 'city'>,
+): string | null {
+  const streetLine = [inquiry.street, inquiry.houseNumber].filter(Boolean).join(' ');
+  const cityLine = [inquiry.postalCode, inquiry.city].filter(Boolean).join(' ');
+  return [streetLine, cityLine].filter(Boolean).join('\n') || null;
 }

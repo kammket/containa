@@ -15,10 +15,10 @@ export class CreateContactDto {
   @MaxLength(255)
   email!: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
+  @ApiProperty({ example: '+49 221 1234567', description: 'Pflichtfeld für Rückfragen' })
+  @IsString({ message: 'Bitte geben Sie Ihre Telefonnummer ein.' })
   @Matches(/^[+0-9()\s./-]{6,25}$/, { message: 'Bitte geben Sie eine gültige Telefonnummer ein.' })
-  phone?: string;
+  phone!: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -26,9 +26,31 @@ export class CreateContactDto {
   @MaxLength(120)
   company?: string;
 
+  // Reihenfolge ist Absicht: class-validator prüft von unten nach oben und
+  // meldet mit stopAtFirstError nur den ersten Fehler. Steht @IsString unten,
+  // lautet die Meldung bei fehlendem Feld „Bitte geben Sie die Straße ein." –
+  // sonst käme die englische Standardmeldung von @MaxLength.
+  @ApiProperty({ example: 'Hohenzollernring' })
+  @MaxLength(120)
+  @MinLength(2, { message: 'Bitte geben Sie die Straße ein.' })
+  @IsString({ message: 'Bitte geben Sie die Straße ein.' })
+  street!: string;
+
+  @ApiProperty({ example: '42a' })
+  @MaxLength(20)
+  @MinLength(1, { message: 'Bitte geben Sie die Hausnummer ein.' })
+  @IsString({ message: 'Bitte geben Sie die Hausnummer ein.' })
+  houseNumber!: string;
+
   @ApiProperty({ example: '50667' })
   @Matches(/^\d{5}$/, { message: 'Bitte geben Sie eine gültige Postleitzahl ein.' })
   postalCode!: string;
+
+  @ApiProperty({ example: 'Köln' })
+  @MaxLength(80)
+  @MinLength(2, { message: 'Bitte geben Sie den Ort ein.' })
+  @IsString({ message: 'Bitte geben Sie den Ort ein.' })
+  city!: string;
 
   @ApiProperty({ example: 'Produktberatung' })
   @IsString()

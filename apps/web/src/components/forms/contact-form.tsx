@@ -20,12 +20,19 @@ const schema = z.object({
     .trim()
     .min(1, 'Bitte geben Sie Ihre E-Mail-Adresse ein.')
     .email('Bitte geben Sie eine gültige E-Mail-Adresse ein.'),
-  phone: z.string().trim().max(25).optional().or(z.literal('')),
+  phone: z
+    .string()
+    .trim()
+    .min(1, 'Bitte geben Sie Ihre Telefonnummer ein.')
+    .regex(/^[+0-9()\s./-]{6,25}$/, 'Bitte geben Sie eine gültige Telefonnummer ein.'),
   company: z.string().trim().max(120).optional().or(z.literal('')),
+  street: z.string().trim().min(2, 'Bitte geben Sie die Straße ein.').max(120),
+  houseNumber: z.string().trim().min(1, 'Bitte geben Sie die Hausnummer ein.').max(20),
   postalCode: z
     .string()
     .trim()
     .regex(/^\d{5}$/, 'Bitte geben Sie eine gültige Postleitzahl ein.'),
+  city: z.string().trim().min(2, 'Bitte geben Sie den Ort ein.').max(80),
   subject: z.string().min(1, 'Bitte wählen Sie ein Anliegen.'),
   message: z
     .string()
@@ -73,9 +80,12 @@ export function ContactForm() {
       await sendContactRequest({
         name: values.name,
         email: values.email,
-        phone: values.phone || undefined,
+        phone: values.phone,
         company: values.company || undefined,
+        street: values.street,
+        houseNumber: values.houseNumber,
         postalCode: values.postalCode,
+        city: values.city,
         subject: values.subject,
         message: values.message,
       });
@@ -136,27 +146,66 @@ export function ContactForm() {
         </div>
 
         <div>
-          <Label htmlFor="phone">Telefon (optional)</Label>
-          <Input id="phone" type="tel" autoComplete="tel" {...register('phone')} />
-          <p className="mt-1.5 text-2xs text-stone-500">
-            Für Rückfragen zur Zufahrt geht es telefonisch am schnellsten.
-          </p>
-        </div>
-
-        <div>
-          <Label htmlFor="postalCode">Lieferpostleitzahl *</Label>
+          <Label htmlFor="phone">Telefon *</Label>
           <Input
-            id="postalCode"
-            inputMode="numeric"
-            maxLength={5}
-            autoComplete="postal-code"
-            aria-invalid={Boolean(errors.postalCode)}
-            {...register('postalCode')}
+            id="phone"
+            type="tel"
+            autoComplete="tel"
+            aria-invalid={Boolean(errors.phone)}
+            {...register('phone')}
           />
-          <FieldError>{errors.postalCode?.message}</FieldError>
+          <FieldError>{errors.phone?.message}</FieldError>
         </div>
 
-        <div>
+        {/* Anschrift – Aufteilung wie im Checkout */}
+        <div className="grid gap-5 sm:col-span-2 sm:grid-cols-6">
+          <div className="sm:col-span-4">
+            <Label htmlFor="street">Straße *</Label>
+            <Input
+              id="street"
+              autoComplete="address-line1"
+              aria-invalid={Boolean(errors.street)}
+              {...register('street')}
+            />
+            <FieldError>{errors.street?.message}</FieldError>
+          </div>
+
+          <div className="sm:col-span-2">
+            <Label htmlFor="houseNumber">Hausnummer *</Label>
+            <Input
+              id="houseNumber"
+              aria-invalid={Boolean(errors.houseNumber)}
+              {...register('houseNumber')}
+            />
+            <FieldError>{errors.houseNumber?.message}</FieldError>
+          </div>
+
+          <div className="sm:col-span-2">
+            <Label htmlFor="postalCode">PLZ *</Label>
+            <Input
+              id="postalCode"
+              inputMode="numeric"
+              maxLength={5}
+              autoComplete="postal-code"
+              aria-invalid={Boolean(errors.postalCode)}
+              {...register('postalCode')}
+            />
+            <FieldError>{errors.postalCode?.message}</FieldError>
+          </div>
+
+          <div className="sm:col-span-4">
+            <Label htmlFor="city">Ort *</Label>
+            <Input
+              id="city"
+              autoComplete="address-level2"
+              aria-invalid={Boolean(errors.city)}
+              {...register('city')}
+            />
+            <FieldError>{errors.city?.message}</FieldError>
+          </div>
+        </div>
+
+        <div className="sm:col-span-2">
           <Label htmlFor="subject">Anliegen *</Label>
           <select
             id="subject"

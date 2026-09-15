@@ -23,16 +23,22 @@ const schema = z.object({
   phone: z
     .string()
     .trim()
-    .min(6, 'Bitte geben Sie eine Telefonnummer an – für Rückfragen zur Zufahrt.'),
+    .min(1, 'Bitte geben Sie eine Telefonnummer an – für Rückfragen zur Zufahrt.')
+    // Dieselbe Regel wie in der API. Ohne sie ginge z. B. „auf Anfrage" im
+    // Browser durch und käme erst als Fehler vom Server zurück.
+    .regex(/^[+0-9()\s./-]{6,25}$/, 'Bitte geben Sie eine gültige Telefonnummer ein.'),
   company: z.string().trim().max(120).optional().or(z.literal('')),
   customerType: z.enum(['privat', 'gewerblich']),
   size: z.string().min(1, 'Bitte wählen Sie eine Containergröße.'),
   condition: z.string().min(1, 'Bitte wählen Sie einen Zustand.'),
   quantity: z.coerce.number().int().min(1, 'Mindestens 1 Container.').max(50),
+  street: z.string().trim().min(2, 'Bitte geben Sie die Straße ein.').max(120),
+  houseNumber: z.string().trim().min(1, 'Bitte geben Sie die Hausnummer ein.').max(20),
   postalCode: z
     .string()
     .trim()
     .regex(/^\d{5}$/, 'Bitte geben Sie eine gültige fünfstellige Postleitzahl ein.'),
+  city: z.string().trim().min(2, 'Bitte geben Sie den Ort ein.').max(80),
   deliveryDate: z.string().optional().or(z.literal('')),
   usage: z.string().trim().max(200).optional().or(z.literal('')),
   message: z.string().trim().max(4000).optional().or(z.literal('')),
@@ -94,7 +100,10 @@ export function QuoteForm({ productSlug }: { productSlug?: string }) {
         size: values.size,
         condition: values.condition,
         quantity: values.quantity,
+        street: values.street,
+        houseNumber: values.houseNumber,
         postalCode: values.postalCode,
+        city: values.city,
         deliveryDate: values.deliveryDate || undefined,
         usage: values.usage || undefined,
         message: values.message || undefined,
@@ -209,9 +218,31 @@ export function QuoteForm({ productSlug }: { productSlug?: string }) {
         <legend className="mb-4 font-display text-lg font-bold text-navy-900">
           2. Wohin und wann?
         </legend>
-        <div className="grid gap-5 sm:grid-cols-2">
-          <div>
-            <Label htmlFor="quotePostalCode">Lieferpostleitzahl *</Label>
+        {/* Lieferanschrift – Aufteilung wie im Checkout */}
+        <div className="grid gap-5 sm:grid-cols-6">
+          <div className="sm:col-span-4">
+            <Label htmlFor="quoteStreet">Straße *</Label>
+            <Input
+              id="quoteStreet"
+              autoComplete="address-line1"
+              aria-invalid={Boolean(errors.street)}
+              {...register('street')}
+            />
+            <FieldError>{errors.street?.message}</FieldError>
+          </div>
+
+          <div className="sm:col-span-2">
+            <Label htmlFor="quoteHouseNumber">Hausnummer *</Label>
+            <Input
+              id="quoteHouseNumber"
+              aria-invalid={Boolean(errors.houseNumber)}
+              {...register('houseNumber')}
+            />
+            <FieldError>{errors.houseNumber?.message}</FieldError>
+          </div>
+
+          <div className="sm:col-span-2">
+            <Label htmlFor="quotePostalCode">PLZ *</Label>
             <Input
               id="quotePostalCode"
               inputMode="numeric"
@@ -224,7 +255,18 @@ export function QuoteForm({ productSlug }: { productSlug?: string }) {
             <FieldError>{errors.postalCode?.message}</FieldError>
           </div>
 
-          <div>
+          <div className="sm:col-span-4">
+            <Label htmlFor="quoteCity">Ort *</Label>
+            <Input
+              id="quoteCity"
+              autoComplete="address-level2"
+              aria-invalid={Boolean(errors.city)}
+              {...register('city')}
+            />
+            <FieldError>{errors.city?.message}</FieldError>
+          </div>
+
+          <div className="sm:col-span-3">
             <Label htmlFor="deliveryDate">Wunschtermin (optional)</Label>
             <Input id="deliveryDate" type="date" {...register('deliveryDate')} />
           </div>

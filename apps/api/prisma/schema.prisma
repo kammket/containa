@@ -432,8 +432,15 @@ model Inquiry {
 
   name    String
   email   String
+  /// Seit 2026-09 in beiden Formularen Pflicht; ältere Anfragen können leer sein
   phone   String?
   company String?
+
+  /// Anschrift. Seit 2026-09 in beiden Formularen Pflicht. In der Datenbank
+  /// optional, weil ältere Anfragen ohne Anschrift eingegangen sind.
+  street      String?
+  houseNumber String?
+  city        String?
 
   /// Nur bei Kontaktanfragen
   subject String?

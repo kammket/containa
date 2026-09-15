@@ -61,12 +61,27 @@ Aufstellung und Genehmigungen.
 </p>`;
 }
 
+/**
+ * Anschrift einer Anfrage in einer Zeile.
+ *
+ * Ältere Anfragen stammen aus der Zeit, als nur die Postleitzahl erfasst wurde.
+ * Für sie bleibt es bei der Postleitzahl, statt eine halbe Anschrift mit
+ * Leerstellen auszugeben.
+ */
+export function formatInquiryAddress(
+  inquiry: Pick<Inquiry, 'street' | 'houseNumber' | 'postalCode' | 'city'>,
+): string | null {
+  const streetLine = [inquiry.street, inquiry.houseNumber].filter(Boolean).join(' ');
+  const cityLine = [inquiry.postalCode, inquiry.city].filter(Boolean).join(' ');
+  return [streetLine, cityLine].filter(Boolean).join(', ') || null;
+}
+
 export function quoteAcknowledgementBody(inquiry: Inquiry): string {
   const rows = [
     ['Containergröße', sizeLabels[inquiry.size ?? ''] ?? inquiry.size],
     ['Zustand', conditionLabels[inquiry.condition ?? ''] ?? inquiry.condition],
     ['Anzahl', inquiry.quantity ? String(inquiry.quantity) : null],
-    ['Lieferpostleitzahl', inquiry.postalCode],
+    ['Lieferadresse', formatInquiryAddress(inquiry)],
     ['Verwendungszweck', inquiry.usage],
     [
       'Wunschtermin',
