@@ -2,6 +2,7 @@ import type { Address, Order, OrderItem } from '@prisma/client';
 import {
   absoluteUrl,
   address as companyAddress,
+  bank,
   brand,
   contact,
   formatPrice,
@@ -13,6 +14,7 @@ type OrderWithRelations = Order & {
   items: OrderItem[];
   billingAddress?: Address | null;
   shippingAddress?: Address | null;
+  payments?: { method: string }[];
 };
 
 /** Einfaches HTML-Escaping – Kundendaten dürfen niemals roh ins Template. */
@@ -94,6 +96,58 @@ ${formatPrice(item.lineNet)}
     .join('');
 }
 
+/**
+ * Zahlungshinweise.
+ *
+ * Bei Vorkasse ist das der wichtigste Teil der Bestätigung: Ohne Bankverbindung
+ * und Verwendungszweck weiß die Kundschaft nicht, wohin sie überweisen soll.
+ * Die Bestellnummer als Verwendungszweck ist keine Förmlichkeit – ohne sie
+ * lässt sich ein Zahlungseingang keiner Bestellung zuordnen.
+ */
+function paymentBlock(order: OrderWithRelations): string {
+  const method = order.payments?.[0]?.method ?? 'BANKTRANSFER';
+
+  const row = (label: string, value: string) => `<tr>
+<td style="padding:6px 0;font-size:13px;color:#868e96;width:42%;">${esc(label)}</td>
+<td style="padding:6px 0;font-size:14px;color:#212529;font-weight:600;">${esc(value)}</td>
+</tr>`;
+
+  if (method === 'BANKTRANSFER') {
+    return `<div style="margin:0 0 28px;padding:18px 20px;background-color:#f8f9fa;border-radius:8px;">
+<p style="margin:0 0 10px;font-size:14px;font-weight:700;color:#0d1826;">Zahlung per Vorkasse</p>
+<p style="margin:0 0 12px;font-size:13px;line-height:1.6;color:#495057;">
+Bitte überweisen Sie den Gesamtbetrag auf das folgende Konto. Nach Zahlungseingang
+stimmen wir den Liefertermin mit Ihnen ab.
+</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+${row('Kontoinhaber', bank.accountHolder)}
+${row('Bank', bank.bankName)}
+${row('IBAN', bank.iban)}
+${row('BIC', bank.bic)}
+${row('Verwendungszweck', order.orderNumber)}
+${row('Betrag', formatPrice(order.totalGross))}
+</table>
+</div>`;
+  }
+
+  if (method === 'SEPA') {
+    return `<div style="margin:0 0 28px;padding:18px 20px;background-color:#f8f9fa;border-radius:8px;">
+<p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#0d1826;">Zahlung per SEPA-Lastschrift</p>
+<p style="margin:0;font-size:13px;line-height:1.6;color:#495057;">
+Wir melden uns zur Erteilung des Mandats bei Ihnen. Bis dahin ist nichts weiter zu tun.
+</p>
+</div>`;
+  }
+
+  return `<div style="margin:0 0 28px;padding:18px 20px;background-color:#f8f9fa;border-radius:8px;">
+<p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#0d1826;">Kauf auf Rechnung</p>
+<p style="margin:0;font-size:13px;line-height:1.6;color:#495057;">
+Die Rechnung erhalten Sie mit der Lieferung, zahlbar innerhalb von 14 Tagen.
+Verwendungszweck: ${esc(order.orderNumber)}.
+</p>
+</div>`;
+}
+
 function addressBlock(label: string, addr?: Address | null): string {
   if (!addr) return '';
   return `<td style="padding:0 8px 0 0;vertical-align:top;width:50%;">
@@ -154,6 +208,8 @@ ${addressBlock('Rechnungsadresse', order.billingAddress)}
 ${addressBlock('Lieferadresse', order.shippingAddress)}
 </tr>
 </table>
+
+${paymentBlock(order)}
 
 ${
   order.deliveryNotes
