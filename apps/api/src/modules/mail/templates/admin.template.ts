@@ -94,6 +94,21 @@ function adminLink(path: string, label: string, appUrl: string | undefined): str
 </p>`;
 }
 
+/**
+ * Hebt die Adresse der Kundschaft hervor und sagt, was „Antworten" bewirkt.
+ *
+ * In der Tabelle weiter unten steht sie ohnehin; oben steht sie, weil das die
+ * Angabe ist, die man beim Überfliegen sucht.
+ */
+function replyHint(email: string): string {
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0 0;background-color:#f8f9fa;border-radius:8px;">
+<tr><td style="padding:12px 16px;">
+<span style="font-size:12px;color:${MUTED};">Antwort geht an</span><br>
+<a href="mailto:${esc(email)}" style="font-size:15px;font-weight:600;color:${NAVY};text-decoration:none;">${esc(email)}</a>
+<br><span style="font-size:12px;color:${MUTED};">Auf diese E-Mail zu antworten erreicht direkt die Kundschaft.</span>
+</td></tr></table>`;
+}
+
 export function adminOrderNotificationBody(order: OrderWithRelations, appUrl?: string): string {
   const customerType = order.customerType === 'GEWERBLICH' ? 'Geschäftskunde' : 'Privatkunde';
   const shipping = addressText(order.shippingAddress) ?? addressText(order.billingAddress);
@@ -104,6 +119,7 @@ export function adminOrderNotificationBody(order: OrderWithRelations, appUrl?: s
 <p style="margin:0;font-size:15px;color:#495057;">
 ${esc(formatPrice(order.totalGross))} brutto · ${esc(customerType)}
 </p>
+${replyHint(order.email)}
 
 ${heading('Kontakt')}
 ${rows([
@@ -160,6 +176,7 @@ ${isQuote ? 'Neue Angebotsanfrage' : 'Neue Kontaktanfrage'} ${esc(inquiry.refere
 <p style="margin:0;font-size:15px;color:#495057;">von ${esc(inquiry.name)}${
     inquiry.company ? ` · ${esc(inquiry.company)}` : ''
   }</p>
+${replyHint(inquiry.email)}
 
 ${heading('Kontakt')}
 ${rows([

@@ -125,6 +125,7 @@ export class MailService {
     await this.send({
       to: this.adminRecipient(),
       subject: `Neue Bestellung ${order.orderNumber} · ${formatPrice(order.totalGross)}`,
+      from: this.notificationFrom(),
       html: layout(adminOrderNotificationBody(order, this.appUrl())),
       replyTo: order.email,
     });
@@ -137,6 +138,7 @@ export class MailService {
     await this.send({
       to: this.adminRecipient(),
       subject: `${isQuote ? 'Angebotsanfrage' : 'Kontaktanfrage'} ${inquiry.reference} von ${inquiry.name}`,
+      from: this.notificationFrom(),
       html: layout(adminInquiryNotificationBody(inquiry, this.appUrl())),
       // Antworten gehen direkt an die anfragende Person, nicht an den Shop.
       replyTo: inquiry.email,
@@ -148,6 +150,7 @@ export class MailService {
     await this.send({
       to: this.adminRecipient(),
       subject: `Neue Newsletter-Anmeldung: ${email}`,
+      from: this.notificationFrom(),
       html: layout(adminNewsletterNotificationBody(email, this.appUrl())),
       replyTo: email,
     });
@@ -174,6 +177,7 @@ export class MailService {
     return {
       mode: this.resendApiKey ? 'resend' : this.transporter ? 'smtp' : 'log',
       from: this.from(),
+      notificationFrom: this.notificationFrom(),
       adminRecipient: this.adminRecipient(),
       resendKeyConfigured: Boolean(this.resendApiKey),
       resendKeyHint: this.resendApiKey ? `${this.resendApiKey.slice(0, 5)}…` : null,
@@ -217,15 +221,34 @@ export class MailService {
     );
   }
 
+  /**
+   * Absender der internen Benachrichtigungen.
+   *
+   * Bewusst **nicht** dieselbe Adresse wie der Empfänger: Läuft eine Nachricht
+   * von `contact@` an `contact@`, sieht das Postfach eine Mail von einem selbst.
+   * Etliche Programme beantworten sie dann an den Empfänger statt an
+   * `Reply-To` – die Antwort ginge an das eigene Postfach statt an die
+   * Kundschaft. Eine eigene Absenderadresse auf derselben Domain vermeidet das;
+   * ein Postfach dafür ist nicht nötig, die Domainverifizierung genügt.
+   */
+  private notificationFrom(): string {
+    const configured = this.setting('MAIL_FROM_NOTIFICATIONS');
+    if (configured) return configured;
+
+    const domain = this.from().match(/@([^>\s]+)/)?.[1];
+    return domain ? `${brand.name} Benachrichtigung <benachrichtigung@${domain}>` : this.from();
+  }
+
   private async send(options: {
     to: string;
     subject: string;
     html?: string;
     text?: string;
     replyTo?: string;
+    from?: string;
   }) {
-    const { replyTo, ...content } = options;
-    const from = this.from();
+    const { replyTo, from: fromOverride, ...content } = options;
+    const from = fromOverride ?? this.from();
 
     if (this.resendApiKey) {
       await this.sendViaResend({ ...content, from, replyTo: replyTo ?? contact.email });
