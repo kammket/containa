@@ -1,13 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { randomBytes } from 'node:crypto';
 
+import { MailService } from '../mail/mail.service';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class NewsletterService {
   private readonly logger = new Logger(NewsletterService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly mail: MailService,
+  ) {}
 
   /**
    * Double-Opt-in nach § 7 UWG: Die Anmeldung wird erst nach Bestätigung
@@ -34,8 +38,16 @@ export class NewsletterService {
       update: { confirmToken, unsubscribedAt: null },
     });
 
-    // TODO Betrieb: Bestätigungsmail über MailService versenden.
+    // TODO Betrieb: Bestätigungsmail mit diesem Token an die Anmeldeadresse
+    // versenden. Ohne sie kann niemand bestätigen, die Anmeldung bleibt offen.
     this.logger.log(`Bestätigungslink für ${normalized} erzeugt`);
+
+    // Die interne Benachrichtigung hängt nicht an der Bestätigung: Sie meldet,
+    // dass sich jemand eingetragen hat. Ein Zustellfehler darf die Anmeldung
+    // nicht verwerfen – sie steht bereits in der Datenbank.
+    void this.mail.notifyAdminNewsletter(normalized).catch((error) => {
+      this.logger.error(`Benachrichtigung zu ${normalized} fehlgeschlagen`, error);
+    });
 
     return { status: 'pending' };
   }

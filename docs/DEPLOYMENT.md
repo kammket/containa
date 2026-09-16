@@ -96,13 +96,20 @@ CLOUDINARY_CLOUD_NAME=...
 CLOUDINARY_API_KEY=...
 CLOUDINARY_API_SECRET=...
 
-# SMTP – ohne SMTP_HOST werden E-Mails nur protokolliert
-SMTP_HOST=smtp.ihr-anbieter.de
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=...
-SMTP_PASSWORD=...
-SMTP_FROM=EMC Container <info@emccontainer.com>
+# E-Mail über Resend (empfohlen). Ohne einen der beiden Wege werden E-Mails
+# nur protokolliert.
+RESEND_API_KEY=re_...
+MAIL_FROM=EMC Container <info@emccontainer.com>
+
+# Alternativ SMTP – wird nur genutzt, wenn RESEND_API_KEY leer ist
+# SMTP_HOST=smtp.ihr-anbieter.de
+# SMTP_PORT=587
+# SMTP_SECURE=false
+# SMTP_USER=...
+# SMTP_PASSWORD=...
+
+# Empfänger der internen Benachrichtigungen zu Bestellungen, Anfragen und
+# Newsletter-Anmeldungen
 ADMIN_NOTIFY_EMAIL=vertrieb@emccontainer.com
 
 ```
@@ -199,7 +206,29 @@ Varianten müssen dort eingetragen sein.
 
 ---
 
-## 3. Zahlungen
+## 3. E-Mail-Benachrichtigungen
+
+Versendet werden sechs E-Mails: Bestellbestätigung und Statusänderung an die
+Kundschaft, Eingangsbestätigung für Kontakt- und Angebotsanfragen sowie interne
+Benachrichtigungen an `ADMIN_NOTIFY_EMAIL` bei jeder Bestellung, jeder Anfrage
+und jeder Newsletter-Anmeldung. Die internen Nachrichten enthalten den
+vollständigen Vorgang – Anschrift, Positionen, Beträge, Nachrichtentext – und
+verlinken in die Verwaltung.
+
+Der Absender in `MAIL_FROM` muss auf einer bei Resend verifizierten Domain
+liegen. Andernfalls antwortet die API mit einem Fehler, der im Protokoll des
+Dienstes steht; die Bestellung oder Anfrage geht dabei nicht verloren, da der
+Versand vom eigentlichen Vorgang entkoppelt ist.
+
+> **Die Bestätigungsmail zur Newsletter-Anmeldung fehlt noch.** Die Anmeldung
+> arbeitet mit Double-Opt-in: Sie wird erst mit Bestätigung wirksam. Weder die
+> Mail mit dem Bestätigungslink noch die zugehörige Seite in der Storefront
+> existieren bisher, die Anmeldung bleibt deshalb dauerhaft unbestätigt. Die
+> interne Benachrichtigung über die Anmeldung wird dennoch versendet.
+
+---
+
+## 4. Zahlungen
 
 Der Shop bindet keinen Zahlungsanbieter ein. Angeboten werden Vorkasse,
 SEPA-Lastschrift und Kauf auf Rechnung – alle drei laufen über das
@@ -227,7 +256,7 @@ heraus, die Zahlung wird nach Lieferung erfasst.
 
 ---
 
-## 4. Nach dem Livegang
+## 5. Nach dem Livegang
 
 ### Sofort erledigen
 
@@ -256,7 +285,7 @@ heraus, die Zahlung wird nach Lieferung erfasst.
 
 ---
 
-## 5. Fehlersuche
+## 6. Fehlersuche
 
 **Anmeldung im Adminbereich schlägt fehl, Login-Antwort ist aber 200**
 `CORS_ORIGINS` stimmt nicht exakt mit der aufgerufenen Domain überein. Ohne
@@ -288,7 +317,7 @@ Cloudinary ist nicht konfiguriert. Alle drei Variablen setzen und neu starten.
 
 **Bestellungen bleiben auf „Eingegangen"**
 Das ist der vorgesehene Zustand. Alle Zahlungsarten werden im Adminbereich
-manuell bestätigt (Abschnitt 3) – es gibt keinen Anbieter, der den Status
+manuell bestätigt (Abschnitt 4) – es gibt keinen Anbieter, der den Status
 automatisch weiterschaltet.
 
 **Storefront zeigt Platzhalter statt Fotos**

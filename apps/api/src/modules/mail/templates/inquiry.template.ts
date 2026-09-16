@@ -11,7 +11,7 @@ function esc(value: string | null | undefined): string {
     .replace(/'/g, '&#39;');
 }
 
-const sizeLabels: Record<string, string> = {
+export const sizeLabels: Record<string, string> = {
   '10ft': '10 Fuß',
   '20ft': '20 Fuß',
   '20ft-hc': '20 Fuß High Cube',
@@ -21,7 +21,7 @@ const sizeLabels: Record<string, string> = {
   unklar: 'noch offen – Beratung gewünscht',
 };
 
-const conditionLabels: Record<string, string> = {
+export const conditionLabels: Record<string, string> = {
   neu: 'Fabrikneu',
   'one-trip': 'One-Trip',
   generalueberholt: 'Generalüberholt',
