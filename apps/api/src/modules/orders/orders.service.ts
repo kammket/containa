@@ -189,7 +189,9 @@ export class OrdersService {
     void this.mail.sendOrderConfirmation(order).catch((error) => {
       this.logger.error(`Bestätigungsmail für ${order.orderNumber} fehlgeschlagen`, error);
     });
-    void this.mail.notifyAdminNewOrder(order).catch(() => undefined);
+    void this.mail.notifyAdminNewOrder(order).catch((error) => {
+      this.logger.error(`Benachrichtigung zu ${order.orderNumber} fehlgeschlagen`, error);
+    });
 
     return {
       orderNumber: order.orderNumber,

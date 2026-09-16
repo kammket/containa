@@ -40,7 +40,11 @@ export class InquiriesService {
     void this.mail.sendContactAcknowledgement(inquiry).catch((error) => {
       this.logger.error(`Bestätigung für ${inquiry.reference} fehlgeschlagen`, error);
     });
-    void this.mail.notifyAdminInquiry(inquiry).catch(() => undefined);
+    void this.mail.notifyAdminInquiry(inquiry).catch((error) => {
+      // Früher stillschweigend verworfen. Bleibt die Benachrichtigung aus,
+      // muss die Ursache im Protokoll stehen – sonst sucht man im Dunkeln.
+      this.logger.error(`Benachrichtigung zu ${inquiry.reference} fehlgeschlagen`, error);
+    });
 
     return { id: inquiry.id, reference: inquiry.reference };
   }
@@ -74,7 +78,11 @@ export class InquiriesService {
     void this.mail.sendQuoteAcknowledgement(inquiry).catch((error) => {
       this.logger.error(`Bestätigung für ${inquiry.reference} fehlgeschlagen`, error);
     });
-    void this.mail.notifyAdminInquiry(inquiry).catch(() => undefined);
+    void this.mail.notifyAdminInquiry(inquiry).catch((error) => {
+      // Früher stillschweigend verworfen. Bleibt die Benachrichtigung aus,
+      // muss die Ursache im Protokoll stehen – sonst sucht man im Dunkeln.
+      this.logger.error(`Benachrichtigung zu ${inquiry.reference} fehlgeschlagen`, error);
+    });
 
     return { id: inquiry.id, reference: inquiry.reference };
   }

@@ -42,15 +42,31 @@ export class MailService {
   private transporter: Transporter | null = null;
   private readonly resendApiKey?: string;
 
+  /**
+   * Liest einen Wert aus der Umgebung und entfernt umschließende
+   * Anführungszeichen.
+   *
+   * In einer .env-Datei sind Anführungszeichen üblich und werden vom Parser
+   * entfernt; trägt man denselben Wert in der Oberfläche eines Hosters ein,
+   * bleiben sie Teil des Werts. Ein Absender `"EMC Container <…>"` wird von
+   * Resend abgelehnt – ein Fehler, der schwer zu sehen ist, weil er erst beim
+   * Versand auftritt.
+   */
+  private setting(key: string): string | undefined {
+    const value = this.config.get<string>(key)?.trim();
+    if (!value) return undefined;
+    return value.replace(/^(['"])(.*)\1$/s, '$2').trim() || undefined;
+  }
+
   constructor(private readonly config: ConfigService) {
-    this.resendApiKey = this.config.get<string>('RESEND_API_KEY')?.trim() || undefined;
+    this.resendApiKey = this.setting('RESEND_API_KEY');
 
     if (this.resendApiKey) {
       this.logger.log(`E-Mail-Versand über Resend, Absender: ${this.from()}`);
       return;
     }
 
-    const host = this.config.get<string>('SMTP_HOST');
+    const host = this.setting('SMTP_HOST');
 
     if (!host) {
       this.logger.warn(
@@ -140,11 +156,55 @@ export class MailService {
   // ── intern ───────────────────────────────────────────────────────────────
 
   private adminRecipient(): string {
-    return this.config.get<string>('ADMIN_NOTIFY_EMAIL') ?? contact.salesEmail;
+    return this.setting('ADMIN_NOTIFY_EMAIL') ?? contact.salesEmail;
   }
 
   private appUrl(): string | undefined {
-    return this.config.get<string>('APP_URL');
+    return this.setting('APP_URL');
+  }
+
+  /**
+   * Zustand des Versandwegs – ohne Geheimnisse.
+   *
+   * Dient der Fehlersuche im Betrieb: Ob eine E-Mail hinausgeht, entscheidet
+   * sich in der Umgebung des laufenden Dienstes. Ohne diese Auskunft bleibt
+   * als Erklärung für eine ausbleibende Nachricht nur Raten.
+   */
+  describeTransport() {
+    return {
+      mode: this.resendApiKey ? 'resend' : this.transporter ? 'smtp' : 'log',
+      from: this.from(),
+      adminRecipient: this.adminRecipient(),
+      resendKeyConfigured: Boolean(this.resendApiKey),
+      resendKeyHint: this.resendApiKey ? `${this.resendApiKey.slice(0, 5)}…` : null,
+      appUrl: this.appUrl() ?? null,
+    };
+  }
+
+  /**
+   * Verschickt eine Testnachricht und meldet den tatsächlichen Ausgang zurück,
+   * statt ihn nur zu protokollieren.
+   */
+  async sendTestEmail(to?: string) {
+    const recipient = to?.trim() || this.adminRecipient();
+    try {
+      await this.send({
+        to: recipient,
+        subject: 'Testnachricht aus dem Adminbereich',
+        html: layout(
+          '<p style="margin:0;font-size:15px;line-height:1.6;color:#212529;">' +
+            'Diese Nachricht wurde aus dem Adminbereich ausgelöst. Kommt sie an, ' +
+            'funktionieren Zugangsdaten, Absenderdomain und Zustellung.</p>',
+        ),
+      });
+      return { ok: true, ...this.describeTransport() };
+    } catch (error) {
+      return {
+        ok: false,
+        ...this.describeTransport(),
+        error: error instanceof Error ? error.message : String(error),
+      };
+    }
   }
 
   /**
@@ -153,9 +213,7 @@ export class MailService {
    */
   private from(): string {
     return (
-      this.config.get<string>('MAIL_FROM') ??
-      this.config.get<string>('SMTP_FROM') ??
-      `${brand.name} <${contact.email}>`
+      this.setting('MAIL_FROM') ?? this.setting('SMTP_FROM') ?? `${brand.name} <${contact.email}>`
     );
   }
 
